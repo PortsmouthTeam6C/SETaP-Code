@@ -6,7 +6,7 @@ import uk.ac.port.setap.team6c.Main;
 
 import java.util.UUID;
 
-public class Authentication {
+public class AuthManager {
 
     public static void login(Context ctx) {
         Main.GSON.fromJson(ctx.body(), EmailPasswordRequest.class);
