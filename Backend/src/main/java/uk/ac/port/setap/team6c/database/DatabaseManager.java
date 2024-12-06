@@ -33,7 +33,7 @@ public class DatabaseManager {
     }
 
     /**
-     * Used for inline running of SQL statements by the {@link DatabaseManager.SQLConsumer} method
+     * Used for inline running of SQL statements by the {@link DatabaseManager.runSQL} method
      */
     @FunctionalInterface
     private interface SQLConsumer {
