@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import './Login.css'; 
 
-const Login = () => {
+function Login () {
+  
+  const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-
-    console.log('Logging in with:', username, password);
+  function handleLogin() {
+    //Redirects to the Homepage if login successful
+    navigate('/Homepage');
   };
 
-  const handleSignUp = () => {
-    console.log('Redirecting to sign-up page');
+  function handleSignUp()  {
+    //Redirecting to the sign up page.
+    navigate('/Sign Up');
   };
 
-  const handleForgotPassword = () => {
-    console.log('Redirecting to forgot password page');
+  function handleForgotPassword() {
+    //Redirects to forgot password page
+    navigate('/ForgotPasswordPage');
   };
 
   return (
-    <div className="login-container">
       <div className="login-box">
-        <div className="logo">
-          <img src="/logo.png" alt="Logo" /> 
-        </div>
         <div className="form-container">
+          <div className="logo">
+            <img src="/demoLogo.png" alt="Logo" /> 
+          </div>
           <input
             type="text"
             placeholder="Username"
@@ -44,7 +48,6 @@ const Login = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
 
