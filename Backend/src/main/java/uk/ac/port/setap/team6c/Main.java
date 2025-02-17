@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
+import io.javalin.plugin.bundled.CorsPluginConfig;
 import uk.ac.port.setap.team6c.authentication.AuthManager;
 import uk.ac.port.setap.team6c.database.DatabaseManager;
 import uk.ac.port.setap.team6c.gson.InstantTypeAdapter;
@@ -22,7 +23,11 @@ public class Main {
 
     public static void main(String[] args) {
 //        DatabaseManager.initializeDatabase(); // Uncomment if you need to create the database
-        Javalin app = Javalin.create();
+        Javalin app = Javalin.create(config -> {
+            config.bundledPlugins.enableCors(cors -> {
+                cors.addRule(CorsPluginConfig.CorsRule::anyHost);
+            });
+        });
 
         app.get("/", ctx -> ctx.result("Hello, world!"));
         app.post("/login", AuthManager::login);
