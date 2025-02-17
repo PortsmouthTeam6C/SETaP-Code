@@ -77,6 +77,7 @@ public class User {
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
+                this.userId = resultSet.getInt("userid");
                 this.universityId = resultSet.getInt("universityid");
                 this.username = resultSet.getString("username");
                 this.email = resultSet.getString("email");
