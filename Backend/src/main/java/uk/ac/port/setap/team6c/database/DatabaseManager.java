@@ -31,11 +31,17 @@ public class DatabaseManager {
         connection.close();
     }
 
+    /**
+     * A functional interface for accepting a connection, used by {@link #createConnection(ConnectionConsumer)}
+     */
     @FunctionalInterface
     public interface ConnectionConsumer {
         void accept(Connection connection) throws SQLException;
     }
 
+    /**
+     * Initializes the database with the required tables
+     */
     public static void initializeDatabase() {
         try {
             createConnection(connection -> {
