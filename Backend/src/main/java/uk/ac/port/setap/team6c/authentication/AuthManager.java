@@ -44,7 +44,6 @@ public class AuthManager {
         // Send token back to user
         ctx.result(Main.GSON.toJson(new LoginResponse(token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(), user.isAdministrator(), user.getSettings())));
     }
-
     
 }
 
