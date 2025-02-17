@@ -2,6 +2,7 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import uk.ac.port.setap.team6c.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,6 +11,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Represents a user in the database
+ */
 @Getter
 public class User {
 
@@ -92,6 +96,17 @@ public class User {
         }
     }
 
+    /**
+     * Create a new user
+     * @param university The university the user is associated with
+     * @param username The user's username
+     * @param email The user's email
+     * @param password The user's hashed password. This should be hashed using {@link AuthManager#hashPassword(String)}
+     * @param profilePicture The user's profile picture
+     * @param isAdministrator Whether the user is an administrator
+     * @param settings The user's settings
+     * @throws AccountAlreadyExistsException if a user with the provided email already exists
+     */
     public User(University university, String username, String email, String password, String profilePicture, boolean isAdministrator, String settings) throws AccountAlreadyExistsException {
         this.universityId = university.getUniversityId();
         this.username = username;
@@ -121,6 +136,12 @@ public class User {
         }
     }
 
+    /**
+     * Save a created session token to the user. The session token should also be returned to the user.
+     * @param token The session token
+     * @param expiry The token's expiry date
+     * @throws SessionTokenCouldNotBeCreatedException if the session token could not be created
+     */
     public void assignSessionToken(UUID token, Instant expiry) throws SessionTokenCouldNotBeCreatedException {
         try {
             DatabaseManager.createConnection(connection -> {
@@ -136,9 +157,24 @@ public class User {
         }
     }
 
+    /**
+     * Exception thrown when a login token is not found
+     */
     public static class UnknownLoginTokenException extends Exception {}
+
+    /**
+     * Exception thrown when an email is not found
+     */
     public static class UnknownEmailException extends Exception {}
+
+    /**
+     * Exception thrown when an account already exists
+     */
     public static class AccountAlreadyExistsException extends Exception {}
+
+    /**
+     * Exception thrown when a session token could not be created
+     */
     public static class SessionTokenCouldNotBeCreatedException extends Exception {}
 
 }

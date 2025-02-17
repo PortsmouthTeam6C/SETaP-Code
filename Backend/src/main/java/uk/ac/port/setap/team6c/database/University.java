@@ -7,6 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * Represents a university saved in the database
+ */
 @Getter
 public class University {
 
@@ -16,6 +19,13 @@ public class University {
     private String emailDomain;
     private String theming;
 
+    /**
+     * Create a new university and save it to the database
+     * @param universityName The name of the university
+     * @param emailDomain The domain of the university's email addresses. This must be unique.
+     * @param theming JSON string representing the theming of the university
+     * @throws UniversityAlreadyExistsException if a university with the same email domain already exists
+     */
     public University(String universityName, String emailDomain, String theming) throws UniversityAlreadyExistsException {
         this.universityName = universityName;
         this.emailDomain = emailDomain;
@@ -37,6 +47,11 @@ public class University {
         }
     }
 
+    /**
+     * Get a university from its email domain
+     * @param emailDomain The domain of the university's email addresses
+     * @throws UniversityNotFoundException if no university with the provided email domain exists
+     */
     public University(String emailDomain) throws UniversityNotFoundException {
         try {
             DatabaseManager.createConnection(connection -> {
@@ -55,7 +70,14 @@ public class University {
         }
     }
 
+    /**
+     * Exception thrown when a university is created with an existing email address
+     */
     public static class UniversityAlreadyExistsException extends Exception {}
+
+    /**
+     * Exception thrown when an attempt is made to retrieve a university which does not exist
+     */
     public static class UniversityNotFoundException extends Exception {}
 
 }
