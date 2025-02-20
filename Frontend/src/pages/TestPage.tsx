@@ -9,7 +9,7 @@ function TestPage() {
   };
 
   function handleSignUp() {
-    navigate('/SignupPage'); 
+    navigate('/Sign Up'); 
   };
 
   function handleForgotPassword() {
