@@ -124,54 +124,53 @@ public class DatabaseManager {
     public static void populateDatabase() {
         try {
             createConnection(connection -> {
-                Statement statement =  createStatement();
+                Statement statement = connection.createStatement();
                 statement.execute(
-                    "insert into university (universityName, emailDomain, theming) values"
-                    "('University of Example', 'example.edu', 'Green and Gold'),"
-                    "('Sample University', 'sample.edu', 'Blue and White'),"
-                    "('Tech Institute', 'tech.edu', 'Red and Black');"
+                    "insert into university (universityName, emailDomain, theming) values" +
+                    "('University of Example', 'example.edu', 'Green and Gold')," +
+                    "('Sample University', 'sample.edu', 'Blue and White')," +
+                    "('Tech Institute', 'tech.edu', 'Red and Black');" +
 
-                    "insert into society (universityId, societyName, societyDescription, societyPicture, maxSize, isPaid) values"
-                    "(1, 'Computer Science Society', 'A society for tech enthusiasts and developers', 'cs_society_picture.jpg', 200, false),"
-                    "(2, 'Drama Club', 'A society focused on theater arts and performances', 'drama_club_picture.jpg', 100, false),"
-                    "(3, 'Science and Innovation', 'A society dedicated to scientific discoveries and innovation', 'science_innovation_picture.jpg', 150, true);"
+                    "insert into society (universityId, societyName, societyDescription, societyPicture, maxSize, isPaid) values" +
+                    "(1, 'Computer Science Society', 'A society for tech enthusiasts and developers', 'cs_society_picture.jpg', 200, false)," +
+                    "(2, 'Drama Club', 'A society focused on theater arts and performances', 'drama_club_picture.jpg', 100, false)," +
+                    "(3, 'Science and Innovation', 'A society dedicated to scientific discoveries and innovation', 'science_innovation_picture.jpg', 150, true);" +
 
-                    "insert into users (universityId, username, email, password, profilePicture, isAdministrator, settings) values"
-                    "(1, 'johndoe', 'johndoe@example.edu', 'passwordhash', 'profile_johndoe.jpg', false, '{"theme":"light","notifications":true}'),"
-                    "(2, 'janedoe', 'janedoe@sample.edu', 'passwordhash', 'profile_janedoe.jpg', false, '{"theme":"dark","notifications":false}'),"
-                    "(3, 'samuser', 'samuser@tech.edu', 'passwordhash', 'profile_samuser.jpg', true, '{"theme":"light","notifications":true}');"
+                    "insert into users (universityId, username, email, password, profilePicture, isAdministrator, settings) values" +
+                    "(1, 'johndoe', 'johndoe@example.edu', 'passwordhash', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(2, 'janedoe', 'janedoe@sample.edu', 'passwordhash', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
+                    "(3, 'samuser', 'samuser@tech.edu', 'passwordhash', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}');" +
 
-                    "insert into sessionToken (token, userid, expiry) values"
-                    "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00'),"
-                    "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00'),"
-                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-02-30 15:00:00');"
+                    "insert into sessionToken (token, userid, expiry) values" +
+                    "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
+                    "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00')," +
+                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-02-30 15:00:00');" +
 
-                    "insert into societyMember (userId, societyId, isManager) values"
-                    "(1, 1, true),"
-                    "(2, 2, false),"
-                    "(3, 3, true),"
-                    "(1, 3, false);"
+                    "insert into societyMember (userId, societyId, isManager) values" +
+                    "(1, 1, true)," +
+                    "(2, 2, false)," +
+                    "(3, 3, true)," +
+                    "(1, 3, false);" +
 
-                    "insert into message (userId, societyId, messageContent, timestamp, isPinned) values"
-                    "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true),"
-                    "(2, 2, 'Join us for an exciting drama performance next week!', '2025-02-18 14:30:00', false),"
-                    "(3, 3, 'We have an exciting new research opportunity available!', '2025-02-19 11:45:00', true);"
+                    "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
+                    "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
+                    "(2, 2, 'Join us for an exciting drama performance next week!', '2025-02-18 14:30:00', false)," +
+                    "(3, 3, 'We have an exciting new research opportunity available!', '2025-02-19 11:45:00', true);" +
 
-                    "insert into events (userId, startTimestamp, endTimestamp, createdTimestamp, location, name, description) values"
-                    "(1, '2025-03-01 09:00:00', '2025-03-01 12:00:00', '2025-02-10 15:00:00', 'Room 101', 'Tech Talk on AI', 'Join us for a deep dive into Artificial Intelligence.'),"
-                    "(2, '2025-02-28 18:00:00', '2025-02-28 21:00:00', '2025-02-15 10:00:00', 'Auditorium', 'Drama Performance: Romeo and Juliet', 'Watch our talented actors perform the classic play, Romeo and Juliet.'),"
-                    "(3, '2025-03-05 13:00:00', '2025-03-05 16:00:00', '2025-02-20 09:00:00', 'Lab 202', 'Innovation Challenge', 'Participate in our innovation challenge and showcase your ideas.');"
+                    "insert into events (userId, startTimestamp, endTimestamp, createdTimestamp, location, name, description) values" +
+                    "(1, '2025-03-01 09:00:00', '2025-03-01 12:00:00', '2025-02-10 15:00:00', 'Room 101', 'Tech Talk on AI', 'Join us for a deep dive into Artificial Intelligence.')," +
+                    "(2, '2025-02-28 18:00:00', '2025-02-28 21:00:00', '2025-02-15 10:00:00', 'Auditorium', 'Drama Performance: Romeo and Juliet', 'Watch our talented actors perform the classic play, Romeo and Juliet.')," +
+                    "(3, '2025-03-05 13:00:00', '2025-03-05 16:00:00', '2025-02-20 09:00:00', 'Lab 202', 'Innovation Challenge', 'Participate in our innovation challenge and showcase your ideas.');" +
 
-                    "insert into societyEvent (societyId, eventId) values"
-                    "(1, 1),"
-                    "(2, 2),"
+                    "insert into societyEvent (societyId, eventId) values" +
+                    "(1, 1)," +
+                    "(2, 2)," +
                     "(3, 3);"
-                )
-                statement.close()
-
-            })
+                );
+                statement.close();
+            });
         } catch (SQLException e) {
-            e.printStackTrace()
+            e.printStackTrace();
         }
     }
 
