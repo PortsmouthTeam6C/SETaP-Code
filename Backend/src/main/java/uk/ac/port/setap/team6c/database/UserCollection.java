@@ -1,5 +1,6 @@
 package uk.ac.port.setap.team6c.database;
 
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,13 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+@AllArgsConstructor
 public class UserCollection implements Iterable<User> {
 
     private final List<Integer> userIds;
-
-    public UserCollection(List<Integer> userIds) {
-        this.userIds = userIds;
-    }
 
     /**
      * Convert this {@link UserCollection} to a list of users

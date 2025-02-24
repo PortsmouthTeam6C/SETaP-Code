@@ -1,5 +1,6 @@
 package uk.ac.port.setap.team6c.database;
 
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -7,13 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+@AllArgsConstructor
 public class SocietyCollection implements Iterable<Society> {
 
     private final List<Integer> societyIds;
-
-    public SocietyCollection(List<Integer> societyIds) {
-        this.societyIds = societyIds;
-    }
 
     /**
      * Convert this {@link SocietyCollection} to a list of societies
