@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import io.github.cdimascio.dotenv.Dotenv;
 import io.javalin.Javalin;
 import uk.ac.port.setap.team6c.authentication.AuthManager;
-import uk.ac.port.setap.team6c.database.DatabaseManager;
+import uk.ac.port.setap.team6c.database.*;
+
+import java.util.List;
 
 public class Main {
 
