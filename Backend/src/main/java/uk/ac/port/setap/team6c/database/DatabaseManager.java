@@ -42,7 +42,7 @@ public class DatabaseManager {
     /**
      * Initializes the database with the required tables
      */
-    public static void initializeDatabase() {
+    private static void initializeDatabase() {
         try {
             createConnection(connection -> {
                 Statement statement = connection.createStatement();
@@ -121,15 +121,15 @@ public class DatabaseManager {
         }
     }
 
-    public static void populateDatabase() {
+    private static void populateDatabase() {
         try {
             createConnection(connection -> {
                 Statement statement = connection.createStatement();
                 statement.execute(
                     "insert into university (universityName, emailDomain, theming) values" +
-                    "('University of Example', 'example.edu', 'Green and Gold')," +
-                    "('Sample University', 'sample.edu', 'Blue and White')," +
-                    "('Tech Institute', 'tech.edu', 'Red and Black');" +
+                    "('University of Portsmouth', '@port.ac.uk', 'Purple and White')," +
+                    "('University of Southampton', '@soton.ac.uk', 'Blue and White')," +
+                    "('Royal Holloway University of London', '@rhul.ac.uk', 'Orange and Black');" +
 
                     "insert into society (universityId, societyName, societyDescription, societyPicture, maxSize, isPaid) values" +
                     "(1, 'Computer Science Society', 'A society for tech enthusiasts and developers', 'cs_society_picture.jpg', 200, false)," +
@@ -137,20 +137,20 @@ public class DatabaseManager {
                     "(3, 'Science and Innovation', 'A society dedicated to scientific discoveries and innovation', 'science_innovation_picture.jpg', 150, true);" +
 
                     "insert into users (universityId, username, email, password, profilePicture, isAdministrator, settings) values" +
-                    "(1, 'johndoe', 'johndoe@example.edu', 'passwordhash', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
-                    "(2, 'janedoe', 'janedoe@sample.edu', 'passwordhash', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
-                    "(3, 'samuser', 'samuser@tech.edu', 'passwordhash', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}');" +
+                    // Passwords are all 'password'
+                    "(1, 'johndoe', 'johndoe@port.ac.uk', '$2y$10$wr1OF4PvzJX0nrfsJ6mumuriuI5MzNPdF.9nxzzElz2mldImt2n.O', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(2, 'janedoe', 'janedoe@soton.ac.uk', '$2y$10$LCkWRFUWsiNl0uV7hRvQ/.MVZ973xMgzxOI.ZkLxGV.3BvR.H7HEq', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
+                    "(3, 'samuser', 'samuser@rhul.ac.uk', '$2y$10$pHJkJD/6Dl7MNaq8HJhrMO4/4BR1uPm/xO8s0HVz94Qx0MGs3LJdu', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}');" +
 
                     "insert into sessionToken (token, userid, expiry) values" +
                     "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
                     "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00')," +
-                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-02-30 15:00:00');" +
+                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-03-02 15:00:00');" +
 
                     "insert into societyMember (userId, societyId, isManager) values" +
                     "(1, 1, true)," +
                     "(2, 2, false)," +
-                    "(3, 3, true)," +
-                    "(1, 3, false);" +
+                    "(3, 3, true);" +
 
                     "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
                     "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
@@ -172,6 +172,30 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void resetDatabase() {
+        try {
+            createConnection(connection -> {
+                Statement statement = connection.createStatement();
+                statement.execute(
+                    "drop table if exists societyEvent;" +
+                    "drop table if exists events;" +
+                    "drop table if exists message;" +
+                    "drop table if exists societyMember;" +
+                    "drop table if exists sessionToken;" +
+                    "drop table if exists users;" +
+                    "drop table if exists society;" +
+                    "drop table if exists university;"
+                );
+                statement.close();
+            });
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        initializeDatabase();
+        populateDatabase();
     }
 
 }
