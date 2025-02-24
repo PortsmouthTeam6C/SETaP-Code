@@ -58,26 +58,20 @@ public class University {
         }
     }
 
-    public @NotNull List<Society> allSocieties() {
-        List<Society> result = new ArrayList<>();
+    public @NotNull SocietyCollection getSocieties() {
+        List<Integer> societies = new ArrayList<>();
         try {
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select societyid from society where universityid = ?");
                 preparedStatement.setInt(1, universityId);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                for (int id : List.of(resultSet.getInt("societyid"))) {
-                    try {
-                        result.add(new Society(id));
-                    } catch (Society.UnknownSocietyException e) {
-                        e.printStackTrace();
-                    }
-                }
+                while (resultSet.next())
+                    societies.add(resultSet.getInt("societyid"));
             });
         } catch (SQLException exception) {
             exception.printStackTrace();
         }
-        return result;
+        return new SocietyCollection(societies);
     }
 
     public static class UniversityAlreadyExistsException extends Exception {}
