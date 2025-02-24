@@ -72,11 +72,11 @@ public class User {
     public User(String email) throws UnknownEmailException {
         try {
             DatabaseManager.createConnection(connection -> {
-                // Get the userid
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from users where email = ?");
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
                 resultSet.next();
+                this.userId = resultSet.getInt("userid");
                 this.universityId = resultSet.getInt("universityid");
                 this.username = resultSet.getString("username");
                 this.email = resultSet.getString("email");
@@ -88,6 +88,38 @@ public class User {
         } catch (SQLException exception) {
             exception.printStackTrace();
             throw new UnknownEmailException();
+        }
+    }
+
+    /**
+     * Get a user from a provided user id
+     * <p>
+     * <b>Users retrieved via this constructor are NOT automatically authenticated.
+     * The user must be authenticated using {@link User#getPassword()} before use.</b>
+     *
+     * @param userId the user's unique id
+     * @throws UnknownUseridException if the provided user id does not correspond to a user
+     */
+    protected User(int userId) throws UnknownUseridException {
+        try {
+            DatabaseManager.createConnection(connection -> {
+                // Get the userid
+                PreparedStatement preparedStatement = connection.prepareStatement("select * from users where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+                this.userId = resultSet.getInt("userid");
+                this.universityId = resultSet.getInt("universityid");
+                this.username = resultSet.getString("username");
+                this.email = resultSet.getString("email");
+                this.password = resultSet.getString("password");
+                this.profilePicture = resultSet.getString("profilepicture");
+                this.isAdministrator = resultSet.getBoolean("isadministrator");
+                this.settings = resultSet.getString("settings");
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UnknownUseridException();
         }
     }
 
@@ -137,6 +169,7 @@ public class User {
 
     public static class UnknownLoginTokenException extends Exception {}
     public static class UnknownEmailException extends Exception {}
+    public static class UnknownUseridException extends Exception {}
     public static class AccountAlreadyExistsException extends Exception {}
     public static class SessionTokenCouldNotBeCreatedException extends Exception {}
 
