@@ -2,10 +2,13 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class University {
@@ -53,6 +56,28 @@ public class University {
             exception.printStackTrace();
             throw new UniversityNotFoundException();
         }
+    }
+
+    public @NotNull List<Society> allSocieties() {
+        List<Society> result = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from society where universityid = ?");
+                preparedStatement.setInt(1, universityId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+                for (int id : List.of(resultSet.getInt("societyid"))) {
+                    try {
+                        result.add(new Society(id));
+                    } catch (Society.UnknownSocietyException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return result;
     }
 
     public static class UniversityAlreadyExistsException extends Exception {}
