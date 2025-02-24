@@ -140,7 +140,8 @@ public class DatabaseManager {
                     // Passwords are all 'password'
                     "(1, 'johndoe', 'johndoe@port.ac.uk', '$2y$10$wr1OF4PvzJX0nrfsJ6mumuriuI5MzNPdF.9nxzzElz2mldImt2n.O', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
                     "(2, 'janedoe', 'janedoe@soton.ac.uk', '$2y$10$LCkWRFUWsiNl0uV7hRvQ/.MVZ973xMgzxOI.ZkLxGV.3BvR.H7HEq', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
-                    "(3, 'samuser', 'samuser@rhul.ac.uk', '$2y$10$pHJkJD/6Dl7MNaq8HJhrMO4/4BR1uPm/xO8s0HVz94Qx0MGs3LJdu', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}');" +
+                    "(3, 'samuser', 'samuser@rhul.ac.uk', '$2y$10$pHJkJD/6Dl7MNaq8HJhrMO4/4BR1uPm/xO8s0HVz94Qx0MGs3LJdu', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(1, 'billytest', 'billytest@port.ac.uk', '$2y$10$D.6MBWU7ORf5Yt4ruW5/9OPs4RSFLyOYliqsepZ7vHhLbgIKkVH3.', 'profile_billytest.jpg', false, '{\"theme\":\"light\",\"notifications\":true}');" +
 
                     "insert into sessionToken (token, userid, expiry) values" +
                     "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
@@ -150,7 +151,8 @@ public class DatabaseManager {
                     "insert into societyMember (userId, societyId, isManager) values" +
                     "(1, 1, true)," +
                     "(2, 2, false)," +
-                    "(3, 3, true);" +
+                    "(3, 3, true)," +
+                    "(4, 1, false);" +
 
                     "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
                     "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
