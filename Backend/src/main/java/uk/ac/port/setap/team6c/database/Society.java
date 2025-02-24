@@ -23,7 +23,7 @@ public class Society {
     private int maxSize;
     private boolean isPaid;
 
-    private Society(int societyId) throws UnknownSocietyException {
+    protected Society(int societyId) throws UnknownSocietyException {
         try {
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from society where societyid = ?");
@@ -44,26 +44,22 @@ public class Society {
         }
     }
 
-    private static @NotNull List<Society> all(University university) {
-        List<Society> result = new ArrayList<>();
+    public UserCollection getUsers() throws UnknownSocietyException {
+        List<Integer> userIds = new ArrayList<>();
         try {
             DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from society where universityid = ?");
-                preparedStatement.setInt(1, university.getUniversityId());
+                PreparedStatement preparedStatement = connection.prepareStatement("select userid from societymember where societyid = ?");
+                preparedStatement.setInt(1, societyId);
                 ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                for (int id : List.of(resultSet.getInt("societyid"))) {
-                    try {
-                        result.add(new Society(id));
-                    } catch (UnknownSocietyException e) {
-                        e.printStackTrace();
-                    }
+                while (resultSet.next()) {
+                    userIds.add(resultSet.getInt("userid"));
                 }
             });
         } catch (SQLException exception) {
             exception.printStackTrace();
+            throw new UnknownSocietyException();
         }
-        return result;
+        return new UserCollection(userIds);
     }
 
     public static class UnknownSocietyException extends Exception {}
