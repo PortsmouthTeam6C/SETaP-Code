@@ -61,6 +61,23 @@ public class Society {
         }
         return new UserCollection(userIds);
     }
+    public EventCollection getEvents() throws UnknownSocietyException{
+        List<Integer> eventIds = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select eventid from societyevent where societyid = ?");
+                preparedStatement.setInt(1, societyId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    eventIds.add(resultSet.getInt("eventId"));
+                }
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UnknownSocietyException();
+        }
+        return new EventCollection(eventIds);
+    }
 
     public static class UnknownSocietyException extends Exception {}
 
