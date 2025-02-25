@@ -44,8 +44,9 @@ public class Event {
             throw new UnknownEventException();
         }
     }
-    //believe this method is not needed
-    //  public User getCreator() throws UnknownEventException{
+    public User getCreator() throws UnknownEventException{
+        return new User(userid)
+    }
     public static class UnknownEventException extends Exception {}
 }
 
