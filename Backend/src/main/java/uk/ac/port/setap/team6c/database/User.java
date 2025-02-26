@@ -2,6 +2,7 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
@@ -76,7 +77,6 @@ public class User {
     public User(String email) throws UnknownEmailException {
         try {
             DatabaseManager.createConnection(connection -> {
-                // Get the userid
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from users where email = ?");
                 preparedStatement.setString(1, email);
                 ResultSet resultSet = preparedStatement.executeQuery();
@@ -97,6 +97,38 @@ public class User {
     }
 
     /**
+     * Get a user from a provided user id
+     * <p>
+     * <b>Users retrieved via this constructor are NOT automatically authenticated.
+     * The user must be authenticated using {@link User#getPassword()} before use.</b>
+     *
+     * @param userId the user's unique id
+     * @throws UnknownUseridException if the provided user id does not correspond to a user
+     */
+    protected User(int userId) throws UnknownUseridException {
+        try {
+            DatabaseManager.createConnection(connection -> {
+                // Get the userid
+                PreparedStatement preparedStatement = connection.prepareStatement("select * from users where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+                this.userId = resultSet.getInt("userid");
+                this.universityId = resultSet.getInt("universityid");
+                this.username = resultSet.getString("username");
+                this.email = resultSet.getString("email");
+                this.password = resultSet.getString("password");
+                this.profilePicture = resultSet.getString("profilepicture");
+                this.isAdministrator = resultSet.getBoolean("isadministrator");
+                this.settings = resultSet.getString("settings");
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UnknownUseridException();
+        }
+    }
+
+    /**
      * Create a new user
      * @param university The university the user is associated with
      * @param username The user's username
@@ -107,7 +139,7 @@ public class User {
      * @param settings The user's settings
      * @throws AccountAlreadyExistsException if a user with the provided email already exists
      */
-    public User(University university, String username, String email, String password, String profilePicture, boolean isAdministrator, String settings) throws AccountAlreadyExistsException {
+    public User(@NotNull University university, String username, String email, String password, String profilePicture, boolean isAdministrator, String settings) throws AccountAlreadyExistsException {
         this.universityId = university.getUniversityId();
         this.username = username;
         this.email = email;
@@ -156,6 +188,11 @@ public class User {
             throw new SessionTokenCouldNotBeCreatedException();
         }
     }
+  
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof User && ((User) obj).userId == userId;
+    }
 
     /**
      * Exception thrown when a login token is not found
@@ -166,6 +203,11 @@ public class User {
      * Exception thrown when an email is not found
      */
     public static class UnknownEmailException extends Exception {}
+  
+    /**
+     * Exception thrown when a user with this userid does not exist
+     */
+    public static class UnknownUseridException extends Exception {}
 
     /**
      * Exception thrown when an account already exists

@@ -42,7 +42,7 @@ public class DatabaseManager {
     /**
      * Initializes the database with the required tables
      */
-    public static void initializeDatabase() {
+    private static void initializeDatabase() {
         try {
             createConnection(connection -> {
                 Statement statement = connection.createStatement();
@@ -119,6 +119,91 @@ public class DatabaseManager {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Populates the database with some temp data
+     */
+    private static void populateDatabase() {
+        try {
+            createConnection(connection -> {
+                Statement statement = connection.createStatement();
+                statement.execute(
+                    "insert into university (universityName, emailDomain, theming) values" +
+                    "('University of Portsmouth', '@port.ac.uk', 'Purple and White')," +
+                    "('University of Southampton', '@soton.ac.uk', 'Blue and White')," +
+                    "('Royal Holloway University of London', '@rhul.ac.uk', 'Orange and Black');" +
+
+                    "insert into society (universityId, societyName, societyDescription, societyPicture, maxSize, isPaid) values" +
+                    "(1, 'Computer Science Society', 'A society for tech enthusiasts and developers', 'cs_society_picture.jpg', 200, false)," +
+                    "(2, 'Drama Club', 'A society focused on theater arts and performances', 'drama_club_picture.jpg', 100, false)," +
+                    "(3, 'Science and Innovation', 'A society dedicated to scientific discoveries and innovation', 'science_innovation_picture.jpg', 150, true);" +
+
+                    "insert into users (universityId, username, email, password, profilePicture, isAdministrator, settings) values" +
+                    // Passwords are all 'password'
+                    "(1, 'johndoe', 'johndoe@port.ac.uk', '$2y$10$wr1OF4PvzJX0nrfsJ6mumuriuI5MzNPdF.9nxzzElz2mldImt2n.O', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(2, 'janedoe', 'janedoe@soton.ac.uk', '$2y$10$LCkWRFUWsiNl0uV7hRvQ/.MVZ973xMgzxOI.ZkLxGV.3BvR.H7HEq', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
+                    "(3, 'samuser', 'samuser@rhul.ac.uk', '$2y$10$pHJkJD/6Dl7MNaq8HJhrMO4/4BR1uPm/xO8s0HVz94Qx0MGs3LJdu', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(1, 'billytest', 'billytest@port.ac.uk', '$2y$10$D.6MBWU7ORf5Yt4ruW5/9OPs4RSFLyOYliqsepZ7vHhLbgIKkVH3.', 'profile_billytest.jpg', false, '{\"theme\":\"light\",\"notifications\":true}');" +
+
+                    "insert into sessionToken (token, userid, expiry) values" +
+                    "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
+                    "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00')," +
+                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-03-02 15:00:00');" +
+
+                    "insert into societyMember (userId, societyId, isManager) values" +
+                    "(1, 1, true)," +
+                    "(2, 2, false)," +
+                    "(3, 3, true)," +
+                    "(4, 1, false);" +
+
+                    "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
+                    "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
+                    "(2, 2, 'Join us for an exciting drama performance next week!', '2025-02-18 14:30:00', false)," +
+                    "(3, 3, 'We have an exciting new research opportunity available!', '2025-02-19 11:45:00', true);" +
+
+                    "insert into events (userId, startTimestamp, endTimestamp, createdTimestamp, location, name, description) values" +
+                    "(1, '2025-03-01 09:00:00', '2025-03-01 12:00:00', '2025-02-10 15:00:00', 'Room 101', 'Tech Talk on AI', 'Join us for a deep dive into Artificial Intelligence.')," +
+                    "(2, '2025-02-28 18:00:00', '2025-02-28 21:00:00', '2025-02-15 10:00:00', 'Auditorium', 'Drama Performance: Romeo and Juliet', 'Watch our talented actors perform the classic play, Romeo and Juliet.')," +
+                    "(3, '2025-03-05 13:00:00', '2025-03-05 16:00:00', '2025-02-20 09:00:00', 'Lab 202', 'Innovation Challenge', 'Participate in our innovation challenge and showcase your ideas.');" +
+
+                    "insert into societyEvent (societyId, eventId) values" +
+                    "(1, 1)," +
+                    "(2, 2)," +
+                    "(3, 3);"
+                );
+                statement.close();
+            });
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Resets the database by dropping all tables and reinitializing them
+     */
+    public static void resetDatabase() {
+        try {
+            createConnection(connection -> {
+                Statement statement = connection.createStatement();
+                statement.execute(
+                    "drop table if exists societyEvent;" +
+                    "drop table if exists events;" +
+                    "drop table if exists message;" +
+                    "drop table if exists societyMember;" +
+                    "drop table if exists sessionToken;" +
+                    "drop table if exists users;" +
+                    "drop table if exists society;" +
+                    "drop table if exists university;"
+                );
+                statement.close();
+            });
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+        initializeDatabase();
+        populateDatabase();
     }
 
 }

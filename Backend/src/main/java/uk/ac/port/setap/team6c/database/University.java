@@ -2,10 +2,13 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a university saved in the database
@@ -68,6 +71,31 @@ public class University {
             exception.printStackTrace();
             throw new UniversityNotFoundException();
         }
+    }
+
+    /**
+     * Get all societies associated with this university
+     * @return A collection of societies
+     */
+    public @NotNull SocietyCollection getSocieties() {
+        List<Integer> societies = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from society where universityid = ?");
+                preparedStatement.setInt(1, universityId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next())
+                    societies.add(resultSet.getInt("societyid"));
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new SocietyCollection(societies);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof University && ((University) obj).universityId == universityId;
     }
 
     /**

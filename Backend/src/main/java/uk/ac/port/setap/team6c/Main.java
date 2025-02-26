@@ -22,7 +22,7 @@ public class Main {
             .load();
 
     public static void main(String[] args) {
-//        DatabaseManager.initializeDatabase(); // Uncomment if you need to create the database
+        DatabaseManager.resetDatabase(); // Uncomment if you need to create the database
         Javalin app = Javalin.create(config -> {
             config.bundledPlugins.enableCors(cors -> {
                 cors.addRule(CorsPluginConfig.CorsRule::anyHost);
