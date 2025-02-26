@@ -3,6 +3,7 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import uk.ac.port.setap.team6c.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,9 @@ import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Represents a user in the database
+ */
 @Getter
 public class User {
 
@@ -129,7 +133,7 @@ public class User {
      * @param university The university the user is associated with
      * @param username The user's username
      * @param email The user's email
-     * @param password The user's password
+     * @param password The user's hashed password. This should be hashed using {@link AuthManager#hashPassword(String)}
      * @param profilePicture The user's profile picture
      * @param isAdministrator Whether the user is an administrator
      * @param settings The user's settings
@@ -165,9 +169,9 @@ public class User {
     }
 
     /**
-     * Assign a session token to this user
+     * Save a created session token to the user. The session token should also be returned to the user.
      * @param token The session token
-     * @param expiry The expiry timestamp
+     * @param expiry The token's expiry date
      * @throws SessionTokenCouldNotBeCreatedException if the session token could not be created
      */
     public void assignSessionToken(UUID token, Instant expiry) throws SessionTokenCouldNotBeCreatedException {
@@ -184,16 +188,35 @@ public class User {
             throw new SessionTokenCouldNotBeCreatedException();
         }
     }
-
+  
     @Override
     public boolean equals(Object obj) {
         return obj instanceof User && ((User) obj).userId == userId;
     }
 
+    /**
+     * Exception thrown when a login token is not found
+     */
     public static class UnknownLoginTokenException extends Exception {}
+
+    /**
+     * Exception thrown when an email is not found
+     */
     public static class UnknownEmailException extends Exception {}
+  
+    /**
+     * Exception thrown when a user with this userid does not exist
+     */
     public static class UnknownUseridException extends Exception {}
+
+    /**
+     * Exception thrown when an account already exists
+     */
     public static class AccountAlreadyExistsException extends Exception {}
+
+    /**
+     * Exception thrown when a session token could not be created
+     */
     public static class SessionTokenCouldNotBeCreatedException extends Exception {}
 
 }

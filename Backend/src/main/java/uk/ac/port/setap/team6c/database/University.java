@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a university saved in the database
+ */
 @Getter
 public class University {
 
@@ -20,10 +23,10 @@ public class University {
     private String theming;
 
     /**
-     * Create a new university
+     * Create a new university and save it to the database
      * @param universityName The name of the university
-     * @param emailDomain The email domain of the university
-     * @param theming The theming of the university
+     * @param emailDomain The domain of the university's email addresses. This must be unique.
+     * @param theming JSON string representing the theming of the university
      * @throws UniversityAlreadyExistsException if a university with the same email domain already exists
      */
     public University(String universityName, String emailDomain, String theming) throws UniversityAlreadyExistsException {
@@ -48,9 +51,9 @@ public class University {
     }
 
     /**
-     * Get a university from an email domain
-     * @param emailDomain The email domain of the university
-     * @throws UniversityNotFoundException if a university with the provided email domain does not exist
+     * Get a university from its email domain
+     * @param emailDomain The domain of the university's email addresses
+     * @throws UniversityNotFoundException if no university with the provided email domain exists
      */
     public University(String emailDomain) throws UniversityNotFoundException {
         try {
@@ -95,7 +98,14 @@ public class University {
         return obj instanceof University && ((University) obj).universityId == universityId;
     }
 
+    /**
+     * Exception thrown when a university is created with an existing email address
+     */
     public static class UniversityAlreadyExistsException extends Exception {}
+
+    /**
+     * Exception thrown when an attempt is made to retrieve a university which does not exist
+     */
     public static class UniversityNotFoundException extends Exception {}
 
 }
