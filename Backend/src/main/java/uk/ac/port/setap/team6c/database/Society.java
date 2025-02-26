@@ -79,6 +79,11 @@ public class Society {
         return new EventCollection(eventIds);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Society && ((Society) obj).societyId == societyId;
+    }
+
     public static class UnknownSocietyException extends Exception {}
 
 }

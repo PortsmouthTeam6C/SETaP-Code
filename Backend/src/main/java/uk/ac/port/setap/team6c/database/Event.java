@@ -48,6 +48,11 @@ public class Event {
         return new User(userid);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Event && ((Event) obj).eventId == eventId;
+    }
+
     public static class UnknownEventException extends Exception {}
 
 }

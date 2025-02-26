@@ -49,6 +49,11 @@ public class Message {
         return new User(userId);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof Message && ((Message) obj).messageId == messageId;
+    }
+
     public static class MessageDoesNotExistException extends Exception {}
 
 }

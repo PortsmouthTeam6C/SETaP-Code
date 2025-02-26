@@ -167,6 +167,11 @@ public class User {
         }
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof User && ((User) obj).userId == userId;
+    }
+
     public static class UnknownLoginTokenException extends Exception {}
     public static class UnknownEmailException extends Exception {}
     public static class UnknownUseridException extends Exception {}

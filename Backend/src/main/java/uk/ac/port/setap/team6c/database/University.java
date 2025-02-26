@@ -74,6 +74,11 @@ public class University {
         return new SocietyCollection(societies);
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return obj instanceof University && ((University) obj).universityId == universityId;
+    }
+
     public static class UniversityAlreadyExistsException extends Exception {}
     public static class UniversityNotFoundException extends Exception {}
 
