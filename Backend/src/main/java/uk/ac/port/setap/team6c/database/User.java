@@ -2,6 +2,7 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -123,7 +124,18 @@ public class User {
         }
     }
 
-    public User(University university, String username, String email, String password, String profilePicture, boolean isAdministrator, String settings) throws AccountAlreadyExistsException {
+    /**
+     * Create a new user
+     * @param university The university the user is associated with
+     * @param username The user's username
+     * @param email The user's email
+     * @param password The user's password
+     * @param profilePicture The user's profile picture
+     * @param isAdministrator Whether the user is an administrator
+     * @param settings The user's settings
+     * @throws AccountAlreadyExistsException if a user with the provided email already exists
+     */
+    public User(@NotNull University university, String username, String email, String password, String profilePicture, boolean isAdministrator, String settings) throws AccountAlreadyExistsException {
         this.universityId = university.getUniversityId();
         this.username = username;
         this.email = email;
@@ -152,6 +164,12 @@ public class User {
         }
     }
 
+    /**
+     * Assign a session token to this user
+     * @param token The session token
+     * @param expiry The expiry timestamp
+     * @throws SessionTokenCouldNotBeCreatedException if the session token could not be created
+     */
     public void assignSessionToken(UUID token, Instant expiry) throws SessionTokenCouldNotBeCreatedException {
         try {
             DatabaseManager.createConnection(connection -> {

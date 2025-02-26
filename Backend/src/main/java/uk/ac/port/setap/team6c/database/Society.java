@@ -2,7 +2,6 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -23,6 +22,11 @@ public class Society {
     private int maxSize;
     private boolean isPaid;
 
+    /**
+     * Get a society from a provided society ID
+     * @param societyId The society ID
+     * @throws UnknownSocietyException if the provided society ID does not correspond to a society
+     */
     protected Society(int societyId) throws UnknownSocietyException {
         try {
             DatabaseManager.createConnection(connection -> {
@@ -44,6 +48,11 @@ public class Society {
         }
     }
 
+    /**
+     * Get all the users in this society
+     * @return A collection of users in this society
+     * @throws UnknownSocietyException if the society does not exist
+     */
     public UserCollection getUsers() throws UnknownSocietyException {
         List<Integer> userIds = new ArrayList<>();
         try {
@@ -61,7 +70,13 @@ public class Society {
         }
         return new UserCollection(userIds);
     }
-    public EventCollection getEvents() throws UnknownSocietyException{
+
+    /**
+     * Get all the events in this society
+     * @return A collection of events in this society
+     * @throws UnknownSocietyException if the society does not exist
+     */
+    public EventCollection getEvents() throws UnknownSocietyException {
         List<Integer> eventIds = new ArrayList<>();
         try {
             DatabaseManager.createConnection(connection -> {

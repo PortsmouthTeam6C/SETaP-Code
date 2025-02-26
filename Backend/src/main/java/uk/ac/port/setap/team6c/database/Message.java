@@ -21,6 +21,11 @@ public class Message {
     Instant timestamp;
     boolean isPinned;
 
+    /**
+     * Get a message from a provided message ID
+     * @param messageId The message ID
+     * @throws MessageDoesNotExistException if the provided message ID does not correspond to a message
+     */
     protected Message(int messageId) throws MessageDoesNotExistException {
         try {
             DatabaseManager.createConnection(connection -> {
@@ -41,10 +46,20 @@ public class Message {
         }
     }
 
+    /**
+     * Get the society that this message was sent in
+     * @return The society that this message was sent in
+     * @throws Society.UnknownSocietyException if the society that this message was sent in does not exist
+     */
     public Society getSociety() throws Society.UnknownSocietyException {
         return new Society(societyId);
     }
 
+    /**
+     * Get the sender of this message
+     * @return The sender of this message
+     * @throws User.UnknownUseridException if the sender of this message does not exist
+     */
     public User getSender() throws User.UnknownUseridException {
         return new User(userId);
     }

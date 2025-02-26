@@ -22,6 +22,11 @@ public class Event {
     private String Name;
     private String Description;
 
+    /**
+     * Get an event from an event id
+     * @param eventId The event id
+     * @throws UnknownEventException if the provided event id does not correspond to an event
+     */
     protected Event(int eventId) throws UnknownEventException {
         try{
             DatabaseManager.createConnection(connection -> {
@@ -44,6 +49,11 @@ public class Event {
         }
     }
 
+    /**
+     * Get the creator of the event
+     * @return The creator of the event
+     * @throws User.UnknownUseridException if the creator of the event does not exist
+     */
     public User getCreator() throws User.UnknownUseridException {
         return new User(userid);
     }

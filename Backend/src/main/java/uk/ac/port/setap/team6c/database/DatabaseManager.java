@@ -121,6 +121,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Populates the database with some temp data
+     */
     private static void populateDatabase() {
         try {
             createConnection(connection -> {
@@ -176,6 +179,9 @@ public class DatabaseManager {
         }
     }
 
+    /**
+     * Resets the database by dropping all tables and reinitializing them
+     */
     public static void resetDatabase() {
         try {
             createConnection(connection -> {

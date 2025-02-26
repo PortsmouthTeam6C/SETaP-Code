@@ -19,6 +19,13 @@ public class University {
     private String emailDomain;
     private String theming;
 
+    /**
+     * Create a new university
+     * @param universityName The name of the university
+     * @param emailDomain The email domain of the university
+     * @param theming The theming of the university
+     * @throws UniversityAlreadyExistsException if a university with the same email domain already exists
+     */
     public University(String universityName, String emailDomain, String theming) throws UniversityAlreadyExistsException {
         this.universityName = universityName;
         this.emailDomain = emailDomain;
@@ -40,6 +47,11 @@ public class University {
         }
     }
 
+    /**
+     * Get a university from an email domain
+     * @param emailDomain The email domain of the university
+     * @throws UniversityNotFoundException if a university with the provided email domain does not exist
+     */
     public University(String emailDomain) throws UniversityNotFoundException {
         try {
             DatabaseManager.createConnection(connection -> {
@@ -58,6 +70,10 @@ public class University {
         }
     }
 
+    /**
+     * Get all societies associated with this university
+     * @return A collection of societies
+     */
     public @NotNull SocietyCollection getSocieties() {
         List<Integer> societies = new ArrayList<>();
         try {
