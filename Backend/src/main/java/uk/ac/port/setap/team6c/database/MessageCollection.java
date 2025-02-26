@@ -1,23 +1,31 @@
 package uk.ac.port.setap.team6c.database;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A collection of messages
+ * <p>
+ * Constructed using {@link MessageCollectionBuilder}. All filters are optional & can be combined in any combination.
+ * <pre>{@code
+ *    MessageCollection messageCollection = new MessageCollectionBuilder()
+ *        .sentBy(user) // Only show messages sent by a specific user
+ *        .sentIn(society) // Only show messages sent in a specific society
+ *        .containing("Hello, world!") // Only show messages containing the string "Hello, world!"
+ *        .betweenTimestamps(Instant.now().minus(Duration.ofDays(7)), Instant.now()) // Only show messages sent in the last week
+ *        .build(); // Build the message collection
+ * }</pre>
+ */
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class MessageCollection implements Iterable<Message> {
 
-    private final List<Integer> messageIds = new ArrayList<>();
-
-    private MessageCollection() {
-
-    }
+    private final List<Integer> messageIds;
 
     /**
      * Convert this {@link MessageCollection} to a list of messages
@@ -50,66 +58,6 @@ public class MessageCollection implements Iterable<Message> {
      */
     public int size() {
         return messageIds.size();
-    }
-
-    public MessageCollection containing(String messageContent) {
-        // Todo: impl
-    }
-
-    public MessageCollection sentBy(User user) {
-        // Todo: impl
-    }
-
-    public MessageCollection sentIn(Society society) {
-        // Todo: impl
-    }
-
-    public MessageCollection betweenTimestamps(Instant start, Instant end) {
-        // Todo: impl
-    }
-
-    /**
-     * Get all messages sent in a society's chat room
-     * @param societyId The society to get messages for
-     * @return A MessageCollection containing all messages sent to the society's chat room
-     */
-    public static @NotNull MessageCollection fromSociety(int societyId) {
-        MessageCollection messageCollection = new MessageCollection();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select messageid from message where societyid = ?");
-                preparedStatement.setInt(1, societyId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    messageCollection.messageIds.add(resultSet.getInt("messageId"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return messageCollection;
-    }
-
-    /**
-     * Get all messages sent by a user
-     * @param user The user to get messages from
-     * @return A MessageCollection containing all messages sent by the user
-     */
-    public static @NotNull MessageCollection fromUser(User user) {
-        MessageCollection messageCollection = new MessageCollection();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select messageid from message where userid = ?");
-                preparedStatement.setInt(1, user.getUserId());
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    messageCollection.messageIds.add(resultSet.getInt("messageId"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return messageCollection;
     }
 
     public class MessageCollectionIterator implements Iterator<Message> {
