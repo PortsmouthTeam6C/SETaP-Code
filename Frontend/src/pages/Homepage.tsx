@@ -73,7 +73,7 @@ function Homepage() {
 
         {/* Message Input and Send Button */}
         <div className="message-input">
-          <input
+          <input className="enter-message"
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
