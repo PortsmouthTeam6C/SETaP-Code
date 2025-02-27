@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 
 const societies = [
@@ -13,13 +14,38 @@ const events = [
   { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
 ];
 
-const messages = [
+const initialMessages = [
   { id: 1, user: "Alice", text: "Hey everyone! Looking forward to the event." },
   { id: 2, user: "Bob", text: "Can't wait! It's going to be amazing." },
   { id: 3, user: "Charlie", text: "Does anyone know the entry requirements?" },
 ];
 
-export default function Homepage() {
+function Homepage() {
+  const navigate = useNavigate();
+  const [messages, setMessages] = useState(initialMessages);
+  const [newMessage, setNewMessage] = useState("");
+
+  function handleJoinSociety() {
+    // Redirects to navigate page
+    navigate('/NavigateScreen');
+  }
+
+  function handleSendMessage() {
+    if (newMessage.trim() !== "") {
+      const newMessageObj = {
+        id: messages.length + 1,  // Simple way to create a unique id
+        user: "You",  // Assuming the user sending the message is always "You" for simplicity
+        text: newMessage
+      };
+
+      // Update messages state
+      setMessages((prevMessages) => [...prevMessages, newMessageObj]);
+
+      // Clear input field after sending the message
+      setNewMessage("");
+    }
+  }
+
   return (
     <div className="container">
       {/* Society List */}
@@ -30,6 +56,10 @@ export default function Homepage() {
             <p>{society.name}</p>
           </div>
         ))}
+        {/* join Society */}
+        <div className="add-society">
+          <button onClick={handleJoinSociety}>+</button>
+        </div>
       </div>
 
       {/* Messages */}
@@ -39,6 +69,17 @@ export default function Homepage() {
           {messages.map((msg) => (
             <p key={msg.id}><strong>{msg.user}:</strong> {msg.text}</p>
           ))}
+        </div>
+
+        {/* Message Input and Send Button */}
+        <div className="message-input">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            placeholder="Type your message..."
+          />
+          <button onClick={handleSendMessage}>Send</button>
         </div>
       </div>
 
@@ -53,9 +94,13 @@ export default function Homepage() {
           </div>
         ))}
       </div>
+
+      {/* Profile Button */}
       <div className="profile-button">
         Profile
       </div>
     </div>
   );
 }
+
+export default Homepage;

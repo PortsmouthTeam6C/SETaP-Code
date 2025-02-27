@@ -57,17 +57,23 @@ body {
   }
   
   .message-box {
-    height: 500px;
+    height: 560px;
     overflow-y: auto;
     background-color: #f3f4f6;
-    padding: 0.5rem;
+    padding: 1rem;
     border-radius: 0.5rem;
+    text-align: left;
   }
   
   .message-box p {
     margin-bottom: 0.5rem;
   }
   
+  .message-input{
+    padding: 10px;
+    align-content: space-between;
+  }
+
   .event-details {
     font-size: 0.875rem;
     color: #4b5563; /* Tailwind's text-gray-600 */
