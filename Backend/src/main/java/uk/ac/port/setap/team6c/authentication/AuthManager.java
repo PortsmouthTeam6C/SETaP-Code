@@ -3,6 +3,7 @@ package uk.ac.port.setap.team6c.authentication;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
 import uk.ac.port.setap.team6c.database.User;
@@ -10,12 +11,35 @@ import uk.ac.port.setap.team6c.database.User;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Manages all authentication for the application
+ */
 public class AuthManager {
 
-    private static boolean verifyHash(@NotNull String string, String hashed) {
-        return BCrypt.verifyer().verify(string.toCharArray(), hashed).verified;
+    /**
+     * Verifies that the provided string matches the hashed string
+     * @param password The plaintext password to check
+     * @param hashed The hashed password to check against
+     * @return Whether the password matches the hash
+     */
+    private static boolean verifyHash(@NotNull String password, String hashed) {
+        return BCrypt.verifyer().verify(password.toCharArray(), hashed).verified;
     }
 
+    /**
+     * Hashes a password using BCrypt
+     * @param password The password to hash
+     * @return The hashed password
+     */
+    @Contract("_ -> new")
+    public static @NotNull String hashPassword(@NotNull String password) {
+        return BCrypt.withDefaults().hashToString(12, password.toCharArray());
+    }
+
+    /**
+     * Route to log the router in with a provided email and password and get a login token
+     * @param ctx The request context
+     */
     public static void login(@NotNull Context ctx) {
         EmailPasswordRequest request = Main.GSON.fromJson(ctx.body(), EmailPasswordRequest.class);
 
@@ -46,4 +70,3 @@ public class AuthManager {
     }
     
 }
-
