@@ -1,12 +1,15 @@
 package uk.ac.port.setap.team6c.routes.Events;
 
 import io.javalin.http.Context;
+import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
-import uk.ac.port.setap.team6c.database.Event;
-import uk.ac.port.setap.team6c.database.Society;
-import uk.ac.port.setap.team6c.database.SocietyCollection;
+import uk.ac.port.setap.team6c.database.*;
 import uk.ac.port.setap.team6c.routes.IdRequest;
+import uk.ac.port.setap.team6c.routes.UserTokenRequest;
+
+import java.util.List;
+import java.util.UUID;
 
 public class Events {
     public static void getAllEvents(@NotNull Context ctx) {
@@ -20,6 +23,18 @@ public class Events {
             return;
         }
         society.getEvents();
+    }
+    public static void getJoinedEvents(@NotNull Context ctx) {
+        UserTokenRequest request = Main.GSON.fromJson(ctx.body(), UserTokenRequest.class);
+        User user;
+        try {
+            user = new User(UUID.fromString(request.token()), request.expiry());
+        } catch (User.UnknownLoginTokenException e) {
+            throw new UnauthorizedResponse();
+        }
+        EventCollection eventCollection = user.getJoinedEvents();
+        // tbd
+
     }
 
 }

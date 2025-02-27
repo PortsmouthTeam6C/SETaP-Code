@@ -210,6 +210,21 @@ public class User {
         }
         return new SocietyCollection(societies);
     }
+    public EventCollection getJoinedEvents() {
+        List<Integer> events = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select eventid from eventuser where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next())
+                    events.add(resultSet.getInt("eventid"));
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new EventCollection(events);
+    }
   
     @Override
     public boolean equals(Object obj) {
