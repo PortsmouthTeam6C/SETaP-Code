@@ -1,0 +1,60 @@
+body {
+    background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
+  }
+  
+  .container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    height: 100vh;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  
+  .card {
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+  }
+  
+  .title {
+    font-weight: bold;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .society-item,
+  .event-item {
+    padding: 0.5rem;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .society-item p,
+  .event-item p {
+    font-weight: 600;
+  }
+  
+  .message-box {
+    height: 500px;
+    overflow-y: auto;
+    background-color: #f3f4f6;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+  }
+  
+  .message-box p {
+    margin-bottom: 0.5rem;
+  }
+  
+  .event-details {
+    font-size: 0.875rem;
+    color: #4b5563; /* Tailwind's text-gray-600 */
+  }
+  
+  .event-price {
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
