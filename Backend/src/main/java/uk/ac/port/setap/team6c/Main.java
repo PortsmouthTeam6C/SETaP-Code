@@ -8,6 +8,7 @@ import io.javalin.plugin.bundled.CorsPluginConfig;
 import uk.ac.port.setap.team6c.routes.authentication.AuthManager;
 import uk.ac.port.setap.team6c.database.DatabaseManager;
 import uk.ac.port.setap.team6c.gson.InstantTypeAdapter;
+import uk.ac.port.setap.team6c.routes.societies.Societies;
 
 import java.time.Instant;
 
@@ -29,8 +30,10 @@ public class Main {
             });
         });
 
-        app.get("/", ctx -> ctx.result("Hello, world!"));
-        app.post("/login", AuthManager::login);
+        app.post("/user/login", AuthManager::login);
+        app.post("/societies/all", Societies::getAllSocieties);
+        app.post("/societies/joined", Societies::getJoinedSocieties);
+        app.post("/societies/info", Societies::getSocietyInfo);
 
         app.start(7071);
     }

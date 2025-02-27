@@ -10,6 +10,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -191,6 +193,22 @@ public class User {
 
     public University getUniversity() throws University.UniversityNotFoundException {
         return new University(universityId);
+    }
+
+    public SocietyCollection getJoinedSocieties() {
+        List<Integer> societies = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from societymember where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next())
+                    societies.add(resultSet.getInt("societyid"));
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new SocietyCollection(societies);
     }
   
     @Override
