@@ -75,7 +75,7 @@ public class Society {
      * @return A collection of events in this society
      * @throws UnknownSocietyException if the society does not exist
      */
-    public EventCollection getEvents() throws UnknownSocietyException {
+    public EventCollection getEvents()  {
         List<Integer> eventIds = new ArrayList<>();
         try {
             DatabaseManager.createConnection(connection -> {
@@ -88,7 +88,6 @@ public class Society {
             });
         } catch (SQLException exception) {
             exception.printStackTrace();
-            throw new UnknownSocietyException();
         }
         return new EventCollection(eventIds);
     }
