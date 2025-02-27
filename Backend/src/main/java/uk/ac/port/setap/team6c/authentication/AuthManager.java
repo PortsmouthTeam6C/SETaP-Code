@@ -2,10 +2,12 @@ package uk.ac.port.setap.team6c.authentication;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.javalin.http.Context;
+import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
+import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 
 import java.time.Instant;
@@ -65,8 +67,18 @@ public class AuthManager {
             expiry = null;
         }
 
+        // Get the university
+        University university;
+        try {
+            university = user.getUniversity();
+        } catch (University.UniversityNotFoundException e) {
+            throw new InternalServerErrorResponse();
+        }
+
         // Send token back to user
-        ctx.result(Main.GSON.toJson(new LoginResponse(token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(), user.isAdministrator(), user.getSettings())));
+        ctx.result(Main.GSON.toJson(new LoginResponse(
+                token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(),
+                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getTheming())));
     }
     
 }

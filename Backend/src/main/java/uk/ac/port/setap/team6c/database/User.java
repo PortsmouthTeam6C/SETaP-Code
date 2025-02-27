@@ -188,6 +188,10 @@ public class User {
             throw new SessionTokenCouldNotBeCreatedException();
         }
     }
+
+    public University getUniversity() throws University.UniversityNotFoundException {
+        return new University(universityId);
+    }
   
     @Override
     public boolean equals(Object obj) {
