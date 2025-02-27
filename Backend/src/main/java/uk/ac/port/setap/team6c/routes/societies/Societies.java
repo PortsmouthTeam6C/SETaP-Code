@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.societies;
+package uk.ac.port.setap.team6c.routes.societies;
 
 import io.javalin.http.Context;
 import org.jetbrains.annotations.NotNull;
@@ -6,6 +6,7 @@ import uk.ac.port.setap.team6c.Main;
 import uk.ac.port.setap.team6c.database.Society;
 import uk.ac.port.setap.team6c.database.SocietyCollection;
 import uk.ac.port.setap.team6c.database.University;
+import uk.ac.port.setap.team6c.routes.IdRequest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +37,7 @@ public class Societies {
     }
 
     public static void getSocietyInfo(@NotNull Context ctx) {
-        SocietyIdRequest request = Main.GSON.fromJson(ctx.body(), SocietyIdRequest.class);
+        IdRequest request = Main.GSON.fromJson(ctx.body(), IdRequest.class);
 
         // Get society
         Society society;

@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.authentication;
+package uk.ac.port.setap.team6c.routes.authentication;
 
 import java.time.Instant;
 import java.util.UUID;

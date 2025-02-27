@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.authentication;
+package uk.ac.port.setap.team6c.routes.authentication;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 import io.javalin.http.Context;

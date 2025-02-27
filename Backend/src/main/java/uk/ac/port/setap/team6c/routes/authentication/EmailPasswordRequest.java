@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.authentication;
+package uk.ac.port.setap.team6c.routes.authentication;
 
 /**
  * POST request body for logging in with an email and password

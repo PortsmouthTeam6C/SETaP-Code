@@ -3,7 +3,7 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import uk.ac.port.setap.team6c.authentication.AuthManager;
+import uk.ac.port.setap.team6c.routes.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
