@@ -23,7 +23,7 @@ export default function Homepage() {
   return (
     <div className="container">
       {/* Society List */}
-      <div className="card">
+      <div className="society">
         <h2 className="title">Societies</h2>
         {societies.map((society) => (
           <div key={society.id} className="society-item">
@@ -33,7 +33,7 @@ export default function Homepage() {
       </div>
 
       {/* Messages */}
-      <div className="card">
+      <div className="messages">
         <h2 className="title">Messages</h2>
         <div className="message-box">
           {messages.map((msg) => (
@@ -43,7 +43,7 @@ export default function Homepage() {
       </div>
 
       {/* Event Board */}
-      <div className="card">
+      <div className="event">
         <h2 className="title">Event Board</h2>
         {events.map((event) => (
           <div key={event.id} className="event-item">
@@ -52,6 +52,9 @@ export default function Homepage() {
             <p className="event-price">Price: {event.price}</p>
           </div>
         ))}
+      </div>
+      <div className="profile-button">
+        Profile
       </div>
     </div>
   );

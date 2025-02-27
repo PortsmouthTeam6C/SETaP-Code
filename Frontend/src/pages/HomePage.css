@@ -3,20 +3,40 @@ body {
   }
   
   .container {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    height: 100vh;
+    display: flex;
+    height: 88vh;
     padding: 1rem;
     gap: 1rem;
   }
-  
-  .card {
+
+  .society{
     padding: 1rem;
     background-color: white;
     border: 1px solid #ddd;
     border-radius: 0.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow-y: auto;
+    width: 14%;
+  }
+
+  .messages{
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    width: 43%;
+  }
+
+  .event{
+    padding: 1rem;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    width: 43%;
   }
   
   .title {
