@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 public class Society {
 
-    @Getter(AccessLevel.PACKAGE)
     private int societyId;
     @Getter(AccessLevel.PACKAGE)
     private int universityId;
@@ -27,7 +26,7 @@ public class Society {
      * @param societyId The society ID
      * @throws UnknownSocietyException if the provided society ID does not correspond to a society
      */
-    protected Society(int societyId) throws UnknownSocietyException {
+    public Society(int societyId) throws UnknownSocietyException {
         try {
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from society where societyid = ?");
