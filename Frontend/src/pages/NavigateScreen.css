@@ -4,7 +4,7 @@
 .container {
     display: flex;
     width: 150vh;
-    height: 100vh;
+    height: 88vh;
     padding: 1rem;
     background-color: #f3f4f6; /* bg-gray-100 */
   }
@@ -25,7 +25,8 @@
   }
   
   .society-list {
-    height: 700px;
+    height: 620px;
+    overflow-x: hidden;
     overflow-y: auto;
     border: 1px solid #d1d5db; /* border */
     border-radius: 0.5rem; /* rounded-lg */
