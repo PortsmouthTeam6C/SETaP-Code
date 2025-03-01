@@ -1,0 +1,90 @@
+/* SettingsPage.css */
+.container {
+    background-color: #0078D4;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .container.dark-mode {
+    background-color: #1a202c; /* Dark blue/gray for dark mode */
+  }
+  
+  .content-panel {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 1.5rem;
+    max-width: 64rem;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .content-panel.dark-mode {
+    background: #2d3748; /* Dark gray for dark mode */
+    color: #e2e8f0; /* Light text for dark mode */
+  }
+  
+  .settings-title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1f2937; /* Gray-800 equivalent */
+  }
+  
+  .settings-title.dark-mode {
+    color: #e2e8f0; /* Light text for dark mode */
+  }
+  
+  .text-gray-700 {
+    color: #374151; /* Gray-700 equivalent */
+  }
+  
+  .text-gray-700.dark-mode {
+    color: #a0aec0; /* Lighter gray for dark mode */
+  }
+  
+  .custom-link {
+    color: #2563eb; /* Blue-600 equivalent */
+  }
+  
+  .custom-link:hover {
+    color: #1d4ed8; /* Blue-800 equivalent */
+  }
+  
+  .settings-options {
+    margin-top: 1rem;
+  }
+  
+  .setting-item {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .setting-input {
+    padding: 0.5rem;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    color: #1f2937;
+  }
+  
+  .setting-input.dark-mode {
+    background: #4a5568; /* Dark gray for dark mode */
+    border-color: #718096; /* Lighter border for dark mode */
+    color: #e2e8f0;
+  }
+  
+  .setting-checkbox {
+    width: 1.5rem;
+    height: 1.5rem;
+    accent-color: #2563eb; /* Match blue theme */
+  }
+  
+  .setting-checkbox.dark-mode {
+    accent-color: #63b3ed; /* Lighter blue for dark mode visibility */
+  }

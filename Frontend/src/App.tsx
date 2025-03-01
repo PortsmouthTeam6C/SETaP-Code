@@ -4,6 +4,8 @@ import Homepage from './pages/Homepage'
 import SignupPage from './pages/SignupPage'
 import ForgotPasswordPage from './pages/ForgotPasswordPage'
 import NavigateScreen from './pages/NavigateScreen'
+import SettingsPage from './pages/SettingsPage'
+
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -17,6 +19,7 @@ function App() {
         <Route path = "/Homepage" element = {<Homepage />} />
         <Route path = "/ForgotPasswordPage" element = {<ForgotPasswordPage />} />
         <Route path = "/NavigateScreen" element = {<NavigateScreen/>} />
+        <Route path="/SettingsPage" element={<SettingsPage />} />
       </Routes>
     </Router>
   );
