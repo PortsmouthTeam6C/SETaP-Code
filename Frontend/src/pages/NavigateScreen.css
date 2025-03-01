@@ -86,20 +86,27 @@
     font-weight: 600;
   }
   
-  /* Profile Button */
-  .profile-button {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    padding: 0.5rem 1rem;
-    background-color: #3b82f6; /* bg-blue-500 */
-    color: #ffffff;
-    border-radius: 0.5rem; /* rounded-lg */
-    font-weight: 500;
-    cursor: pointer;
-  }
+/* Profile Button */
+.profile-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
   
-  .profile-button:hover {
-    background-color: #2563eb; /* hover:bg-blue-600 */
-  }
+  /* Set background and text color */
+  background-color: #f3f4f6; /* Light gray */
+  color: #333; /* Dark text */
+  border: 1px solid #d1d5db; /* Subtle border */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Hover effect */
+.profile-button:hover {
+  background-color: #d1d5db; /* Darker gray */
+  color: #333; /* Darker text */
+}
+
   
