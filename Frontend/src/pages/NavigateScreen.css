@@ -1,0 +1,112 @@
+/* NavigateScreen.css */
+
+/* General Layout */
+.container {
+    display: flex;
+    width: 150vh;
+    height: 88vh;
+    padding: 1rem;
+    background-color: #f3f4f6; /* bg-gray-100 */
+  }
+  
+  /* Left Section */
+  .left-section {
+    width: 25%;
+    padding: 1rem;
+    padding-right: 2rem;
+  }
+  
+  .search-bar {
+    width: 90%;
+    padding: 1rem;
+    border: 1px solid #d1d5db; /* border */
+    border-radius: 0.5rem; /* rounded-lg */
+    margin-bottom: 1rem;
+  }
+  
+  .society-list {
+    height: 620px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border: 1px solid #d1d5db; /* border */
+    border-radius: 0.5rem; /* rounded-lg */
+    padding: 0.5rem;
+    background-color: #ffffff; /* bg-white */
+  }
+  
+  .society-item {
+    padding: 1rem;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border: 1px solid #e5e7eb; /* border */
+    border-radius: 0.5rem; /* rounded-lg */
+    background-color: #ffffff; /* bg-white */
+  }
+  
+  .society-item:hover {
+    background-color: #f3f4f6; /* hover:bg-gray-100 */
+  }
+  
+  .society-item.selected {
+    background-color: #cfe0fc; /* bg-blue-200 */
+  }
+  
+  .society-item h3 {
+    font-weight: bold;
+  }
+  
+  .society-item p {
+    font-size: 0.875rem;
+    color: #4b5563; /* text-gray-600 */
+  }
+  
+  /* Right Section */
+  .right-section {
+    width: 75%;
+    padding: 1rem;
+    background-color: #ffffff; /* bg-white */
+    border: 1px solid #e5e7eb; /* border */
+    border-radius: 0.5rem; /* rounded-lg */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
+  }
+  
+  .right-section h2 {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+  
+  .right-section p {
+    font-size: 1.125rem;
+    color: #4b5563; /* text-gray-700 */
+    margin-bottom: 1rem;
+  }
+  
+  .right-section .price {
+    font-weight: 600;
+  }
+  
+/* Profile Button */
+.profile-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  cursor: pointer;
+  
+  /* Set background and text color */
+  background-color: #f3f4f6; /* Light gray */
+  color: #333; /* Dark text */
+  border: 1px solid #d1d5db; /* Subtle border */
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+}
+
+/* Hover effect */
+.profile-button:hover {
+  background-color: #d1d5db; /* Darker gray */
+  color: #333; /* Darker text */
+}
+
+  
