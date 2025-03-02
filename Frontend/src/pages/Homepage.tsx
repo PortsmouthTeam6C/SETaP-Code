@@ -46,23 +46,31 @@ function Homepage() {
     }
   }
 
+  function handleKeyDown(event: { key: string; }) {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
+
   return (
     <div className="container">
-      {/* Society List */}
+      {/* Society Section */}
       <div className="society">
         <h2 className="title">Societies</h2>
-        {societies.map((society) => (
-          <div key={society.id} className="society-item">
-            <p>{society.name}</p>
-          </div>
-        ))}
-        {/* join Society */}
+        <div className="society-list">
+          {societies.map((society) => (
+            <div key={society.id} className="society-item">
+              <p>{society.name}</p>
+            </div>
+          ))}
+        </div>
+        {/* Join Society Button */}
         <div className="add-society">
-          <button onClick={handleJoinSociety}>+</button>
+          <button onClick={handleJoinSociety}>+ Join Society</button>
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages Section */}
       <div className="messages">
         <h2 className="title">Messages</h2>
         <div className="message-box">
@@ -77,13 +85,14 @@ function Homepage() {
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Type your message..."
           />
           <button onClick={handleSendMessage}>Send</button>
         </div>
       </div>
 
-      {/* Event Board */}
+      {/* Event Board Section */}
       <div className="event">
         <h2 className="title">Event Board</h2>
         {events.map((event) => (
@@ -93,11 +102,6 @@ function Homepage() {
             <p className="event-price">Price: {event.price}</p>
           </div>
         ))}
-      </div>
-
-      {/* Profile Button */}
-      <div className="profile-button">
-        Profile
       </div>
     </div>
   );

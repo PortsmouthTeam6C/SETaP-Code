@@ -1,108 +1,165 @@
 body {
-    background-color: #f3f4f6; /* Tailwind's bg-gray-100 */
-  }
-  
-  .container {
-    display: flex;
-    height: 88vh;
-    padding: 1rem;
-    gap: 1rem;
-  }
-
-  .society{
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    width: 14%;
-  }
-
-  .messages{
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow-y: hidden;
-    width: 60%;
-  }
-
-  .event{
-    padding: 1rem;
-    background-color: white;
-    border: 1px solid #ddd;
-    border-radius: 0.5rem;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow-y: auto;
-    width: 26%;
-  }
-  
-  .title {
-    font-weight: bold;
-    font-size: 1.125rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .society-item,
-  .event-item {
-    padding: 0.5rem;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .society-item p,
-  .event-item p {
-    font-weight: 600;
-  }
-  
-  .message-box {
-    height: 560px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    background-color: #f3f4f6;
-    padding: 1rem;
-    border-radius: 0.5rem;
-    text-align: left;
-  }
-  
-  .message-box p {
-    margin-bottom: 0.5rem;
-  }
-  
-  .message-input{
-    padding: 10px;
-    align-content: space-between;
-  }
-
-  .enter-message{
-    padding: 10px;
-    width: 320px;
-    border-radius: 13px;
-  }
-
-  .message-input button {
-    border: none;
-    border-radius: 5px;
-    background-color: #516ce5;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    margin-bottom: 10px;
-    align-items: center;
+  color: #333;
+  margin: 0;
+  font-family: Arial, sans-serif;
 }
 
-  .message-input button:hover {
-    background-color: #6b8bd1;
+.container {
+  display: flex;
+  height: 88vh;
+  padding: 1rem;
+  gap: 1rem;
 }
 
-  .event-details {
-    font-size: 0.875rem;
-    color: #4b5563; /* Tailwind's text-gray-600 */
-  }
-  
-  .event-price {
-    font-size: 0.875rem;
-    font-weight: 600;
-  }
-  
+/* Society Section */
+.society {
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 20%; /* Slightly wider for better spacing */
+  display: flex;
+  flex-direction: column;
+}
+
+.society h2 {
+  margin-bottom: 0.5rem; /* Space between title and button */
+}
+
+.toggle-button {
+  background-color: #516ce5;
+  color: white;
+  border: none;
+  padding: 6px 12px; /* Smaller button */
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 12px; /* Smaller font size */
+  transition: background-color 0.3s ease;
+  margin-bottom: 1rem; /* Space between button and list */
+}
+
+.toggle-button:hover {
+  background-color: #6b8bd1;
+}
+
+.society-list {
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.society-list.visible {
+  max-height: 500px; /* Adjust based on content */
+}
+
+.society-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.society-item p {
+  font-weight: 600;
+  margin: 0;
+}
+
+.add-society {
+  margin-top: auto; /* Push the button to the bottom */
+  text-align: center;
+}
+
+.add-society button {
+  background-color: #516ce5;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.add-society button:hover {
+  background-color: #6b8bd1;
+}
+
+/* Messages Section */
+.messages {
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50%; /* Adjusted width */
+  display: flex;
+  flex-direction: column;
+}
+
+.message-box {
+  flex-grow: 1;
+  overflow-y: auto;
+  background-color: #f3f4f6;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.message-box p {
+  margin-bottom: 0.5rem;
+}
+
+.message-input {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.enter-message {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 13px;
+  border: 1px solid #ddd;
+}
+
+.message-input button {
+  background-color: #516ce5;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.message-input button:hover {
+  background-color: #6b8bd1;
+}
+
+/* Event Board Section */
+.event {
+  padding: 1rem;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 30%; /* Adjusted width */
+  overflow-y: auto;
+}
+
+.event-item {
+  padding: 0.5rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.event-item p {
+  font-weight: 600;
+  margin: 0;
+}
+
+.event-details {
+  font-size: 0.875rem;
+  color: #4b5563; /* Tailwind's text-gray-600 */
+}
+
+.event-price {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
