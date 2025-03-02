@@ -2,7 +2,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Static Badge](https://img.shields.io/badge/Group-6C-blue)
 
-
 # Synergy
 
 Synergy is a project designed to improve finding and joining university societies.
