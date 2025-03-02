@@ -1,29 +1,22 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './SettingsPage.css';
 import { Link } from 'react-router-dom';
+import { useSettings } from './SettingsContext'; 
 
 export default function SettingsPage(): JSX.Element {
-  // State for app-wide settings
-  const [theme, setTheme] = useState<'light' | 'dark'>('light'); // TypeScript union type for theme
-  const [notifications, setNotifications] = useState<boolean>(true); // Boolean for notifications
+  const { settings, updateSettings } = useSettings(); // Use context
 
-  // Function to save settings (e.g., to localStorage)
-  const saveSettings = () => {
-    localStorage.setItem('appSettings', JSON.stringify({ theme, notifications }));
+  const handleThemeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newTheme = e.target.value as 'light' | 'dark';
+    updateSettings({ theme: newTheme }); // Update context, which handles localStorage
   };
 
-  // Function to load settings from localStorage (on mount or refresh)
-  React.useEffect(() => {
-    const savedSettings = localStorage.getItem('appSettings');
-    if (savedSettings) {
-      const { theme, notifications } = JSON.parse(savedSettings);
-      setTheme(theme);
-      setNotifications(notifications);
-    }
-  }, []); // Empty dependency array ensures this runs only once on mount
+  const handleNotificationsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    updateSettings({ notifications: e.target.checked }); // Update context
+  };
 
   return (
-    <div className={`container ${theme === 'dark' ? 'dark-mode' : ''}`}>
+    <div className={`container ${settings.theme === 'dark' ? 'dark-mode' : ''}`}>
       <div className="content-panel">
         <h1 className="settings-title">Settings</h1>
         <div className="settings-options">
@@ -31,9 +24,8 @@ export default function SettingsPage(): JSX.Element {
           <div className="setting-item">
             <label className="text-gray-700">Theme:</label>
             <select
-              value={theme}
-              onChange={(e) => setTheme(e.target.value as 'light' | 'dark')}
-              onBlur={saveSettings} // Save when user leaves the input
+              value={settings.theme} // Use settings.theme from context
+              onChange={handleThemeChange} // Update via context
               className="setting-input"
             >
               <option value="light">Light</option>
@@ -46,9 +38,8 @@ export default function SettingsPage(): JSX.Element {
             <label className="text-gray-700">Notifications:</label>
             <input
               type="checkbox"
-              checked={notifications}
-              onChange={(e) => setNotifications(e.target.checked)}
-              onBlur={saveSettings} // Save when user leaves the input
+              checked={settings.notifications} // Use settings.notifications from context
+              onChange={handleNotificationsChange} // Update via context
               className="setting-checkbox"
             />
           </div>
