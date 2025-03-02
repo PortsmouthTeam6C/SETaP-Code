@@ -3,31 +3,45 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #006eff;
+  /* default values for light theme*/
+  --background-color: #ffffff;
+  --text-color: #213547;
+  --button-bg: #afb1b1;
+  --link-color: #646cff;
+  --link-hover-color: #747bff;
+  --button-border-hover: #646cff;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+[data-theme="dark"] {
+  --background-color: #24292E;
+  --text-color: #ffffff;
+  --button-bg: #00000028;
+  --link-hover-color: #535bf2;
+
+  color: var(--text-color);
+  background-color: var(--background-color);
 }
 
-body {
+html[data-theme] body { /* Increase specificity */
   margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background-color) !important; /* Force for testing */
+  color: var(--text-color);
+}
+
+a {
+  font-weight: 500;
+  color: var(--link-color);
+  text-decoration: inherit;
+}
+a:hover {
+  color: var(--link-hover-color);
 }
 
 h1 {
@@ -42,27 +56,15 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-bg);
   cursor: pointer;
   transition: border-color 0.25s;
+  color: var(--text-color);
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--button-border-hover);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
