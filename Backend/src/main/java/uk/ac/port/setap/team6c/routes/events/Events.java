@@ -7,7 +7,6 @@ import uk.ac.port.setap.team6c.Main;
 import uk.ac.port.setap.team6c.database.*;
 import uk.ac.port.setap.team6c.routes.IdRequest;
 import uk.ac.port.setap.team6c.routes.UserTokenRequest;
-import uk.ac.port.setap.team6c.routes.societies.SocietyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
