@@ -1,6 +1,7 @@
 package uk.ac.port.setap.team6c.routes.authentication;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
+import io.javalin.http.ConflictResponse;
 import io.javalin.http.Context;
 import io.javalin.http.InternalServerErrorResponse;
 import io.javalin.http.UnauthorizedResponse;
@@ -11,9 +12,7 @@ import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 
 import java.time.Instant;
-import java.util.Map;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Manages all authentication for the application
@@ -94,17 +93,34 @@ public class AuthManager {
     /**
      * Create a new account & send a verification email
      * @param ctx The request context
+     * @throws ConflictResponse If the email is in use
      */
     public static void createAccount(@NotNull Context ctx) {
         CreateAccountRequest request = Main.GSON.fromJson(ctx.body(), CreateAccountRequest.class);
 
-        /* Todo: ensure email is not currently in use in the database or present in {@link usersWaitingForVerification} */
+        // If the user is instantiated without error, the user already exists in the database
+        try {
+            new User(request.email());
+            throw new ConflictResponse("Email is already in use");
+        } catch (User.UnknownEmailException ignored) {}
 
+        // If the user already exists in the list of those waiting for verification, remove the older one
+        for (String key : usersWaitingForVerification.keySet())
+            if (usersWaitingForVerification.get(key).email().equals(request.email()))
+                usersWaitingForVerification.remove(key);
+
+        // Add this user to the list of users waiting for verification
         String accountIdentifier = UUID.randomUUID().toString();
         String verificationCode = padWithZeroes(String.valueOf(RANDOM.nextInt(1000000)));
         usersWaitingForVerification.put(accountIdentifier + verificationCode, request);
 
-        /* Todo: remove the user from {@link usersWaitingForVerification} after a certain amount of time */
+        // Stop waiting for verification after 10 minutes
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                usersWaitingForVerification.remove(accountIdentifier + verificationCode);
+            }
+        }, 10 * 60 * 1000);
 
         // Send verification email
         /* Todo: Implement email sending
