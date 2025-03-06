@@ -13,6 +13,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Represents a user in the database
@@ -168,6 +169,24 @@ public class User {
             exception.printStackTrace();
             throw new AccountAlreadyExistsException();
         }
+    }
+
+    /**
+     * Check if a user exists
+     * @param email The user's email
+     * @return Whether the user exists
+     */
+    public static boolean exists(String email) {
+        AtomicBoolean exists = new AtomicBoolean(false);
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select 1 from users where email = ?");
+                preparedStatement.setString(1, email);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                exists.set(resultSet.next());
+            });
+        } catch (Exception ignored) {}
+        return exists.get();
     }
 
     /**

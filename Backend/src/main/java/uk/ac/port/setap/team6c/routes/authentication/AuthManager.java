@@ -25,7 +25,7 @@ public class AuthManager {
      * Key: UUID + Verification code concatenated
      * Value: All the user-supplied information about the account
      */
-    private static Map<String, CreateAccountRequest> usersWaitingForVerification;
+    private static Map<String, CreateAccountRequest> usersWaitingForVerification = new HashMap<>();
 
     /**
      * Verifies that the provided string matches the hashed string
@@ -99,10 +99,9 @@ public class AuthManager {
         CreateAccountRequest request = Main.GSON.fromJson(ctx.body(), CreateAccountRequest.class);
 
         // If the user is instantiated without error, the user already exists in the database
-        try {
-            new User(request.email());
-            throw new ConflictResponse("Email is already in use");
-        } catch (User.UnknownEmailException ignored) {}
+        if (User.exists(request.email())) {
+            throw new ConflictResponse();
+        }
 
         // If the user already exists in the list of those waiting for verification, remove the older one
         for (String key : usersWaitingForVerification.keySet())
@@ -123,14 +122,14 @@ public class AuthManager {
         }, 10 * 60 * 1000);
 
         // Send verification email
-        /* Todo: Implement email sending
-            - Attach to GMail API
-            - Log in with OAuth2
-            - Create email draft with verification code
-            - Send email
-         */
+        GmailManager.sendEmail(request.email(), "Verification code", "Your verification code is: " + verificationCode);
 
+        // Respond with the account identifier
         ctx.result(Main.GSON.toJson(new CreateAccountResponse(accountIdentifier)));
+    }
+
+    public static void verifyAccount(@NotNull Context ctx) {
+
     }
 
     /**
