@@ -11,11 +11,8 @@ import java.time.Instant;
 @Getter
 public class Message {
 
-    @Getter(AccessLevel.PACKAGE)
     int messageId;
-    @Getter(AccessLevel.PACKAGE)
     int userId;
-    @Getter(AccessLevel.PACKAGE)
     int societyId;
     String messageContent;
     Instant timestamp;

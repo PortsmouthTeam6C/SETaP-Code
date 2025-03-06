@@ -107,7 +107,7 @@ public class User {
      * @param userId the user's unique id
      * @throws UnknownUseridException if the provided user id does not correspond to a user
      */
-    protected User(int userId) throws UnknownUseridException {
+    public User(int userId) throws UnknownUseridException {
         try {
             DatabaseManager.createConnection(connection -> {
                 // Get the userid

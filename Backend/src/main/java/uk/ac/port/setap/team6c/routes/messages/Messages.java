@@ -7,47 +7,44 @@ import uk.ac.port.setap.team6c.database.Message;
 import uk.ac.port.setap.team6c.database.MessageCollection;
 import uk.ac.port.setap.team6c.database.MessageCollectionBuilder;
 import uk.ac.port.setap.team6c.database.User;
+import uk.ac.port.setap.team6c.routes.UserResponse;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Messages {
 
-    public static void getMessages(@NotNull Context ctx) {
+    public static void getMessagesFromSociety(@NotNull Context ctx) {
         MessageRequest request = Main.GSON.fromJson(ctx.body(), MessageRequest.class);
-
         List<Message> messages = createMessageCollection(request).toList();
-        /* Todo: parse messages into a response object
-        *   Ideally instead of sending back userId and societyId we should be sending back more useful information about them.
-        *   Potentially requires caching database responses for the non-authenticated constructors to reduce query counts.
-        *   -
-        *   Potential formats for response object:
-        *   Easier to parse on the frontend, however larger volume of data per response:
-        *   [
-        *       { content: "...", timestamp: "...", isPinned: false, senderEmail: "...", senderUsername: "...", senderProfilePicture: "...", societyName: "...", societyId: "..." },
-        *       ...
-        *   ]
-        *   -
-        *   Significantly reduced amount of data per response, however slightly harder to parse
-        *   {
-        *       "messages": [
-        *           { content: "...", timestamp: "...", isPinned: false, senderIdx: 0, societyIdx: 0 },
-        *           ...
-        *       ],
-        *       "users": [
-        *           { email: "...", username: "...", profilePicture: "..." }
-        *           ...
-        *       ],
-        *       "societies": [
-        *           { name: "...", "id": "..." }
-        *       ]
-        *   }
-        *   -
-        *   Absolute minimum amount of data per response, however additional requests are required to get more information
-        *   [
-        *       { content: "...", timestamp: "...", isPinned: false, senderId: 0, societyId: 0 },
-        *       ...
-        *   ]
-        * */
+
+        // Convert messages to MessagesResponse
+        List<MessageResponse> messageResponses = new ArrayList<>();
+        Map<String, UserResponse> userResponses = new HashMap<>();
+        for (Message message : messages) {
+            User user;
+            try {
+                user = new User(message.getUserId());
+            } catch (User.UnknownUseridException ignored) {
+                continue;
+            }
+
+            messageResponses.add(new MessageResponse(
+                    message.getMessageId(),
+                    message.getMessageContent(),
+                    message.getTimestamp(),
+                    message.isPinned(),
+                    message.getUserId()
+            ));
+            userResponses.putIfAbsent(String.valueOf(message.getUserId()), new UserResponse(
+                    user.getEmail(),
+                    user.getUsername(),
+                    user.getProfilePicture()
+            ));
+        }
+        ctx.result(Main.GSON.toJson(new MessagesResponse(messageResponses, userResponses)));
     }
 
     private static MessageCollection createMessageCollection(@NotNull MessageRequest request) {
