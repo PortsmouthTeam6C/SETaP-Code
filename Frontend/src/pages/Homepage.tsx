@@ -9,9 +9,6 @@ const societies = [
   { id: 1, name: "Photography Club" },
   { id: 2, name: "Coding Society" },
   { id: 3, name: "Music Club" },
-  { id: 1, name: "Photography Club" },
-  { id: 2, name: "Coding Society" },
-  { id: 3, name: "Music Club" },
 ];
 
 const events = [
@@ -52,6 +49,12 @@ function Homepage() {
     }
   }
 
+  function handleKeyDown(event: { key: string; }) {
+    if (event.key === 'Enter') {
+      handleSendMessage();
+    }
+  }
+
   return (
     <div className="container">
       {/* Society List */}
@@ -68,7 +71,7 @@ function Homepage() {
         </div>
       </div>
 
-      {/* Messages */}
+      {/* Messages Section */}
       <div className="messages">
         <h2 className="title">Messages</h2>
         <div className="message-box">
@@ -83,6 +86,7 @@ function Homepage() {
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Type your message..."
           />
           <button onClick={handleSendMessage}>Send</button>
