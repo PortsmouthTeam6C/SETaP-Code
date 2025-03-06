@@ -75,6 +75,9 @@ const societies = [
   { id: 1, name: "Photography Club" },
   { id: 2, name: "Coding Society" },
   { id: 3, name: "Music Club" },
+  { id: 1, name: "Photography Club" },
+  { id: 2, name: "Coding Society" },
+  { id: 3, name: "Music Club" },
 ];
 
 const events = [
