@@ -75,6 +75,12 @@ const societies = [
   { id: 1, name: "Photography Club" },
   { id: 2, name: "Coding Society" },
   { id: 3, name: "Music Club" },
+  { id: 1, name: "Photography Club" },
+  { id: 2, name: "Coding Society" },
+  { id: 3, name: "Music Club" },
+  { id: 1, name: "Photography Club" },
+  { id: 2, name: "Coding Society" },
+  { id: 3, name: "Music Club" },
 ];
 
 const events = [
@@ -126,7 +132,7 @@ function Homepage() {
       {/* Society Section */}
       <div className="society">
         <h2 className="title">Societies</h2>
-        <div className="society-list">
+        <div className="society_list">
           {societies.map((society) => (
             <div key={society.id} className="society-item">
               <p>{society.name}</p>
