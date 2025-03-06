@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.routes.authentication;
+package uk.ac.port.setap.team6c.email;
 
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;

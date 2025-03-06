@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
 import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
+import uk.ac.port.setap.team6c.email.GmailManager;
 
 import java.time.Instant;
 import java.util.*;
