@@ -38,6 +38,19 @@ public class Events {
         ctx.result(Main.GSON.toJson(events));
 
     }
+    public static void getEventInfo(@NotNull Context ctx) {
+        IdRequest request = Main.GSON.fromJson(ctx.body(), IdRequest.class);
+        Event event;
+        try{
+            event = new Event(request.id());
+
+        } catch (Exception e){
+            ctx.status(400);
+            ctx.result("Eventid not found");
+            return;
+        }
+        ctx.result(Main.GSON.toJson(new EventResponse(event.getEventId(),event.getUserid(),event.getStartTimestamp(),event.getEndTimestamp(),event.getCreationTimestamp(),event.getLocation(),event.getName(),event.getDescription())));
+    }
     private static @NotNull List<EventResponse> convertEventCollectionToResponseList(@NotNull EventCollection eventCollection) {
         List<EventResponse> events = new ArrayList<>();
         for (Event event : eventCollection) {

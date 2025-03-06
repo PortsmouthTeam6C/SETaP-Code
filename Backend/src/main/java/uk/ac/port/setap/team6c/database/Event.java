@@ -28,7 +28,7 @@ public class Event {
      * @param eventId The event id
      * @throws UnknownEventException if the provided event id does not correspond to an event
      */
-    protected Event(int eventId) throws UnknownEventException {
+    public Event(int eventId) throws UnknownEventException {
         try{
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from events where eventid = ?");
