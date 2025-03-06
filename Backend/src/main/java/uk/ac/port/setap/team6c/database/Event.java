@@ -14,9 +14,7 @@ import java.util.List;
 @Getter
 public class Event {
 
-    @Getter(AccessLevel.PACKAGE)
     private int eventId;
-    @Getter(AccessLevel.PACKAGE)
     private int userid;
     private Instant StartTimestamp;
     private Instant EndTimestamp;
