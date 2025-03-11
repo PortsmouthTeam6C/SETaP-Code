@@ -165,3 +165,20 @@ body {
   font-size: 0.875rem;
   font-weight: 600;
 }
+
+/* Profile Button Section */
+.profileHomePage-section {
+  width: 18%;
+  padding: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Uni Logo Section */
+.uniHomePage-logo {
+  position:absolute;
+  right: 16%;
+  bottom: 6%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover; 
+}
