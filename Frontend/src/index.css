@@ -1,9 +1,12 @@
 :root {
   /* Default (light theme) variables */
-  --background: #dadada; /* White for light theme */
+  --background: #fafafa; /* White for light theme */
   --text: #213547; /* Dark text for light theme */
+  --text2: #15ff00;
   --primary: #646cff; /* Link color */
-  --button-bg: #f9f9f9; /* Button background for light theme */
+  --button-bg: #b4b3b3; /* Button background for light theme */
+  --container-bg: #f1f1f1; /* Container background for most elemtents */
+  --container2-bg: #e8e8e8; /* Slightly darker subcontainer */
 
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -15,11 +18,17 @@
 }
 /* Dark theme overrides */
 [data-theme="dark"] {
-  --background: #494949; /* Dark gray for dark theme */
-  --text: rgba(255, 255, 255, 0.87); /* Light text for dark theme */
+  --background: #292929; /* Dark gray for dark theme */
+  --text: #ffffffde; /* Light text for dark theme */
+  --text2: #ff0000;
   --primary: #535bf2; /* Adjusted link color for dark theme */
-  --button-bg: #706f6f; 
+  --button-bg: #555555; /* Gray Button background*/
+  --container-bg: #333333; /* Container background for most elemtents */
+  --container2-bg: #4d4d4d; /* Lighter subcontainer */
 }
+
+/* For dark theme in terms of darkness background>Containers>Buttons */
+/* For light theme in terms of lightness Background>Containers>Buttons */
 
 a {
   font-weight: 500;
@@ -57,11 +66,17 @@ button {
   cursor: pointer;
   color: var(--text);
   transition: border-color 0.25s;
+  margin-right: 0; /* Set default margin to 0 */
+}
+
+button + button {
+  margin-left: 10px;  /* Only add spacing on the left for buttons following buttons buttons */
 }
 
 button:hover {
   border-color: var(--primary);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

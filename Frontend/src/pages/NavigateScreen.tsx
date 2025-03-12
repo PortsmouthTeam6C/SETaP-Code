@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './NavigateScreen.css';  
-import React from 'react';
 import { Link } from "react-router-dom";
 
 {/* Dropdown menu */}
