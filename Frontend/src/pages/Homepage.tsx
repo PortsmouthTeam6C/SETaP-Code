@@ -180,7 +180,7 @@ function Homepage() {
             <SingleLevelDropdownMenu
         buttonLabel="Profile"
         items={[
-          { title: "   Settings", url: "/", icon: <FaUserEdit /> },
+          { title: "   Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
           { title: "   Logout", url: "/Login", icon: <FaSignOutAlt /> },
         ]}
       />

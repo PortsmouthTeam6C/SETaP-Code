@@ -37,3 +37,10 @@ function TestPage() {
 }
 
 export default TestPage;
+
+export function useTestNavigation() {
+  const navigate = useNavigate();
+  return {
+    handleTestPage: () => navigate('/')
+  };
+}

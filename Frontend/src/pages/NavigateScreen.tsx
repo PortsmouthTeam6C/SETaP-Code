@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import './NavigateScreen.css';  
-import React from 'react';
 import { Link } from "react-router-dom";
 
 {/* Dropdown menu */}
@@ -139,7 +138,7 @@ export default function NavigateScreen() {
             <SingleLevelDropdownMenu
         buttonLabel="Profile"
         items={[
-          { title: "   Settings", url: "/", icon: <FaUserEdit /> },
+          { title: "   Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
           { title: "   Logout", url: "/Login", icon: <FaSignOutAlt /> },
         ]}
       />

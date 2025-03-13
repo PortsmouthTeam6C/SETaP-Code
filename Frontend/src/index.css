@@ -1,25 +1,42 @@
 :root {
+  /* Default (light theme) variables */
+  --background: #fafafa; /* White for light theme */
+  --text: #213547; /* Dark text for light theme */
+  --text2: #15ff00;
+  --primary: #646cff; /* Link color */
+  --button-bg: #b4b3b3; /* Button background for light theme */
+  --container-bg: #f1f1f1; /* Container background for most elemtents */
+  --container2-bg: #e8e8e8; /* Slightly darker subcontainer */
+
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #006eff;
-
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* Dark theme overrides */
+[data-theme="dark"] {
+  --background: #292929; /* Dark gray for dark theme */
+  --text: #ffffffde; /* Light text for dark theme */
+  --text2: #ff0000;
+  --primary: #535bf2; /* Adjusted link color for dark theme */
+  --button-bg: #555555; /* Gray Button background*/
+  --container-bg: #333333; /* Container background for most elemtents */
+  --container2-bg: #4d4d4d; /* Lighter subcontainer */
+}
+
+/* For dark theme in terms of darkness background>Containers>Buttons */
+/* For light theme in terms of lightness Background>Containers>Buttons */
 
 a {
   font-weight: 500;
-  color: #646cff;
+  color: var(--primary);
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: var(--primary);
 }
 
 body {
@@ -28,6 +45,9 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
+  background-color: var(--background);
+  color: var(--text);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 h1 {
@@ -42,27 +62,22 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
+  background-color: var(--button-bg);
   cursor: pointer;
+  color: var(--text);
   transition: border-color 0.25s;
+  margin-right: 0; /* Set default margin to 0 */
 }
+
+button + button {
+  margin-left: 10px;  /* Only add spacing on the left for buttons following buttons buttons */
+}
+
 button:hover {
-  border-color: #646cff;
+  border-color: var(--primary);
 }
+
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }

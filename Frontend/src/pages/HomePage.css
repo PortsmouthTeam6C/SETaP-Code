@@ -14,8 +14,8 @@ body {
 /* Society Section */
 .society {
   padding: 1rem;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: var(--container-bg);
+  border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 20%; /* Slightly wider for better spacing */
@@ -29,7 +29,7 @@ body {
 
 .toggle-button {
   background-color: #516ce5;
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   padding: 6px 12px; /* Smaller button */
   border-radius: 5px;
@@ -45,6 +45,7 @@ body {
 
 .society-list {
   overflow: hidden;
+  color: var(--container-bg);
   transition: max-height 0.5s ease-in-out;
 }
 
@@ -54,12 +55,14 @@ body {
 
 .society-item {
   padding: 0.5rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--text);
+  color: var(--container-bg);
 }
 
 .society-item p {
   font-weight: 600;
   margin: 0;
+  color: var(--container-bg);
 }
 
 .add-society {
@@ -69,7 +72,7 @@ body {
 
 .add-society button {
   background-color: #516ce5;
-  color: white;
+  color: rgb(0, 0, 0);
   border: none;
   padding: 8px 16px;
   border-radius: 5px;
@@ -85,8 +88,8 @@ body {
 /* Messages Section */
 .messages {
   padding: 1rem;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: var(--container-bg);
+  border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 50%; /* Adjusted width */
@@ -97,7 +100,7 @@ body {
 .message-box {
   flex-grow: 1;
   overflow-y: auto;
-  background-color: #f3f4f6;
+  background-color: var(--container2-bg);
   padding: 1rem;
   border-radius: 0.5rem;
   margin-bottom: 1rem;
@@ -116,7 +119,7 @@ body {
   flex-grow: 1;
   padding: 10px;
   border-radius: 13px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--text);
 }
 
 .message-input button {
@@ -136,8 +139,8 @@ body {
 /* Event Board Section */
 .event {
   padding: 1rem;
-  background-color: white;
-  border: 1px solid #ddd;
+  background-color: var(--container-bg);
+  border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   width: 30%; /* Adjusted width */
@@ -156,7 +159,7 @@ body {
 
 .event-details {
   font-size: 0.875rem;
-  color: #4b5563; /* Tailwind's text-gray-600 */
+  color: var(--text2); 
 }
 
 .event-price {
