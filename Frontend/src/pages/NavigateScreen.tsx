@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import './NavigateScreen.css';  
-import React from 'react';
 import { Link } from "react-router-dom";
-
+import UoPLogo from "../../public/UoPLogo.jpg";
+import ProfilePic from "../../public/ProfilePic.jpg";
 {/* Dropdown menu */}
 import { FaChevronDown, FaChevronUp, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+
 interface SingleLevelDropdownMenuProps {
   buttonLabel: string;
   items: {
@@ -134,16 +135,21 @@ export default function NavigateScreen() {
           <p className="text-gray-500">Select a society to see details</p>
         )}
       </div>
+    <div className = "profile-section">
+        <img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>
+        <div className="profile-username">Username</div>
       <div className='profile-button'>
             {/* Profile Dropdown */}
             <SingleLevelDropdownMenu
         buttonLabel="Profile"
         items={[
-          { title: "   Settings", url: "/", icon: <FaUserEdit /> },
-          { title: "   Logout", url: "/Login", icon: <FaSignOutAlt /> },
+          { title: "  Settings", url: "/", icon: <FaUserEdit /> },
+          { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
         ]}
       />
       </div>
+      </div>
+      <img src = "../../public/UoPLogo.jpg" alt="University Logo" className = "uni-logo"/>
     </div>
     
   );

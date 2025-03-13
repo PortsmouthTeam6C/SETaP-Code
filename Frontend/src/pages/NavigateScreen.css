@@ -25,7 +25,7 @@
   }
   
   .society-list {
-    height: 620px;
+    height: 80%;
     overflow-x: hidden;
     overflow-y: auto;
     border: 1px solid #d1d5db; /* border */
@@ -88,18 +88,15 @@
   
 /* Profile Button */
 .profile-button {
-  position: absolute;
   top: 1rem;
   right: 1rem;
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
   font-weight: 500;
   cursor: pointer;
   
   /* Set background and text color */
   background-color: #f3f4f6; /* Light gray */
-  color: #333; /* Dark text */
-  border: 1px solid #d1d5db; /* Subtle border */
+  color: #000000; /* Dark text */
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
@@ -109,4 +106,35 @@
   color: #333; /* Darker text */
 }
 
-  
+/* Profile Button Section */
+.profile-section {
+  width: 20%;
+  padding: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+/* Profile Pic Section */
+.profile-pic {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover; 
+  border: 2px solid #000; 
+}
+
+.profile-username {
+  margin-top: 8px; 
+  font-size: 16px;
+  font-weight: bold;
+  color: black;
+}
+
+/* Uni Logo Section */
+.uni-logo {
+  position:absolute;
+  right: 16%;
+  bottom: 10%;
+  width: 100px;
+  height: 100px;
+  object-fit: cover; 
+}
