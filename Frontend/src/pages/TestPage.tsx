@@ -24,14 +24,21 @@ function TestPage() {
     navigate('/NavigateScreen'); 
   };
 
+  function handleSettingsPage() {
+    navigate('/SettingsPage');
+  };
+
   return (
     <div>
       <h1>This is the Test Page.</h1>
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
       <button onClick={handleLogin}>Test Login Page</button>
       <button onClick={handleSignUp}>Test Signup Page</button>
       <button onClick={handleHomepage}>Test Homepage</button>
       <button onClick={handleForgotPassword}>Test Forgot Password Page</button>
       <button onClick={handleNavigateScreen}>Test Navigate Page</button>
+      <button onClick={handleSettingsPage}>Test Settings Page</button>
+      </div>
     </div>
   );
 }
