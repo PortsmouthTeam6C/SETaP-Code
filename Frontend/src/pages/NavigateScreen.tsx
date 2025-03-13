@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import './NavigateScreen.css';  
 import { Link } from "react-router-dom";
-import UoPLogo from "../../public/UoPLogo.jpg";
-import ProfilePic from "../../public/ProfilePic.jpg";
+import { useNavigate } from 'react-router-dom';
 {/* Dropdown menu */}
 import { FaChevronDown, FaChevronUp, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
 
@@ -93,7 +92,7 @@ export default function NavigateScreen() {
 
   return (
     <div className="container">
-      {/* Left Section: Search & Society List */}
+      {/* Left Section: Search & Society List */} 
       <div className="left-section">
         {/* Search Bar */}
         <input
@@ -137,11 +136,10 @@ export default function NavigateScreen() {
       </div>
     <div className = "profile-section">
         <img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>
-        <div className="profile-username">Username</div>
       <div className='profile-button'>
             {/* Profile Dropdown */}
             <SingleLevelDropdownMenu
-        buttonLabel="Profile"
+        buttonLabel="Username"
         items={[
           { title: "  Settings", url: "/", icon: <FaUserEdit /> },
           { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
@@ -149,7 +147,6 @@ export default function NavigateScreen() {
       />
       </div>
       </div>
-      <img src = "../../public/UoPLogo.jpg" alt="University Logo" className = "uni-logo"/>
     </div>
     
   );

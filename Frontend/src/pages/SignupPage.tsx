@@ -22,7 +22,8 @@ function SignUpPage() {
 
   return (
     <div className="SignUp-box">
-      <div className="form-container">
+     <div className="form-container">
+      <img src="/demoLogo.png" alt="Logo" className = "project-Logo"/> 
         <div className="Title">
         <h1>Sign Up</h1>
         </div>

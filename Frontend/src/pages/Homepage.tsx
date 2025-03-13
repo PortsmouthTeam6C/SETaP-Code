@@ -180,11 +180,10 @@ function Homepage() {
       </div>
       <div className = "profileHomePage-section">
               <img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>
-              <div className="profile-username">Username</div>
             <div className='profile-button'>
                   {/* Profile Dropdown */}
                   <SingleLevelDropdownMenu
-              buttonLabel="Profile"
+              buttonLabel="Username"
               items={[
                 { title: "  Settings", url: "/", icon: <FaUserEdit /> },
                 { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
