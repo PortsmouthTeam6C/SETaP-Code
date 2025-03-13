@@ -87,6 +87,12 @@ const events = [
   { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
   { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
   { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
+  { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
+  { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
+  { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
+  { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
+  { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
+  { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
 ];
 
 const initialMessages = [
@@ -179,11 +185,10 @@ function Homepage() {
         ))}
       </div>
       <div className = "profileHomePage-section">
-              <img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>
             <div className='profile-button'>
                   {/* Profile Dropdown */}
                   <SingleLevelDropdownMenu
-              buttonLabel="Username"
+              buttonLabel="Profile"
               items={[
                 { title: "  Settings", url: "/", icon: <FaUserEdit /> },
                 { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
@@ -191,7 +196,7 @@ function Homepage() {
             />
             </div>
             </div>
-            <img src = "../../public/UoPLogo.jpg" alt="University Logo" className = "uniHomePage-logo"/>
+            <img src = "../../public/UoPLogo.png" alt="University Logo" className = "uniHomePage-logo"/>
           </div>
   );
 }
