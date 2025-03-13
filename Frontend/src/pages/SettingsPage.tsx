@@ -6,21 +6,19 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    console.log("Before toggle - Current theme:", theme);
+    console.log("Before toggle - Current theme:", theme); /* Debug */
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
-    console.log("After toggle - New theme:", newTheme);
+    console.log("After toggle - New theme:", newTheme); /* Debug*/
   };
 
   return (
     <div style={{ padding: "20px", maxWidth: "400px", margin: "0 auto" }}>
       <h2>Settings</h2>
-      <button onClick={toggleTheme}>
-        Toggle Theme (Current: {theme})
-      </button>
-      <button onClick={handleTestPage}>
-        Go to Test Page
-      </button>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'center' }}>
+        <button onClick={toggleTheme}>Toggle Theme (Current: {theme})</button>
+        <button onClick={handleTestPage}>Go to Test Page</button>
+      </div>
     </div>
   );
 }
