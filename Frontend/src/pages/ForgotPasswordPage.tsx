@@ -20,7 +20,7 @@ function ForgotPassword() {
         <div className="Title">
         <h1>Forgot Password</h1>
         </div>
-        <h3>Enter Email Adress</h3>
+        <h3>Enter Email Address</h3>
         <input
           type="text"
           placeholder="Email"
