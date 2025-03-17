@@ -135,11 +135,10 @@ export default function NavigateScreen() {
         )}
       </div>
     <div className = "profile-section">
-        <img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>
       <div className='profile-button'>
             {/* Profile Dropdown */}
             <SingleLevelDropdownMenu
-        buttonLabel="Username"
+        buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
         items={[
           { title: "  Settings", url: "/", icon: <FaUserEdit /> },
           { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },

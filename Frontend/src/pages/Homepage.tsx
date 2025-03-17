@@ -188,7 +188,7 @@ function Homepage() {
             <div className='profile-button'>
                   {/* Profile Dropdown */}
                   <SingleLevelDropdownMenu
-              buttonLabel="Profile"
+              buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
               items={[
                 { title: "  Settings", url: "/", icon: <FaUserEdit /> },
                 { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
