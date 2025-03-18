@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import './NavigateScreen.css';  
 import { Link } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 {/* Dropdown menu */}
 import { FaChevronDown, FaChevronUp, FaSignOutAlt, FaUserEdit } from "react-icons/fa";
+
 interface SingleLevelDropdownMenuProps {
   buttonLabel: string;
   items: {
@@ -91,7 +92,7 @@ export default function NavigateScreen() {
 
   return (
     <div className="container">
-      {/* Left Section: Search & Society List */}
+      {/* Left Section: Search & Society List */} 
       <div className="left-section">
         {/* Search Bar */}
         <input
@@ -133,15 +134,17 @@ export default function NavigateScreen() {
           <p className="text-gray-500">Select a society to see details</p>
         )}
       </div>
+    <div className = "profile-section">
       <div className='profile-button'>
             {/* Profile Dropdown */}
             <SingleLevelDropdownMenu
-        buttonLabel="Profile"
+        buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
         items={[
-          { title: "   Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
-          { title: "   Logout", url: "/Login", icon: <FaSignOutAlt /> },
+          { title: "  Settings", url: "/", icon: <FaUserEdit /> },
+          { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
         ]}
       />
+      </div>
       </div>
     </div>
     

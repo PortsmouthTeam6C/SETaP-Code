@@ -78,9 +78,18 @@ const societies = [
   { id: 1, name: "Photography Club" },
   { id: 2, name: "Coding Society" },
   { id: 3, name: "Music Club" },
+  { id: 1, name: "Photography Club" },
+  { id: 2, name: "Coding Society" },
+  { id: 3, name: "Music Club" },
 ];
 
 const events = [
+  { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
+  { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
+  { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
+  { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
+  { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
+  { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
   { id: 1, picture: "📷", description: "Photography Workshop", date: "March 10", time: "2 PM", place: "Room 101", price: "$5" },
   { id: 2, picture: "💻", description: "Hackathon", date: "March 15", time: "10 AM", place: "Main Hall", price: "Free" },
   { id: 3, picture: "🎵", description: "Live Music Night", date: "March 20", time: "7 PM", place: "Cafeteria", price: "$10" },
@@ -129,7 +138,7 @@ function Homepage() {
       {/* Society Section */}
       <div className="society">
         <h2 className="title">Societies</h2>
-        <div className="society-list">
+        <div className="society_list">
           {societies.map((society) => (
             <div key={society.id} className="society-item">
               <p>{society.name}</p>
@@ -175,17 +184,20 @@ function Homepage() {
           </div>
         ))}
       </div>
-      <div className='profile-button'>
-            {/* Profile Dropdown */}
-            <SingleLevelDropdownMenu
-        buttonLabel="Profile"
-        items={[
-          { title: "   Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
-          { title: "   Logout", url: "/Login", icon: <FaSignOutAlt /> },
-        ]}
-      />
-      </div>
-    </div>
+      <div className = "profileHomePage-section">
+            <div className='profile-button'>
+                  {/* Profile Dropdown */}
+                  <SingleLevelDropdownMenu
+              buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
+              items={[
+                { title: "  Settings", url: "/", icon: <FaUserEdit /> },
+                { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
+              ]}
+            />
+            </div>
+            </div>
+            <img src = "../../public/UoPLogo.png" alt="University Logo" className = "uniHomePage-logo"/>
+          </div>
   );
 }
 
