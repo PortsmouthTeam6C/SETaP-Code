@@ -8,9 +8,11 @@ import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
+import uk.ac.port.setap.team6c.database.Society;
 import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 import uk.ac.port.setap.team6c.email.GmailManager;
+import uk.ac.port.setap.team6c.routes.Events.EventResponse;
 
 import java.time.Instant;
 import java.util.*;
@@ -140,6 +142,46 @@ public class AuthManager {
      */
     private static @NotNull String padWithZeroes(@NotNull String string) {
         return "0".repeat(6 - string.length()) + string;
+    }
+
+    public static void createEvent(@NotNull Context ctx) {
+        CreateEventRequest request = Main.GSON.fromJson(ctx.body(), CreateEventRequest.class);
+
+        // Check user info
+        User user;
+        try{
+            user = new User(request.userid());
+        } catch (User.UnknownUseridException ignored) {
+            throw new ConflictResponse();
+        }
+        // Check society info
+        Society society;
+        try{
+            society = new Society(request.societyid());
+        } catch (Society.UnknownSocietyException ignored) {
+            throw new ConflictResponse();
+        }
+        // check user is an administrator, if not check if they are a manager
+        if(!user.isAdministrator()){
+            try{
+                if (!society.getManagers().contains(user)){
+                    throw new UnauthorizedResponse();
+                }
+            } catch (Society.UnknownSocietyException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        // Check start and end timestamps
+        if (request.StartTimestamp().isAfter(request.EndTimeStamp())) {
+            throw new ConflictResponse();
+        }
+        if (request.StartTimestamp().isAfter(request.CreationTimestamp())) {
+            throw new ConflictResponse();
+        }
+        // Response
+        ctx.result(Main.GSON.toJson(new CreateEventResponse(request.userid(),request.StartTimestamp(),request.EndTimeStamp(), request.CreationTimestamp(),request.location(),request.name(),request.description())));
+
     }
 
 }

@@ -69,6 +69,23 @@ public class Society {
         }
         return new UserCollection(userIds);
     }
+    public UserCollection getManagers() throws UnknownSocietyException {
+        List<Integer> userIds = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select userid from societymember where societyid = ? and isManager = true");
+                preparedStatement.setInt(1, societyId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    userIds.add(resultSet.getInt("userid"));
+                }
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UnknownSocietyException();
+        }
+        return new UserCollection(userIds);
+    }
 
     /**
      * Get all the events in this society
