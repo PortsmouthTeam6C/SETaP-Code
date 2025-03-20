@@ -176,7 +176,7 @@ public class AuthManager {
         if (request.StartTimestamp().isAfter(request.EndTimeStamp())) {
             throw new ConflictResponse();
         }
-        if (request.StartTimestamp().isAfter(request.CreationTimestamp())) {
+        if (request.StartTimestamp().isBefore(request.CreationTimestamp())) {
             throw new ConflictResponse();
         }
         // Response
