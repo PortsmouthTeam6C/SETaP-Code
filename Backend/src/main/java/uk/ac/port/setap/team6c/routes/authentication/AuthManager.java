@@ -183,5 +183,35 @@ public class AuthManager {
         ctx.result(Main.GSON.toJson(new CreateEventResponse(request.userid(),request.StartTimestamp(),request.EndTimeStamp(), request.CreationTimestamp(),request.location(),request.name(),request.description())));
 
     }
+    public static void joinEvent(@NotNull Context ctx) {
+        JoinEventRequest request = Main.GSON.fromJson(ctx.body(), JoinEventRequest.class);
+        //get society and user info
+        Society society;
+        try{
+            society = new Society(request.societyid());
+        } catch (Society.UnknownSocietyException ignored) {
+            throw new ConflictResponse();
+        }
+        User user;
+        try{
+            user = new User(request.userid());
+        } catch (User.UnknownUseridException ignored) {
+            throw new ConflictResponse();
+        }
+        //check user is in society
+        try{
+            if (!society.getUsers().contains(user)){
+                throw new UnauthorizedResponse();
+            }
+        } catch (Society.UnknownSocietyException e) {
+            throw new RuntimeException(e);
+        }
+        //check event has not already ended
+        if (request.EndTimestamp().isBefore(Instant.now())) {
+            throw new ConflictResponse();
+        }
+        //response
+        ctx.result(Main.GSON.toJson(new JoinEventResponse(request.userid(), request.eventid())));
+    }
 
 }
