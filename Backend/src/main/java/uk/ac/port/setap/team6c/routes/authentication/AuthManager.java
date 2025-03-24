@@ -236,12 +236,8 @@ public class AuthManager {
             throw new ConflictResponse();
         }
         //check user is in society
-        try{
-            if (!society.getUsers().contains(user)){
-                throw new UnauthorizedResponse();
-            }
-        } catch (Society.UnknownSocietyException e) {
-            throw new RuntimeException(e);
+        if (!user.getJoinedSocieties().contains(society)){
+            throw new UnauthorizedResponse();
         }
         //check event has not already ended
         if (request.EndTimestamp().isBefore(Instant.now())) {
