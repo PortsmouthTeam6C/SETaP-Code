@@ -235,7 +235,7 @@ public class AuthManager {
         } catch (User.UnknownUseridException ignored) {
             throw new ConflictResponse();
         }
-        //check user is in society
+        //Check user is in society
         if (!user.getJoinedSocieties().contains(society)){
             throw new UnauthorizedResponse();
         }
