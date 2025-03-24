@@ -12,7 +12,6 @@ import uk.ac.port.setap.team6c.database.Society;
 import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 import uk.ac.port.setap.team6c.email.GmailManager;
-import uk.ac.port.setap.team6c.routes.Events.EventResponse;
 
 import java.time.Instant;
 import java.util.*;
@@ -22,13 +21,13 @@ import java.util.*;
  */
 public class AuthManager {
 
-    private static Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
     /**
      * A map of users waiting for verification
      * Key: UUID + Verification code concatenated
      * Value: All the user-supplied information about the account
      */
-    private static Map<String, CreateAccountRequest> usersWaitingForVerification = new HashMap<>();
+    private static final Map<String, CreateAccountRequest> usersWaitingForVerification = new HashMap<>();
 
     /**
      * Verifies that the provided string matches the hashed string
@@ -131,8 +130,46 @@ public class AuthManager {
         ctx.result(Main.GSON.toJson(new CreateAccountResponse(accountIdentifier)));
     }
 
-    public static void verifyAccount(@NotNull Context ctx) {
+    public static void verifyAccount(@NotNull Context ctx) throws University.UniversityNotFoundException, User.AccountAlreadyExistsException {
+        VerifyAccountRequest request = Main.GSON.fromJson(ctx.body(), VerifyAccountRequest.class);
 
+        // If the details are incorrect, throw an unauthorized response
+        String key = request.accountIdentifier() + request.verificationCode();
+        if (!usersWaitingForVerification.containsKey(key)) {
+            throw new UnauthorizedResponse();
+        }
+
+        // Get the user details
+        CreateAccountRequest userDetails = usersWaitingForVerification.get(key);
+        usersWaitingForVerification.remove(key);
+        String emailDomain = userDetails.email().split("@")[1];
+        System.out.println(emailDomain);
+        University university = new University(emailDomain);
+        System.out.println(university.getUniversityName());
+        User user = new User(
+                university,
+                userDetails.username(),
+                userDetails.email(),
+                hashPassword(userDetails.password()),
+                "https://api.dicebear.com/9.x/shapes/svg?seed=" + userDetails.username(),
+                false,
+                "{}");
+
+        // Remove the user from the list of users waiting for verification
+
+        // Create the verification code
+        UUID token = UUID.randomUUID();
+        Instant expiry = Instant.now().plusSeconds(60 * 60 * 24 * 30); // 30 days
+        try {
+            user.assignSessionToken(token, expiry);
+        } catch (User.SessionTokenCouldNotBeCreatedException ignore) {
+            token = null;
+            expiry = null;
+        }
+
+        ctx.result(Main.GSON.toJson(new LoginResponse(
+                token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(),
+                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getTheming())));
     }
 
     /**

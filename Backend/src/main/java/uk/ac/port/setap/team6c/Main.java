@@ -33,6 +33,7 @@ public class Main {
 
         app.post("/user/login", AuthManager::login);
         app.post("/user/signup/reserve-account", AuthManager::createAccount);
+        app.post("/user/signup/verify-account", AuthManager::verifyAccount);
         app.post("/societies/all", Societies::getAllSocieties);
         app.post("/societies/joined", Societies::getJoinedSocieties);
         app.post("/societies/info", Societies::getSocietyInfo);
