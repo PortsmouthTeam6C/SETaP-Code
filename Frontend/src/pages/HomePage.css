@@ -1,42 +1,50 @@
+/* Global Styles */
 body {
   color: #333;
   margin: 0;
   font-family: Arial, sans-serif;
 }
 
+/* Main Container */
 .container {
   display: flex;
-  height: 88vh;
-  padding: 1rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  padding: 2vw;
   gap: 1rem;
 }
 
 /* Society Section */
 .society {
+  flex: 1;
+  max-width: 22%;
+  min-width: 200px;
   padding: 1rem;
   background-color: var(--container-bg);
   border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 20%; /* Slightly wider for better spacing */
   display: flex;
   flex-direction: column;
 }
 
 .society h2 {
-  margin-bottom: 0.5rem; /* Space between title and button */
+  font-size: clamp(1rem, 2vw, 1.5rem);
+  margin-bottom: 0.5rem;
 }
 
 .toggle-button {
   background-color: #516ce5;
   color: rgb(0, 0, 0);
   border: none;
-  padding: 6px 12px; /* Smaller button */
+  padding: 0.5vw 1vw;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 12px; /* Smaller font size */
+  font-size: clamp(0.75rem, 1vw, 1rem);
   transition: background-color 0.3s ease;
-  margin-bottom: 1rem; /* Space between button and list */
+  margin-bottom: 1rem;
 }
 
 .toggle-button:hover {
@@ -45,26 +53,14 @@ body {
 
 .society_list {
   overflow: hidden;
-  color: var(--container-bg);
   transition: max-height 0.5s ease-in-out;
-  height: 500px;
+  max-height: 500px;
   overflow-y: auto;
-}
-
-.society_list.visible {
-  max-height: 500px; /* Adjust based on content */
 }
 
 .society-item {
   padding: 0.5rem;
   border-bottom: 1px solid var(--text);
-  color: var(--container-bg);
-}
-
-.society-item p {
-  font-weight: 600;
-  margin: 0;
-  color: var(--container-bg);
 }
 
 .add-society {
@@ -75,10 +71,10 @@ body {
   background-color: #516ce5;
   color: rgb(0, 0, 0);
   border: none;
-  padding: 8px 16px;
+  padding: 0.8vw 1.6vw;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: clamp(0.9rem, 1vw, 1.2rem);
   transition: background-color 0.3s ease;
 }
 
@@ -88,12 +84,14 @@ body {
 
 /* Messages Section */
 .messages {
+  flex: 2;
+  max-width: 50%;
+  min-width: 350px;
   padding: 1rem;
   background-color: var(--container-bg);
   border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 50%; /* Adjusted width */
   display: flex;
   flex-direction: column;
 }
@@ -109,6 +107,7 @@ body {
 }
 
 .message-box p {
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
   margin-bottom: 0.5rem;
 }
 
@@ -122,16 +121,18 @@ body {
   padding: 10px;
   border-radius: 13px;
   border: 1px solid var(--text);
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
 }
 
 .message-input button {
   background-color: #516ce5;
   color: white;
   border: none;
-  padding: 10px 16px;
+  padding: 0.8vw 1.6vw;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-size: clamp(0.9rem, 1vw, 1.1rem);
 }
 
 .message-input button:hover {
@@ -140,12 +141,14 @@ body {
 
 /* Event Board Section */
 .event {
+  flex: 1;
+  max-width: 26%;
+  min-width: 250px;
   padding: 1rem;
   background-color: var(--container-bg);
   border: 1px solid var(--text);
   border-radius: 0.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  width: 30%; /* Adjusted width */
   overflow-y: auto;
 }
 
@@ -155,33 +158,75 @@ body {
 }
 
 .event-item p {
+  font-size: clamp(0.9rem, 1vw, 1.2rem);
   font-weight: 600;
   margin: 0;
 }
 
-.event-details {
-  font-size: 0.875rem;
-  color: var(--text2); 
-}
-
+.event-details,
 .event-price {
-  font-size: 0.875rem;
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  color: var(--text2);
   font-weight: 600;
 }
 
 /* Profile Button Section */
 .profileHomePage-section {
-  width: 18%;
-  padding: 0.5rem;
-  padding-right: 0.5rem;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  object-fit: cover;
 }
 
 /* Uni Logo Section */
 .uniHomePage-logo {
-  position:absolute;
-  right: 16%;
-  bottom: 6%;
-  width: 100px;
-  height: 100px;
-  object-fit: cover; 
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  width: clamp(60px, 10vw, 100px);
+  height: clamp(60px, 10vw, 100px);
+  object-fit: cover;
+}
+
+/* RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+  .container {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .society {
+    max-width: 30%;
+  }
+
+  .messages {
+    max-width: 55%;
+  }
+
+  .event {
+    max-width: 30%;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .society,
+  .messages,
+  .event {
+    width: 90%;
+  }
+
+  .profileHomePage-section {
+    position: relative;
+    margin-top: 1rem;
+  }
+
+  .uniHomePage-logo {
+    width: 60px;
+    height: 60px;
+  }
 }
