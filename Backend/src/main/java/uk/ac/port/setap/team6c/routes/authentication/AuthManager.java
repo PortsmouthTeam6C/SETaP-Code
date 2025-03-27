@@ -269,5 +269,32 @@ public class AuthManager {
         }
         ctx.result(Main.GSON.toJson(new LeaveEventResponse(request.userid(), request.eventid())));
     }
+    public static void createSociety(@NotNull Context ctx) {
+        //TBD
+    }
+    public static void joinSociety(@NotNull Context ctx) {
+        //TBD
+    }
+    public static void leaveSociety(@NotNull Context ctx) {
+        LeaveSocietyRequest request = Main.GSON.fromJson(ctx.body(), LeaveSocietyRequest.class);
+        User user;
+        try{
+            user = new User(request.userid());
+        } catch (User.UnknownUseridException ignored) {
+            throw new ConflictResponse();
+        }
+        Society society;
+        try{
+            society = new Society(request.societyid());
+        } catch (Society.UnknownSocietyException ignored) {
+            throw new ConflictResponse();
+        }
+        if (!user.getJoinedSocieties().contains(society)){
+            throw new UnauthorizedResponse();
+        }
+        ctx.result(Main.GSON.toJson(new LeaveSocietyResponse(request.userid(), request.societyid())));
+    }
+
+
 
 }
