@@ -8,6 +8,7 @@ import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
+import uk.ac.port.setap.team6c.database.Event;
 import uk.ac.port.setap.team6c.database.Society;
 import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
@@ -245,6 +246,28 @@ public class AuthManager {
         }
         //response
         ctx.result(Main.GSON.toJson(new JoinEventResponse(request.userid(), request.eventid())));
+    }
+    public static void leaveEvent(@NotNull Context ctx) {
+        LeaveEventRequest request = Main.GSON.fromJson(ctx.body(), LeaveEventRequest.class);
+        User user;
+        try{
+            user = new User(request.userid());
+        } catch (User.UnknownUseridException ignored) {
+            throw new ConflictResponse();
+        }
+        Event event;
+        try{
+            event = new Event(request.eventid());
+        } catch (Event.UnknownEventException ignored) {
+            throw new ConflictResponse();
+        }
+        if (!user.getJoinedEvents().contains(event)){
+            throw new UnauthorizedResponse();
+        }
+        if (request.EndTimestamp().isBefore(Instant.now())) {
+            throw new ConflictResponse();
+        }
+        ctx.result(Main.GSON.toJson(new LeaveEventResponse(request.userid(), request.eventid())));
     }
 
 }
