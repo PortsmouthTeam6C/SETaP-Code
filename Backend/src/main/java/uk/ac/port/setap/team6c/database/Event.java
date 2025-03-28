@@ -2,18 +2,19 @@ package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Event {
 
-    @Getter(AccessLevel.PACKAGE)
     private int eventId;
-    @Getter(AccessLevel.PACKAGE)
     private int userid;
     private Instant StartTimestamp;
     private Instant EndTimestamp;
@@ -27,7 +28,7 @@ public class Event {
      * @param eventId The event id
      * @throws UnknownEventException if the provided event id does not correspond to an event
      */
-    protected Event(int eventId) throws UnknownEventException {
+    public Event(int eventId) throws UnknownEventException {
         try{
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from events where eventid = ?");
@@ -56,6 +57,22 @@ public class Event {
      */
     public User getCreator() throws User.UnknownUseridException {
         return new User(userid);
+    }
+    public @NotNull UserCollection getUsers () throws UnknownEventException {
+        List<Integer> userids = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(Connection -> {
+                PreparedStatement preparedStatement = Connection.prepareStatement("select userid from eventuser where eventid = ?");
+                preparedStatement.setInt(1, eventId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    userids.add(resultSet.getInt("userid"));
+                }
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new UserCollection(userids);
     }
 
     @Override

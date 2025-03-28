@@ -41,8 +41,19 @@ public class MessageCollectionBuilder {
      * @param user The user to filter messages by
      * @return This {@link MessageCollectionBuilder} instance
      */
-    public MessageCollectionBuilder sentBy(@NotNull User user) {
-        this.userId = user.getUserId();
+    public MessageCollectionBuilder sentBy(User user) {
+        if (user != null)
+            this.userId = user.getUserId();
+        return this;
+    }
+
+    /**
+     * Filter messages to only include those sent by a specific user
+     * @param userId The user to filter messages by
+     * @return This {@link MessageCollectionBuilder} instance
+     */
+    public MessageCollectionBuilder sentBy(Integer userId) {
+        this.userId = userId;
         return this;
     }
 
@@ -53,6 +64,16 @@ public class MessageCollectionBuilder {
      */
     public MessageCollectionBuilder sentIn(@NotNull Society society) {
         this.societyId = society.getSocietyId();
+        return this;
+    }
+
+    /**
+     * Filter messages to only include those sent in a specific societyId
+     * @param societyId The societyId to filter messages by
+     * @return This {@link MessageCollectionBuilder} instance
+     */
+    public MessageCollectionBuilder sentIn(Integer societyId) {
+        this.societyId = societyId;
         return this;
     }
 

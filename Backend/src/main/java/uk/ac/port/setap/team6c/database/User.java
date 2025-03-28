@@ -3,14 +3,17 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
-import uk.ac.port.setap.team6c.authentication.AuthManager;
+import uk.ac.port.setap.team6c.routes.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Represents a user in the database
@@ -105,7 +108,7 @@ public class User {
      * @param userId the user's unique id
      * @throws UnknownUseridException if the provided user id does not correspond to a user
      */
-    protected User(int userId) throws UnknownUseridException {
+    public User(int userId) throws UnknownUseridException {
         try {
             DatabaseManager.createConnection(connection -> {
                 // Get the userid
@@ -169,6 +172,24 @@ public class User {
     }
 
     /**
+     * Check if a user exists
+     * @param email The user's email
+     * @return Whether the user exists
+     */
+    public static boolean exists(String email) {
+        AtomicBoolean exists = new AtomicBoolean(false);
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select 1 from users where email = ?");
+                preparedStatement.setString(1, email);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                exists.set(resultSet.next());
+            });
+        } catch (Exception ignored) {}
+        return exists.get();
+    }
+
+    /**
      * Save a created session token to the user. The session token should also be returned to the user.
      * @param token The session token
      * @param expiry The token's expiry date
@@ -187,6 +208,41 @@ public class User {
             exception.printStackTrace();
             throw new SessionTokenCouldNotBeCreatedException();
         }
+    }
+
+    public University getUniversity() throws University.UniversityNotFoundException {
+        return new University(universityId);
+    }
+
+    public SocietyCollection getJoinedSocieties() {
+        List<Integer> societies = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from societymember where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next())
+                    societies.add(resultSet.getInt("societyid"));
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new SocietyCollection(societies);
+    }
+    public EventCollection getJoinedEvents() {
+        List<Integer> events = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select eventid from eventuser where userid = ?");
+                preparedStatement.setInt(1, userId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next())
+                    events.add(resultSet.getInt("eventid"));
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+        }
+        return new EventCollection(events);
     }
   
     @Override

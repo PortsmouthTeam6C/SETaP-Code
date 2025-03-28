@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 public class Society {
 
-    @Getter(AccessLevel.PACKAGE)
     private int societyId;
     @Getter(AccessLevel.PACKAGE)
     private int universityId;
@@ -27,7 +26,7 @@ public class Society {
      * @param societyId The society ID
      * @throws UnknownSocietyException if the provided society ID does not correspond to a society
      */
-    protected Society(int societyId) throws UnknownSocietyException {
+    public Society(int societyId) throws UnknownSocietyException {
         try {
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("select * from society where societyid = ?");
@@ -70,13 +69,30 @@ public class Society {
         }
         return new UserCollection(userIds);
     }
+    public UserCollection getManagers() throws UnknownSocietyException {
+        List<Integer> userIds = new ArrayList<>();
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select userid from societymember where societyid = ? and isManager = true");
+                preparedStatement.setInt(1, societyId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                while (resultSet.next()) {
+                    userIds.add(resultSet.getInt("userid"));
+                }
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UnknownSocietyException();
+        }
+        return new UserCollection(userIds);
+    }
 
     /**
      * Get all the events in this society
      * @return A collection of events in this society
      * @throws UnknownSocietyException if the society does not exist
      */
-    public EventCollection getEvents() throws UnknownSocietyException {
+    public EventCollection getEvents()  {
         List<Integer> eventIds = new ArrayList<>();
         try {
             DatabaseManager.createConnection(connection -> {
@@ -89,7 +105,6 @@ public class Society {
             });
         } catch (SQLException exception) {
             exception.printStackTrace();
-            throw new UnknownSocietyException();
         }
         return new EventCollection(eventIds);
     }

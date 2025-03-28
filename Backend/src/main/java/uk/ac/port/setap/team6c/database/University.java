@@ -73,6 +73,24 @@ public class University {
         }
     }
 
+    public University(int universityId) throws UniversityNotFoundException {
+        try {
+            DatabaseManager.createConnection(connection -> {
+                PreparedStatement preparedStatement = connection.prepareStatement("select * from university where universityid = ?");
+                preparedStatement.setInt(1, universityId);
+                ResultSet resultSet = preparedStatement.executeQuery();
+                resultSet.next();
+                this.universityId = resultSet.getInt("universityId");
+                this.universityName = resultSet.getString("universityName");
+                this.emailDomain = resultSet.getString("emailDomain");
+                this.theming = resultSet.getString("theming");
+            });
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            throw new UniversityNotFoundException();
+        }
+    }
+
     /**
      * Get all societies associated with this university
      * @return A collection of societies
