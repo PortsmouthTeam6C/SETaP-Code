@@ -1,9 +1,9 @@
 :root {
   /* Default (light theme) variables */
   --background: white; /* White for light theme */
-  --text: #213547; /* Dark text for light theme */
-  --text2: royalblue;
-  --primary: #646cff; /* Link color */
+  --text: #000000; /* Dark text for light theme */
+  --text2: #2c77e0;
+  --primary: #2c77e0; /* Link color */
   --button-bg: #b4b3b3; /* Button background for light theme */
   --container-bg: #f1f1f1; /* Container background for most elemtents */
   --container2-bg: #e8e8e8; /* Slightly darker subcontainer */
