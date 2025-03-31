@@ -1,26 +1,33 @@
 /* Global Styles */
+:root {
+  --container-bg: #f9f9f9;
+  --container2-bg: #fff;
+  --text: #333;
+  --text2: #666;
+}
+
 body {
-  color: #333;
+  color: var(--text);
   margin: 0;
   font-family: Arial, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Main Container */
 .container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  width: 100%;
-  padding: 2vw;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1rem;
+  width: 90vw;
+  padding: 2vw;
 }
 
-/* Society Section */
-.society {
-  flex: 1;
-  max-width: 22%;
-  min-width: 200px;
+/* Society, Messages, and Events Sections */
+.society,
+.messages,
+.event {
   padding: 1rem;
   background-color: var(--container-bg);
   border: 1px solid var(--text);
@@ -30,25 +37,25 @@ body {
   flex-direction: column;
 }
 
+/* Society Section */
+.society {
+  min-width: min(200px, 22%);
+  flex: 1;
+}
+
 .society h2 {
   font-size: clamp(1rem, 2vw, 1.5rem);
-  margin-bottom: 0.5rem;
 }
 
 .toggle-button {
   background-color: #516ce5;
-  color: rgb(0, 0, 0);
+  color: black;
   border: none;
   padding: 0.5vw 1vw;
   border-radius: 5px;
   cursor: pointer;
   font-size: clamp(0.75rem, 1vw, 1rem);
   transition: background-color 0.3s ease;
-  margin-bottom: 1rem;
-}
-
-.toggle-button:hover {
-  background-color: #6b8bd1;
 }
 
 .society_list {
@@ -58,42 +65,10 @@ body {
   overflow-y: auto;
 }
 
-.society-item {
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--text);
-}
-
-.add-society {
-  text-align: center;
-}
-
-.add-society button {
-  background-color: #516ce5;
-  color: rgb(0, 0, 0);
-  border: none;
-  padding: 0.8vw 1.6vw;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: clamp(0.9rem, 1vw, 1.2rem);
-  transition: background-color 0.3s ease;
-}
-
-.add-society button:hover {
-  background-color: #6b8bd1;
-}
-
 /* Messages Section */
 .messages {
   flex: 2;
-  max-width: 50%;
   min-width: 350px;
-  padding: 1rem;
-  background-color: var(--container-bg);
-  border: 1px solid var(--text);
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;
-  flex-direction: column;
 }
 
 .message-box {
@@ -102,15 +77,13 @@ body {
   background-color: var(--container2-bg);
   padding: 1rem;
   border-radius: 0.5rem;
-  margin-bottom: 1rem;
-  text-align: left;
 }
 
 .message-box p {
   font-size: clamp(0.9rem, 1vw, 1.1rem);
-  margin-bottom: 0.5rem;
 }
 
+/* Message Input */
 .message-input {
   display: flex;
   gap: 0.5rem;
@@ -132,7 +105,6 @@ body {
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-size: clamp(0.9rem, 1vw, 1.1rem);
 }
 
 .message-input button:hover {
@@ -142,13 +114,7 @@ body {
 /* Event Board Section */
 .event {
   flex: 1;
-  max-width: 26%;
   min-width: 250px;
-  padding: 1rem;
-  background-color: var(--container-bg);
-  border: 1px solid var(--text);
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
 }
 
@@ -160,39 +126,27 @@ body {
 .event-item p {
   font-size: clamp(0.9rem, 1vw, 1.2rem);
   font-weight: 600;
-  margin: 0;
 }
 
-.event-details,
-.event-price {
-  font-size: clamp(0.8rem, 1vw, 1rem);
-  color: var(--text2);
-  font-weight: 600;
-}
-
-/* Profile Button Section */
+/* Profile & University Logo */
 .profileHomePage-section {
   position: absolute;
   top: 10px;
   right: 10px;
-  object-fit: cover;
 }
 
-/* Uni Logo Section */
 .uniHomePage-logo {
   position: absolute;
   top: 10px;
   left: 10px;
   width: clamp(60px, 10vw, 100px);
   height: clamp(60px, 10vw, 100px);
-  object-fit: cover;
 }
 
-/* RESPONSIVE DESIGN */
+/* Responsive Adjustments */
 @media (max-width: 1024px) {
   .container {
-    justify-content: center;
-    flex-wrap: wrap;
+    grid-template-columns: 1fr 1fr;
   }
 
   .society {
@@ -210,8 +164,8 @@ body {
 
 @media (max-width: 768px) {
   .container {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
+    justify-items: center;
   }
 
   .society,
