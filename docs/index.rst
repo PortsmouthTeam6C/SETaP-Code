@@ -6,6 +6,8 @@ Synergy was made for SETaP Coursework by Team 6C.
 Contents
 =========
 .. toctree::
+   :maxdepth: 2
+   :caption: Contents:
 
    install.md
    usage.md
