@@ -5,4 +5,6 @@ Welcome to the SETaP-Code documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   README.md
+
    modules
