@@ -17,6 +17,6 @@ Synergy also allows for admin accounts for society management, creation and dele
    install.md
    usage.md
    credits.md
-   liscense.md
+   license.md
 
 
