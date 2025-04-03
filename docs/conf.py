@@ -8,4 +8,4 @@ author = 'PortsmouthTeam6C'
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.napoleon']
 extensions.append('myst_parser')
-html_theme = 'furo'
+html_theme = 'sphinx_rtd_theme'
