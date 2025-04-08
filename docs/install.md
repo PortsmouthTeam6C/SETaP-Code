@@ -1,0 +1,3 @@
+## Installation Guide
+
+To install Synergy.....
