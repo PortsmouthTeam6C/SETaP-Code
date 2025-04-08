@@ -17,6 +17,7 @@ Synergy provides universities with a centralized platform for society management
 
 | 📅 **Attend** and manage society events.    
 
+
 Additionally, Synergy includes **admin functionality** for university employees and student unions to:    
 
 | 🏗️ **Create** and manage societies.    
