@@ -1,4 +1,4 @@
-##Credits
+## Credits
 
 Synergy was made by Team6C:
 - Lewis Kennedy (UP2246693)
