@@ -1,3 +1,3 @@
-## How to Use the Project
+## How to Use Synergy
 
 Synergy....
