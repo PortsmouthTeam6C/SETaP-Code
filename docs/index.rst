@@ -26,7 +26,7 @@ The following sections will guide you through setting up and using Synergy:
    :maxdepth: 2
    :caption: 📚 Documentation Contents
 
-   install.md      📥 Installation Guide
-   usage.md        🛠️ How to Use Synergy
-   credits.md      🎓 Credits & Contributors
-   license.md      ⚖️ License Information
+   install.md
+   usage.md
+   credits.md
+   license.md
