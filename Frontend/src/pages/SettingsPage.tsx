@@ -1,8 +1,8 @@
 import { useTheme } from "../context/themeContext.tsx";
-import { useTestNavigation } from "./TestPage.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function SettingsPage() {
-  const { handleTestPage } = useTestNavigation();
+  const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -10,6 +10,10 @@ export default function SettingsPage() {
     const newTheme = theme === "light" ? "dark" : "light";
     setTheme(newTheme);
     console.log("After toggle - New theme:", newTheme); /* Debug*/
+  };
+
+  const handleTestPage = () => {
+    navigate("/");
   };
 
   return (
