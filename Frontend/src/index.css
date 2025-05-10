@@ -1,13 +1,19 @@
 :root {
-  /* Default (light theme) variables */
-  --background: white; /* White for light theme */
-  --text: #213547; /* Dark text for light theme */
-  --text2: royalblue;
-  --primary: #646cff; /* Link color */
-  --button-bg: #b4b3b3; /* Button background for light theme */
-  --container-bg: #f1f1f1; /* Container background for most elemtents */
-  --container2-bg: #e8e8e8; /* Slightly darker subcontainer */
+  /* –––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+  /* raw HSL palette                                             */
+  --h-bg:           0;   --s-bg:    0%;  --l-bg:    98%;  /* Off-white background */
+  --h-text:       209;   --s-text:  37%; --l-text:  20%;  /* Dark slate text */
+  --h-accent:     237;   --s-accent:100%; --l-accent:70%; /* Bright blue accent */
+  --h-highlight:    0;   --s-highlight:100%; --l-highlight:71%; /* Vivid red (errors) */
+  --h-surface:       0;   --s-surface:  0%;  --l-surface: 94%; /* Very light grey */
+  --h-surface-alt:   0;   --s-surface-alt:0%;  --l-surface-alt:91%; /* Slightly darker */
+  
+  /* status colors */
+  --h-warning:     45;   --s-warning:100%; --l-warning:50%; /* Amber/yellow warning */
+  --h-error:        0;   --s-error:  100%; --l-error:  50%; /* Pure red error */
+  /* –––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
+  /* font rendering & defaults */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -16,32 +22,61 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-/* Dark theme overrides */
+
+[data-theme="light"] {
+  /* –––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+  /* LIGHT THEME — generate semantic colors from raw HSL */
+  --background:     hsl(var(--h-bg),          var(--s-bg),       var(--l-bg));
+  --text:           hsl(var(--h-text),        var(--s-text),     var(--l-text));
+  --link-color:     hsl(var(--h-accent),      var(--s-accent),   var(--l-accent));
+  --error-color:    hsl(var(--h-highlight),   var(--s-highlight),var(--l-highlight));
+  --surface:        hsl(var(--h-surface),     var(--s-surface),  var(--l-surface));
+  --surface-alt:    hsl(var(--h-surface-alt), var(--s-surface-alt),var(--l-surface-alt));
+  --warning-color:  hsl(var(--h-warning),     var(--s-warning),  var(--l-warning));
+  --error-status:   hsl(var(--h-error),       var(--s-error),    var(--l-error));
+
+  /* semantic aliases for components */
+  --button-bg:      var(--link-color);
+  --button-bg-hover: hsl(var(--h-accent), var(--s-accent), 60%);
+}
+
 [data-theme="dark"] {
-  --background: #292929; /* Dark gray for dark theme */
-  --text: #ffffffde; /* Light text for dark theme */
-  --text2: #ff0000;
-  --primary: #535bf2; /* Adjusted link color for dark theme */
-  --button-bg: #555555; /* Gray Button background*/
-  --container-bg: #333333; /* Container background for most elemtents */
-  --container2-bg: #4d4d4d; /* Lighter subcontainer */
-}
+  /* –––––––––––––––––––––––––––––––––––––––––––––––––––––– */
+  /* DARK THEME — only invert lightness values, then re-generate */
+  --l-bg:           12%;  /* almost-black */
+  --l-text:         80%;  /* off-white text */
+  --l-accent:       80%;  /* bright accent */
+  --l-highlight:    60%;  /* softer error red */
+  --l-surface:      18%;  /* dark surface */
+  --l-surface-alt:  30%;  /* slightly lighter surface */
+  --l-warning:      60%;  /* lighter warning */
+  --l-error:        60%;  /* lighter error */
 
-/* For dark theme in terms of darkness background>Containers>Buttons */
-/* For light theme in terms of lightness Background>Containers>Buttons */
+  /* re-generate the same semantic vars */
+  --background:     hsl(var(--h-bg),          var(--s-bg),       var(--l-bg));
+  --text:           hsl(var(--h-text),        var(--s-text),     var(--l-text));
+  --link-color:     hsl(var(--h-accent),      var(--s-accent),   var(--l-accent));
+  --error-color:    hsl(var(--h-highlight),   var(--s-highlight),var(--l-highlight));
+  --surface:        hsl(var(--h-surface),     var(--s-surface),  var(--l-surface));
+  --surface-alt:    hsl(var(--h-surface-alt), var(--s-surface-alt),var(--l-surface-alt));
+  --warning-color:  hsl(var(--h-warning),     var(--s-warning),  var(--l-warning));
+  --error-status:   hsl(var(--h-error),       var(--s-error),    var(--l-error));
 
-a {
-  font-weight: 500;
-  color: var(--primary);
-  text-decoration: inherit;
+  /* override font-weight for dark mode */
+  font-weight: 300;
+  
+  --button-bg-hover: hsl(var(--h-accent), var(--s-accent), 50%);
+  --button-bg: var(--surface-alt);
+  --button-text: hsl(var(--h-text), var(--s-text), var(--l-text)); /* ~80% */
 }
-a:hover {
-  color: var(--primary);
-}
+/* –––––––––––––––––––––––––––––––––––––––––––––––––––––– */
 
+/* — Element defaults — */
 body {
-  margin: 0;
+  margin: 0 auto;
   display: flex;
+  justify-content: center;
+  align-items: flex-start;
   place-items: center;
   min-width: 320px;
   min-height: 100vh;
@@ -50,33 +85,34 @@ body {
   transition: background-color 0.3s, color 0.3s;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+a {
+  font-weight: 500;
+  color: var(--link-color);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
 }
 
 button {
-  border-radius: 8px;
-  border: 1px solid transparent;
+  border: none;
+  border-radius: 0.5rem;
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
   background-color: var(--button-bg);
-  cursor: pointer;
   color: var(--text);
-  transition: border-color 0.25s;
-  margin-right: 0; /* Set default margin to 0 */
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s;
 }
-
 button + button {
-  margin-left: 10px;  /* Only add spacing on the left for buttons following buttons buttons */
+  margin-left: 0.5rem;
 }
-
 button:hover {
-  border-color: var(--primary);
+  background-color: var(--button-bg-hover);
+  border-color: var(--link-color);
 }
-
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;

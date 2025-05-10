@@ -15,7 +15,7 @@ function Login () {
 
   function handleSignUp()  {
     //Redirecting to the sign up page.
-    navigate('/Sign Up');
+    navigate('/SignUp');
   };
 
   function handleForgotPassword() {

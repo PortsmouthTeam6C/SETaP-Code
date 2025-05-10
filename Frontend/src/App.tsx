@@ -8,7 +8,7 @@ import SettingsPage from './pages/SettingsPage';
 
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useTheme } from './context/themeContext.tsx'; // Import useTheme
+import { useTheme } from './context/themeContext'; // Import useTheme
 import { useEffect } from 'react'; // Import useEffect
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route path="/Sign Up" element={<SignupPage />} />
+        <Route path="/SignUp" element={<SignupPage />} />
         <Route path="/Homepage" element={<Homepage />} />
         <Route path="/ForgotPasswordPage" element={<ForgotPasswordPage />} />
         <Route path="/NavigateScreen" element={<NavigateScreen />} />

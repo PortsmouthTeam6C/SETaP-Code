@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-
+import '../index.css'
 function TestPage() {
   const navigate = useNavigate();
 
@@ -9,7 +9,7 @@ function TestPage() {
   };
 
   function handleSignUp() {
-    navigate('/Sign Up'); 
+    navigate('/SignUp'); 
   };
 
   function handleForgotPassword() {
