@@ -36,6 +36,6 @@ The following sections will guide you through setting up and using Synergy:
    :caption: 📚 Documentation Contents
 
    install.md
-   usage.md
+   tech.md
    credits.md
    license.md

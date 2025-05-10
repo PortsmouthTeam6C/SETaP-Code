@@ -1,8 +1,9 @@
 import { useTheme } from "../context/themeContext.tsx";
 import { useTestNavigation } from "./TestPage.tsx";
 
+
 export default function SettingsPage() {
-  const { handleTestPage } = useTestNavigation();
+  const { handleHomepage } = useTestNavigation();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -17,7 +18,7 @@ export default function SettingsPage() {
       <h2>Settings</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'center' }}>
         <button onClick={toggleTheme}>Toggle Theme (Current: {theme})</button>
-        <button onClick={handleTestPage}>Go to Test Page</button>
+        <button onClick={handleHomepage}>Back to Homepage</button>
       </div>
     </div>
   );
