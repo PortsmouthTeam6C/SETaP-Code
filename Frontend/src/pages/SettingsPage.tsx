@@ -1,4 +1,4 @@
-import { useTheme } from "../context/themeContext.tsx";
+import { useTheme } from "../context/themeContext";
 import { useNavigate } from "react-router-dom";
 
 export default function SettingsPage() {

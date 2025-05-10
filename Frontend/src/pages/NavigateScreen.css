@@ -1,92 +1,94 @@
-/* NavigateScreen.css */
-
-/* General Layout */
 .container {
-    display: flex;
-    width: 150vh;
-    height: 88vh;
-    padding: 1rem;
-    background-color: var(--container-bg);
-  }
-  
-  /* Left Section */
-  .left-section {
-    width: 25%;
-    padding: 1rem;
-    padding-right: 2rem;
-  }
-  
-  .search-bar {
-    width: 90%;
-    padding: 1rem;
-    border: 8px solid var(--text); /* border */
-    border-radius: 0.5rem; /* rounded-lg */
-    margin-bottom: 1rem;
-  }
-  
-  .society-list {
-    height: 80%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    border: 1px solid var(--text); /* border */
-    border-radius: 0.5rem; /* rounded-lg */
-    padding: 0.5rem;
-    background-color: var(--container2-bg); 
-  }
-  
-  .society-item {
-    padding: 1rem;
-    margin-bottom: 0.5rem;
-    cursor: pointer;
-    border: 1px solid var(--text); /* border */
-    border-radius: 0.5rem; /* rounded-lg */
-    background-color: var(--button-bg); /* bg-white */
-    color: var(--text);
-  }
-  
-  .society-item:hover {
-    background-color: #1618af; /* hover:bg-gray-100 */
-  }
-  
-  .society-item.selected {
-    background-color: #cfe0fc; /* bg-blue-200 */
-  }
-  
-  .society-item h3 {
-    font-weight: bold;
-  }
-  
-  .society-item p {
-    font-size: 0.875rem;
-    color: var(--text); /* text-gray-600 */
-  }
-  
-  /* Right Section */
-  .right-section {
-    width: 75%;
-    padding: 1rem;
-    background-color: var(--container2-bg);
-    border: 1px solid var(--text); /* border */
-    border-radius: 0.5rem; /* rounded-lg */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow-lg */
-  }
-  
-  .right-section h2 {
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
-  
-  .right-section p {
-    font-size: 1.125rem;
-    color: var(--text); /* text-gray-700 */
-    margin-bottom: 1rem;
-  }
-  
-  .right-section .price {
-    font-weight: 600;
-  }
-  
+  display: flex;
+  width: 120vh;
+  max-width: 1300px;
+  padding: 1rem;
+  background-color: var(--surface);
+  margin: 0 auto;    
+}
+
+/* Left Section */
+.left-section {
+  width: 25%;
+  padding: 1rem;
+  padding-right: 2rem;
+}
+
+.search-bar {
+  width: 90%;
+  padding: 1rem;
+  border: 8px solid var(--text);            
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  background-color: var(--background);        
+  color: var(--text);
+}
+
+.society-list {
+  height: 80%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--text);              /* was #000 */
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  background-color: var(--surface-alt);       /* was var(--container2-bg) */
+}
+
+.society-item {
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: 1px solid var(--text);              /* was #000 */
+  border-radius: 0.5rem;
+  background-color: var(--button-bg);         /* was #fff */
+  color: var(--text);
+}
+
+.society-item:hover {
+  background-color: var(--link-color);        /* was #1618af */
+}
+
+.society-item.selected {
+  background-color: var(--surface);           /* was #cfe0fc */
+}
+
+.society-item h3 {
+  font-weight: bold;
+}
+
+.society-item p {
+  font-size: 0.875rem;
+  color: var(--text);                         /* was gray-600 */
+}
+
+/* Right Section */
+.right-section {
+  width: 75%;
+  padding: 1rem;
+  background-color: var(--surface-alt);      
+  border: 1px solid var(--text);              /* was #000 */
+  border-radius: 0.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.right-section h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.right-section p {
+  font-size: 1.125rem;
+  color: var(--text);                         /* was text-gray-700 */
+  margin-bottom: 1rem;
+}
+
+.right-section .price {
+  font-weight: 600;
+  color: var(--text);
+}
+
 /* Profile Button */
 .profile-button {
   top: 1rem;
@@ -94,18 +96,15 @@
   padding: 0.5rem 1rem;
   font-weight: 500;
   cursor: pointer;
-  
-  /* Set background and text color */
-  background-color: var(--container-bg); /* Light gray */
-  color: var(--text); /* Dark text */
-  border: 1px solid var(--text); /* Subtle border */
+  background-color: var(--surface);           /* was light gray */
+  color: var(--text);                         /* was dark text */
+  border: 1px solid var(--text);              /* was subtle border */
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
 }
 
-/* Hover effect */
 .profile-button:hover {
-  background-color: var(--background) ; /* Darker gray */
-  color: var(--background); /* Darker text */
+  background-color: var(--surface-alt);       /* was darker gray */
+  color: var(--text);
 }
 
 /* Profile Button Section */
@@ -120,48 +119,48 @@
   width: 80px;
   height: 80px;
   border-radius: 50%;
-  object-fit: cover; 
-  border: 2px solid #000; 
+  object-fit: cover;
+  border: 2px solid var(--text);              
 }
 
 .profile-username {
-  margin-top: 8px; 
+  margin-top: 8px;
   font-size: 16px;
   font-weight: bold;
-  color: black;
+  color: var(--text);                         /* was black */
 }
 
 /* Uni Logo Section */
 .uni-logo {
-  position:absolute;
+  position: absolute;
   left: 10%;
   top: 10%;
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
 }
 
 .uni-logo-button {
-  position:absolute;
+  position: absolute;
   left: 10%;
   top: 10%;
   width: 100%;
   height: 100%;
-  object-fit: cover; 
+  object-fit: cover;
   gap: 8px;
   padding: 8px 16px;
-  border: 2px solid #4b5563; 
+  border: 2px solid var(--text);              /* was #4b5563 */
   border-radius: 6px;
   transition: background-color 0.2s ease-in-out;
   cursor: pointer;
-  }
+}
 
-  .uni-logo-button:hover {
-    background-color: #f3f4f6; 
-  }
-  
-  .uni-logo-button img {
-    width: 60%;
-    height: 60%;
-    border-radius: 50%;
-  }
+.uni-logo-button:hover {
+  background-color: var(--surface-alt);       /* was #f3f4f6 */
+}
+
+.uni-logo-button img {
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+}
