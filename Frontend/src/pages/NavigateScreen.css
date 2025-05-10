@@ -1,4 +1,5 @@
 .container {
+  
   display: flex;
   width: 120vh;
   max-width: 1300px;
@@ -59,6 +60,12 @@
 .society-item p {
   font-size: 0.875rem;
   color: var(--text);                         /* was gray-600 */
+}
+
+.society-description {
+  white-space: pre-wrap; /* Preserves line breaks and spaces */
+  line-height: 1.6; /* Optional: Adjust line height for better readability */
+  font-size: 1rem; /* Optional: Adjust font size */
 }
 
 /* Right Section */

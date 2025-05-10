@@ -14,6 +14,7 @@ interface SingleLevelDropdownMenuProps {
     action?: () => void;
   }[];
 }
+
 export const SingleLevelDropdownMenu = ({
   buttonLabel,
   items,
@@ -73,22 +74,51 @@ export const SingleLevelDropdownMenu = ({
 };
 
 const societies = [
-  { id: 1, name: "Photography Club", price: "$10", description: "A club for photography lovers." },
-  { id: 2, name: "Coding Society", price: "Free", description: "Join us to code cool projects." },
-  { id: 3, name: "Music Club", price: "$15", description: "For musicians and music lovers." },
-  { id: 4, name: "Photography Club", price: "$10", description: "A club for photography lovers." },
-  { id: 5, name: "Coding Society", price: "Free", description: "Join us to code cool projects." },
-  { id: 6, name: "Music Club", price: "$15", description: "For musicians and music lovers." },
+  { id: 1, name: "Calistenics Society", description: `Would you like to defy gravity?
+
+Calisthenics is all about building strength and skill through the use of bodyweight exercises. We aim to promote the physical and mental well-being of all our members.
+
+At University of Portsmouth Calisthenics everyone is welcome to train with us regardless of their experience or skill level. All our sessions are run by our members who have knowledge and experience in a number of disciplines including gymnastics, martial arts, athletics, yoga, bodybuilding and personal training which makes training informative and fun. We are an easy-going friendly bunch of students who thrive on supporting each other to reach the various goals we set ourselves throughout the year.` },
+  { id: 2, name: "Book Club Society", description: `We're a fun, laid-back group for students who love books and good vibes! 📚✨ We meet up to chat about everything—from bestsellers to hidden gems—and host chill events like book swaps, themed discussions, and coffee hangouts. ☕️ Whether you're a casual reader or totally obsessed, it's the perfect place to make new friends, share recs, and dive into amazing stories together.` },
+  { id: 3, name: "Board Games Society", description: `Hello and welcome! You've found your way to the page for all things boardy and gamey at Portsmouth. We're so glad you've made it.
+
+We are a non-paid, no-stress society devoted to the playing and enjoyment of board games. Regardless of how committed to the board games grind you are, the course you're on, or how many deadlines you have due next week, we always meet on a Sunday morning (11am start) in the Union building.
+
+To keep up to date please join our Discord server for all the most up-to-date news!` },
+  { id: 4, name: "Basic Self Defense Society", description: `Welcome to a new year at the Basic Self Defence Society!
+
+At the Basic Self Defence Society, we offer a wide range of martial arts and self defence systems including: aikido, boxing, Brazilian jiu-jitsu, eskrima, judo, and krav maga. Our free membership includes access to weekly sessions and workshops.
+
+The techniques you acquire in these sessions will not only improve your focus but develop your ability to confidently assess situations.` },
+  { id: 5, name: "Bodybuilding Society", description: `Welcome to the Official Society for University of Portsmouth Bodybuilding.
+
+We are a welcoming society to anyone who shares and has a passion for Bodybuilding. No matter your shape, size, age, or background, everyone is welcome here within this society!
+
+As a part of this society, we wish and strive to improve your gym knowledge, etiquette, and ability, whilst enjoying being a part of the Bodybuilding family. Through this society, you'll be able to meet like-minded individuals and create lifelong friendships and workout partners.` },
+  { id: 6, name: "Music Society", description: `We are the UoP Music Society!
+
+We comprise 4 different ensembles that run Monday-Thursday. Within our rehearsals, we welcome students, staff, and members of the community, and aim to provide a welcoming environment for all.` },
+  { id: 7, name: "Photography Society", description: `Welcome to the Photography Society!
+
+Whether you're a seasoned photographer or just starting out, our society is the perfect place to explore your passion for capturing moments. We host regular workshops, photo walks, and exhibitions to help you improve your skills and showcase your work. Join us to meet like-minded individuals and share your love for photography!` },
+  { id: 8, name: "Coding Society", description: `Welcome to the Coding Society!
+
+Are you passionate about coding, software development, or just curious about technology? Our society is open to all skill levels, from beginners to advanced programmers. We organize hackathons, coding challenges, and workshops on various programming languages and technologies. Join us to learn, collaborate, and build amazing projects together!` },
 ];
 
 export default function NavigateScreen() {
   const [selectedSociety, setSelectedSociety] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const navigate = useNavigate();
 
   // Filter societies based on search query
   const filteredSocieties = societies.filter(society =>
     society.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  function handleHomepage() {
+    navigate('/Homepage');
+  };
 
   return (
     <div className="container">
@@ -113,12 +143,15 @@ export default function NavigateScreen() {
                 onClick={() => setSelectedSociety(society)}
               >
                 <h3>{society.name}</h3>
-                <p>{society.price}</p>
               </div>
             ))
           ) : (
             <p className="text-gray-500 text-center">No societies found</p>
           )}
+        </div>
+        {/* Back to Homepage Button */}
+        <div className="homepage-button">
+          <button onClick={handleHomepage}>Back to Homepage</button>
         </div>
       </div>
 
@@ -127,8 +160,7 @@ export default function NavigateScreen() {
         {selectedSociety ? (
           <>
             <h2>{selectedSociety.name}</h2>
-            <p>{selectedSociety.description}</p>
-            <p className="price">Price: {selectedSociety.price}</p>
+            <div className="society-description">{selectedSociety.description}</div>
           </>
         ) : (
           <p className="text-gray-500">Select a society to see details</p>
@@ -140,8 +172,8 @@ export default function NavigateScreen() {
             <SingleLevelDropdownMenu
         buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
         items={[
-          { title: "  Settings", url: "/", icon: <FaUserEdit /> },
-          { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
+          { title: "  Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
+          { title: "  Logout", url: "/", icon: <FaSignOutAlt /> },
         ]}
       />
       </div>

@@ -48,6 +48,6 @@ export default TestPage;
 export function useTestNavigation() {
   const navigate = useNavigate();
   return {
-    handleTestPage: () => navigate('/')
+    handleHomepage: () => navigate('/Homepage')
   };
 }

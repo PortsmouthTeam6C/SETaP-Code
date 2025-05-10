@@ -72,15 +72,14 @@ export const SingleLevelDropdownMenu = ({
 };
 
 const societies = [
-  { id: 1, name: "Photography Club" },
-  { id: 2, name: "Coding Society" },
-  { id: 3, name: "Music Club" },
-  { id: 1, name: "Photography Club" },
-  { id: 2, name: "Coding Society" },
-  { id: 3, name: "Music Club" },
-  { id: 1, name: "Photography Club" },
-  { id: 2, name: "Coding Society" },
-  { id: 3, name: "Music Club" },
+  { id: 1, name: "Calistenics Society" },
+  { id: 2, name: "Book Club Society" },
+  { id: 3, name: "Board Games Society" },
+  { id: 4, name: "Basic Self Defense Society" },
+  { id: 5, name: "Bodybuilding Society" },
+  { id: 6, name: "Music Society" },
+  { id: 7, name: "Photography Society" },
+  { id: 8, name: "Coding Society" },
 ];
 
 const events = [
@@ -188,15 +187,15 @@ function Homepage() {
             <div className='profile-button'>
                   {/* Profile Dropdown */}
                   <SingleLevelDropdownMenu
-              buttonLabel={<img src = "../../public/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
+              buttonLabel={<img src = "/ProfilePic.jpg" alt="Profile Pic" className="profile-pic"/>}
               items={[
-                { title: "  Settings", url: "/", icon: <FaUserEdit /> },
-                { title: "  Logout", url: "/Login", icon: <FaSignOutAlt /> },
+                { title: "  Settings", url: "/SettingsPage", icon: <FaUserEdit /> },
+                { title: "  Logout", url: "/", icon: <FaSignOutAlt /> },
               ]}
             />
             </div>
             </div>
-            <img src = "../../public/UoPLogo.png" alt="University Logo" className = "uniHomePage-logo"/>
+            <img src = "/UoPLogo.png" alt="University Logo" className = "uniHomePage-logo"/>
           </div>
   );
 }

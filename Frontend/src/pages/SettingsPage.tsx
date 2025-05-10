@@ -1,7 +1,9 @@
 import { useTheme } from "../context/themeContext";
 import { useNavigate } from "react-router-dom";
 
+
 export default function SettingsPage() {
+  const { handleHomepage } = useTestNavigation();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
 
@@ -21,7 +23,7 @@ export default function SettingsPage() {
       <h2>Settings</h2>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'center' }}>
         <button onClick={toggleTheme}>Toggle Theme (Current: {theme})</button>
-        <button onClick={handleTestPage}>Go to Test Page</button>
+        <button onClick={handleHomepage}>Back to Homepage</button>
       </div>
     </div>
   );
