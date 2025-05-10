@@ -17,9 +17,14 @@ function ForgotPassword() {
   return (
     <div className="SignUp-box">
       <div className="form-container">
-        <div className="Title">
-        <h1>Forgot Password</h1>
+        <div className="logo">
+          <img src="/demoLogo.png" alt="Logo" /> 
         </div>
+        
+        <div className="Title">
+          <h1>Forgot Password</h1>
+        </div>
+        
         <h3>Enter Email Address</h3>
         <input
           type="text"

@@ -1,5 +1,6 @@
 @import url("./index.css");
 
+
 #root {
   max-width: 1280px;
   margin: 0 auto;
@@ -7,6 +8,7 @@
   text-align: center;
 }
 
+/* Logo styling and hover glow */
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -14,31 +16,32 @@
   transition: filter 300ms;
 }
 .logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+  /* glow effect using primary/link colour */
+  filter: drop-shadow(0 0 2em var(--link-color));
 }
 .logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+  /* same glow on React logo */
+  filter: drop-shadow(0 0 2em var(--link-color));
 }
 
+/* Spin animation for logos */
 @keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
 }
 
+/* if user prefers reduced motion */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
 }
 
+/* Card padding */
 .card {
   padding: 2em;
 }
 
 .read-the-docs {
-  color: #888;
+  color: var(--surface-alt);
 }
