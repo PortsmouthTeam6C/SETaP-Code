@@ -11,7 +11,7 @@ function ForgotPassword() {
       alert("Passwords do not match!");
       return;
     }
-    navigate('/Login');
+    navigate('/');
   }
 
   return (
