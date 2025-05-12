@@ -1,0 +1,222 @@
+@import "src/vars.css";
+
+.page {
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 70px);
+    width: 100vw;
+}
+
+.main-content {
+    display: flex;
+    flex-grow: 1;
+    height: 100%;
+}
+
+.societies-aside {
+    background: var(--white);
+    box-sizing: border-box;
+    flex-grow: 1;
+    width: 25%;
+    max-width: 250px;
+    height: 100%;
+    padding: 0 5px;
+}
+
+.societies-aside > nav {
+    overflow: scroll;
+    width: 100%;
+    height: calc(100% - 60px);
+}
+
+.join-society-button {
+    background-color: var(--mid-grey);
+    color: var(--white);
+    font-size: 20px;
+    height: 50px;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.join-society-button:hover {
+    background-color: var(--dark-grey);
+}
+
+.society-button {
+    background: var(--white);
+    height: 100px;
+    width: 100%;
+    margin: 5px 0;
+    display: flex;
+    flex-direction: row;
+    padding: 0;
+}
+
+.society-button:hover {
+    background-color: var(--light-grey) !important;
+    border-color: var(--light-grey) !important;
+}
+
+.society-button > img {
+    height: 100%;
+    aspect-ratio: 1;
+    border-radius: 10%;
+}
+
+.society-button > div {
+    width: 75%;
+    padding: 2px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-direction: column;
+    margin-left: 10px;
+}
+
+.society-button > div > h3 {
+    width: 100%;
+    text-align: left;
+    margin: 0;
+    padding-right: 2px;
+    color: var(--black);
+}
+
+.society-button > div > p {
+    text-align: left;
+    margin: 0;
+    color: var(--dark-grey);
+}
+
+.events-aside {
+    background: var(--white);
+    box-sizing: border-box;
+    min-width: 330px;
+    height: 100%;
+    padding: 10px;
+}
+
+.events-aside > nav {
+    overflow: scroll;
+    width: 100%;
+    height: 100%;
+}
+
+.event {
+    background-color: var(--white);
+    height: 330px;
+    min-width: 0;
+    padding: 0;
+    border-radius: 20px;
+    border: 0;
+    margin-bottom: 10px;
+    display: flex;
+}
+
+.event > img {
+    object-fit: cover;
+    border-radius: 20px;
+    height: 60%;
+}
+
+.event > div {
+    height: 40%;
+    display: flex;
+    flex-direction: row;
+    padding: 15px;
+}
+
+.event > div > .date {
+    width: 30%;
+    border-right: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.event > div > .date > p {
+    margin: 0;
+    text-transform: uppercase;
+    width: 100%;
+    font-size: 20px;
+}
+
+.event > div > .date > p:nth-child(1) {
+    margin-top: -10px;
+    text-transform: uppercase;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+.event > div > .date > p:nth-child(2) {
+    margin-top: -10px;
+}
+
+.event > div> .info {
+    width: 70%;
+    padding-left: 10px;
+}
+
+.event > div> .info > h2 {
+    text-align: left;
+    font-size: 20px;
+    margin-top: -5px;
+    line-height: 23px;
+}
+
+.event > div> .info > .description {
+    text-align: left;
+    font-size: 12px;
+    margin-top: -12px;
+}
+
+.event > div> .info > .location,.price {
+    text-align: left;
+    font-size: 15px;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    align-items: center;
+    height: 20px;
+}
+
+main {
+    background: var(--light-grey);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: left;
+    align-items: flex-start;
+    padding: 30px;
+}
+
+.message {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.message > img {
+    width: 60px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.message > div > p {
+    text-align: left;
+}
+
+.messages {
+    height: 100%;
+}
+
+.message-input {
+    width: 100%;
+    display: flex;
+}
+
+.message-input > * + * {
+    margin-left: 10px;
+}
