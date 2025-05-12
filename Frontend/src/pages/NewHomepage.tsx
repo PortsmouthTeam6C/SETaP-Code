@@ -1,19 +1,21 @@
 import './NewHomepage.css';
 import {CiLocationOn, CiShoppingTag} from "react-icons/ci";
 import {useColor} from 'color-thief-react'
-import {ReactNode, useEffect, useState} from "react";
+import {ReactNode, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {UserContext} from "../context/UserContext";
+import {getJoinedSocieties, SocietyResponse} from "../api/auth/societies";
 
-const societies = [
-  { id: 1, name: "Calistenics Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 2, name: "Book Club Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 3, name: "Board Games Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 4, name: "Basic Self Defense Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 5, name: "Bodybuilding Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 6, name: "Music Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 7, name: "Photography Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-  { id: 8, name: "Coding Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
-];
+// const societies = [
+//   { id: 1, name: "Calistenics Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 2, name: "Book Club Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 3, name: "Board Games Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 4, name: "Basic Self Defense Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 5, name: "Bodybuilding Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 6, name: "Music Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 7, name: "Photography Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+//   { id: 8, name: "Coding Society", image: "https://cdn.wildrocket.io/media/05nDddpu1BzUak5pXDfIoeEjQrrM3nj2kDs8V1xt.jpg" },
+// ];
 
 const events = [
   {
@@ -63,6 +65,8 @@ const initialMessages = [
 ];
 
 export default function Homepage() {
+  const [selectedSociety, setSelectedSociety] = useState<SocietyResponse|undefined>();
+
   return <div className={'page'}>
     <div className={'main-content'}>
       <SocietiesSidebar />
@@ -189,14 +193,23 @@ function SidebarEventCard({ image, title, location, datetime, description, price
 
 function SocietiesSidebar() {
   const navigate = useNavigate();
+  const context = useContext(UserContext);
+  const [societies, setSocieties] = useState<SocietyResponse[]|undefined>();
+
+  useEffect(() => {
+    if (context.username === undefined) return;
+
+    getJoinedSocieties(context.token!, context.expiry!)
+      .then(soc => setSocieties(soc));
+  }, [context]);
 
   return <aside className={'societies-aside'}>
     <nav>
-      {societies.map((society, key) =>
+      {societies?.map((society, key) =>
         <SidebarSocietyButton
           key={key}
           name={society.name}
-          image={society.image} />
+          image={society.picture} />
       )}
     </nav>
     <button className={'join-society-button'} onClick={() => navigate('/NavigateScreen')}>
