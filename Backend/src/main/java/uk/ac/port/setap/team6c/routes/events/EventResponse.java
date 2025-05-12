@@ -1,4 +1,4 @@
-package uk.ac.port.setap.team6c.routes.Events;
+package uk.ac.port.setap.team6c.routes.events;
 
 import java.time.Instant;
 

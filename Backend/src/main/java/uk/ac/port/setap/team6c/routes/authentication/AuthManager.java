@@ -13,6 +13,7 @@ import uk.ac.port.setap.team6c.database.Society;
 import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 import uk.ac.port.setap.team6c.email.GmailManager;
+import uk.ac.port.setap.team6c.routes.UserTokenRequest;
 
 import java.time.Instant;
 import java.util.*;
@@ -50,6 +51,30 @@ public class AuthManager {
         return BCrypt.withDefaults().hashToString(12, password.toCharArray());
     }
 
+    public static void getAllUserData(@NotNull Context ctx) {
+        UserTokenRequest request = Main.GSON.fromJson(ctx.body(), UserTokenRequest.class);
+
+        System.out.println(request.token() + " " + request.expiry());
+
+        User user;
+        try {
+            user = new User(UUID.fromString(request.token()), request.expiry());
+        } catch (Exception e) {
+            throw new UnauthorizedResponse();
+        }
+
+        University university;
+        try {
+            university = user.getUniversity();
+        } catch (Exception e) {
+            throw new InternalServerErrorResponse();
+        }
+
+        ctx.result(Main.GSON.toJson(new LoginResponse(
+                null, null, user.getUsername(), user.getEmail(), user.getProfilePicture(),
+                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getUniversityPicture(), university.getTheming())));
+    }
+
     /**
      * Route to log the user in with a provided email and password and get a login token
      * @param ctx The request context
@@ -61,7 +86,7 @@ public class AuthManager {
         User user;
         try {
             user = new User(request.email());
-        } catch (User.UnknownEmailException ignored) {
+        } catch (Exception ignored) {
             throw new UnauthorizedResponse();
         }
 
@@ -74,7 +99,7 @@ public class AuthManager {
         Instant expiry = Instant.now().plusSeconds(60 * 60 * 24 * 30); // 30 days
         try {
             user.assignSessionToken(token, expiry);
-        } catch (User.SessionTokenCouldNotBeCreatedException ignore) {
+        } catch (Exception ignore) {
             token = null;
             expiry = null;
         }
@@ -83,14 +108,14 @@ public class AuthManager {
         University university;
         try {
             university = user.getUniversity();
-        } catch (University.UniversityNotFoundException e) {
+        } catch (Exception e) {
             throw new InternalServerErrorResponse();
         }
 
         // Send token back to user
         ctx.result(Main.GSON.toJson(new LoginResponse(
                 token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(),
-                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getTheming())));
+                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getUniversityPicture(), university.getTheming())));
     }
 
     /**
@@ -163,14 +188,14 @@ public class AuthManager {
         Instant expiry = Instant.now().plusSeconds(60 * 60 * 24 * 30); // 30 days
         try {
             user.assignSessionToken(token, expiry);
-        } catch (User.SessionTokenCouldNotBeCreatedException ignore) {
+        } catch (Exception ignore) {
             token = null;
             expiry = null;
         }
 
         ctx.result(Main.GSON.toJson(new LoginResponse(
                 token, expiry, user.getUsername(), user.getEmail(), user.getProfilePicture(),
-                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getTheming())));
+                user.isAdministrator(), user.getSettings(), university.getUniversityName(), university.getUniversityPicture(), university.getTheming())));
     }
 
     /**
@@ -181,120 +206,5 @@ public class AuthManager {
     private static @NotNull String padWithZeroes(@NotNull String string) {
         return "0".repeat(6 - string.length()) + string;
     }
-
-    public static void createEvent(@NotNull Context ctx) {
-        CreateEventRequest request = Main.GSON.fromJson(ctx.body(), CreateEventRequest.class);
-
-        // Check user info
-        User user;
-        try{
-            user = new User(request.userid());
-        } catch (User.UnknownUseridException ignored) {
-            throw new ConflictResponse();
-        }
-        // Check society info
-        Society society;
-        try{
-            society = new Society(request.societyid());
-        } catch (Society.UnknownSocietyException ignored) {
-            throw new ConflictResponse();
-        }
-        // check user is an administrator, if not check if they are a manager
-        if(!user.isAdministrator()){
-            try{
-                if (!society.getManagers().contains(user)){
-                    throw new UnauthorizedResponse();
-                }
-            } catch (Society.UnknownSocietyException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
-        // Check start and end timestamps
-        if (request.StartTimestamp().isAfter(request.EndTimeStamp())) {
-            throw new ConflictResponse();
-        }
-        if (request.StartTimestamp().isBefore(request.CreationTimestamp())) {
-            throw new ConflictResponse();
-        }
-        // Response
-        ctx.result(Main.GSON.toJson(new CreateEventResponse(request.userid(),request.StartTimestamp(),request.EndTimeStamp(), request.CreationTimestamp(),request.location(),request.name(),request.description())));
-
-    }
-    public static void joinEvent(@NotNull Context ctx) {
-        JoinEventRequest request = Main.GSON.fromJson(ctx.body(), JoinEventRequest.class);
-        //get society and user info
-        Society society;
-        try{
-            society = new Society(request.societyid());
-        } catch (Society.UnknownSocietyException ignored) {
-            throw new ConflictResponse();
-        }
-        User user;
-        try{
-            user = new User(request.userid());
-        } catch (User.UnknownUseridException ignored) {
-            throw new ConflictResponse();
-        }
-        //Check user is in society
-        if (!user.getJoinedSocieties().contains(society)){
-            throw new UnauthorizedResponse();
-        }
-        //check event has not already ended
-        if (request.EndTimestamp().isBefore(Instant.now())) {
-            throw new ConflictResponse();
-        }
-        //response
-        ctx.result(Main.GSON.toJson(new JoinEventResponse(request.userid(), request.eventid())));
-    }
-    public static void leaveEvent(@NotNull Context ctx) {
-        LeaveEventRequest request = Main.GSON.fromJson(ctx.body(), LeaveEventRequest.class);
-        User user;
-        try{
-            user = new User(request.userid());
-        } catch (User.UnknownUseridException ignored) {
-            throw new ConflictResponse();
-        }
-        Event event;
-        try{
-            event = new Event(request.eventid());
-        } catch (Event.UnknownEventException ignored) {
-            throw new ConflictResponse();
-        }
-        if (!user.getJoinedEvents().contains(event)){
-            throw new UnauthorizedResponse();
-        }
-        if (request.EndTimestamp().isBefore(Instant.now())) {
-            throw new ConflictResponse();
-        }
-        ctx.result(Main.GSON.toJson(new LeaveEventResponse(request.userid(), request.eventid())));
-    }
-    public static void createSociety(@NotNull Context ctx) {
-        //TBD
-    }
-    public static void joinSociety(@NotNull Context ctx) {
-        //TBD
-    }
-    public static void leaveSociety(@NotNull Context ctx) {
-        LeaveSocietyRequest request = Main.GSON.fromJson(ctx.body(), LeaveSocietyRequest.class);
-        User user;
-        try{
-            user = new User(request.userid());
-        } catch (User.UnknownUseridException ignored) {
-            throw new ConflictResponse();
-        }
-        Society society;
-        try{
-            society = new Society(request.societyid());
-        } catch (Society.UnknownSocietyException ignored) {
-            throw new ConflictResponse();
-        }
-        if (!user.getJoinedSocieties().contains(society)){
-            throw new UnauthorizedResponse();
-        }
-        ctx.result(Main.GSON.toJson(new LeaveSocietyResponse(request.userid(), request.societyid())));
-    }
-
-
 
 }

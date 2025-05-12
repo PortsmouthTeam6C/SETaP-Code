@@ -19,6 +19,7 @@ public class University {
     @Getter(AccessLevel.PACKAGE)
     private int universityId;
     private String universityName;
+    private String universityPicture;
     private String emailDomain;
     private String theming;
 
@@ -64,6 +65,7 @@ public class University {
                 resultSet.next();
                 this.universityId = resultSet.getInt("universityId");
                 this.universityName = resultSet.getString("universityName");
+                this.universityPicture = resultSet.getString("universityPicture");
                 this.emailDomain = resultSet.getString("emailDomain");
                 this.theming = resultSet.getString("theming");
             });
@@ -82,6 +84,7 @@ public class University {
                 resultSet.next();
                 this.universityId = resultSet.getInt("universityId");
                 this.universityName = resultSet.getString("universityName");
+                this.universityPicture = resultSet.getString("universityPicture");
                 this.emailDomain = resultSet.getString("emailDomain");
                 this.theming = resultSet.getString("theming");
             });

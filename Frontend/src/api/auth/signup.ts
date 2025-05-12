@@ -1,5 +1,5 @@
 import axios from "axios";
-import {BASE_URL} from "./defaults";
+import {BASE_URL} from "../defaults";
 import {LoginResponse} from "./login";
 
 export async function reserveAccount(username: string, email: string, password: string): Promise<(string) => LoginResponse> {

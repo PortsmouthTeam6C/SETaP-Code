@@ -106,14 +106,15 @@ button {
   cursor: pointer;
   transition: background-color 0.25s, border-color 0.25s;
 }
-button + button {
-  margin-left: 0.5rem;
-}
-button:hover {
-  background-color: var(--button-bg-hover);
-  border-color: var(--link-color);
-}
+/*button + button {*/
+/*  margin-left: 0.5rem;*/
+/*}*/
+/*button:hover {*/
+/*  background-color: var(--button-bg-hover);*/
+/*  border-color: var(--link-color);*/
+/*}*/
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
+

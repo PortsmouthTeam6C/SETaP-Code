@@ -2,9 +2,11 @@
 
 
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  margin: 0 !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  width: 100% !important;
+  height: 100%;
   text-align: center;
 }
 
@@ -44,4 +46,34 @@
 
 .read-the-docs {
   color: var(--surface-alt);
+}
+
+header {
+  height: 70px;
+  min-height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 10px;
+}
+
+.university-logo {
+  height: 65px;
+}
+
+.user-profile-picture {
+  height: 60px;
+  border-radius: 50%;
+  margin: 5px;
+}
+
+.profile {
+  display: flex;
+  flex-direction: row;
+}
+
+.profile > p {
+  font-size: 20px;
+  margin-right: 10px;
+  font-weight: bold;
 }

@@ -27,7 +27,7 @@ public class Messages {
             User user;
             try {
                 user = new User(message.getUserId());
-            } catch (User.UnknownUseridException ignored) {
+            } catch (Exception ignored) {
                 continue;
             }
 
@@ -56,7 +56,7 @@ public class Messages {
         User sender = null;
         try {
             sender = new User(request.senderEmail());
-        } catch (User.UnknownEmailException ignored) {}
+        } catch (Exception ignored) {}
         messageCollectionBuilder.sentBy(sender);
 
         return messageCollectionBuilder.build();

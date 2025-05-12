@@ -3,6 +3,7 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
+import org.postgresql.util.PSQLException;
 import uk.ac.port.setap.team6c.routes.authentication.AuthManager;
 
 import java.sql.PreparedStatement;
@@ -10,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -44,9 +46,10 @@ public class User {
                 // Get the userid
                 PreparedStatement preparedStatement = connection.prepareStatement("select userid from sessiontoken where token = ? and expiry > ?");
                 preparedStatement.setString(1, token.toString());
-                preparedStatement.setTimestamp(2, Timestamp.from(timestamp));
+                preparedStatement.setTimestamp(2, Timestamp.from(timestamp.truncatedTo(ChronoUnit.MICROS)));
                 ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
+                if (!resultSet.next())
+                    System.out.println("Next has nothing");
                 this.userId = resultSet.getInt("userid");
 
                 // Get the user
@@ -196,6 +199,7 @@ public class User {
      * @throws SessionTokenCouldNotBeCreatedException if the session token could not be created
      */
     public void assignSessionToken(UUID token, Instant expiry) throws SessionTokenCouldNotBeCreatedException {
+        System.out.println("Assigning token " + token + " to user " + username);
         try {
             DatabaseManager.createConnection(connection -> {
                 PreparedStatement preparedStatement = connection.prepareStatement("insert into sessionToken (token, userid, expiry) values (?, ?, ?)");

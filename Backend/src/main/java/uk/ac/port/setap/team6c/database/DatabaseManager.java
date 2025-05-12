@@ -50,6 +50,7 @@ public class DatabaseManager {
                     "create table if not exists university (" +
                         "universityId serial primary key," +
                         "universityName varchar(100) not null," +
+                        "universityPicture text not null," +
                         "emailDomain varchar(100) unique not null check (emailDomain ~ $$@[\\w\\.]{1,}$$)," +
                         "theming text" +
                     ");" +
@@ -129,48 +130,43 @@ public class DatabaseManager {
             createConnection(connection -> {
                 Statement statement = connection.createStatement();
                 statement.execute(
-                    "insert into university (universityName, emailDomain, theming) values" +
-                    "('University of Portsmouth', '@port.ac.uk', 'Purple and White')," +
-                    "('University of Southampton', '@soton.ac.uk', 'Blue and White')," +
-                    "('Royal Holloway University of London', '@rhul.ac.uk', 'Orange and Black');" +
+                    "insert into university (universityName, universityPicture, emailDomain, theming) values" +
+                    "('University of Portsmouth', 'https://upload.wikimedia.org/wikipedia/commons/d/dc/University_of_Portsmouth_Logo.png', '@port.ac.uk', '{\"buttoncolor\":\"#572985\",\"background\":\"#E5E7EB\"}');" +
 
                     "insert into society (universityId, societyName, societyDescription, societyPicture, maxSize, isPaid) values" +
-                    "(1, 'Computer Science Society', 'A society for tech enthusiasts and developers', 'cs_society_picture.jpg', 200, false)," +
-                    "(2, 'Drama Club', 'A society focused on theater arts and performances', 'drama_club_picture.jpg', 100, false)," +
-                    "(3, 'Science and Innovation', 'A society dedicated to scientific discoveries and innovation', 'science_innovation_picture.jpg', 150, true);" +
+                    "(1, 'IT Society', 'The IT Society is a place to hang with people with a passion for all things computing or those who are interested. Providing a platform for students to social network, learn and enhance their skills, while also facilitating those students who have a wilder side, wishing to relax and let their hair down in the evening and unplug from the internet of things.', 'https://memplus-dev.ams3.cdn.digitaloceanspaces.com/media/WKWR2fCewrxdqjov9WqyjT4N2YCu2hku2raKzrER.png', 0, false)," +
+                    "(1, 'Basic Self Defence', 'Welcome to a new year at the Basic Self Defence Society!\nAt the Basic Self Defence Society, we offer a wide range of martial arts and self defence systems including: aikido, boxing, Brazilian jiu-jitsu, eskrima, judo and krav maga. Our free membership includes access to weekly sessions and workshops. The techniques you acquire in these sessions will not only improve your focus but develop your ability to confidently assess situations.\nBeyond physical defences, we find it important to teach the theory of self defence. This includes laws, situational awareness and vital/vulnerable points on the body. We also run weekly socials to give you the opportunity to meet new people from the university.\nIf you have any questions, please message our social media pages. We all look forward to meeting you!', 'https://memplus-dev.ams3.cdn.digitaloceanspaces.com/media/VUXTZYOjpHUgGAN7HJmVsK1r0e7H36yOmWGmx2sW.png', 40, false)," +
+                    "(1, 'Dental', 'The Dental Society is about supporting students of the Dental Academy both academically and socially.\nThis includes rep sessions with products such as Philips Sonicare, Oral-B electric toothbrushes and Oralieve (including freebies) and talks with past students about preparing for practice.\nSocials such as bowling and a Christmas dinner are also organised for our members as well as a summer social, as a way of helping students make new friends and networking.\nMembership is free! So make sure to join up in order to take advantage of our dental events!', 'https://cdn.wildrocket.io/media/HkauYofYJDqICUEYJwKimW3iZ8650BDS7s2mNU0z.jpg', 0, false);" +
 
                     "insert into users (universityId, username, email, password, profilePicture, isAdministrator, settings) values" +
                     // Passwords are all 'password'
-                    "(1, 'johndoe', 'johndoe@port.ac.uk', '$2y$10$wr1OF4PvzJX0nrfsJ6mumuriuI5MzNPdF.9nxzzElz2mldImt2n.O', 'profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
-                    "(2, 'janedoe', 'janedoe@soton.ac.uk', '$2y$10$LCkWRFUWsiNl0uV7hRvQ/.MVZ973xMgzxOI.ZkLxGV.3BvR.H7HEq', 'profile_janedoe.jpg', false, '{\"theme\":\"dark\",\"notifications\":false}')," +
-                    "(3, 'samuser', 'samuser@rhul.ac.uk', '$2y$10$pHJkJD/6Dl7MNaq8HJhrMO4/4BR1uPm/xO8s0HVz94Qx0MGs3LJdu', 'profile_samuser.jpg', true, '{\"theme\":\"light\",\"notifications\":true}')," +
-                    "(1, 'billytest', 'billytest@port.ac.uk', '$2y$10$D.6MBWU7ORf5Yt4ruW5/9OPs4RSFLyOYliqsepZ7vHhLbgIKkVH3.', 'profile_billytest.jpg', false, '{\"theme\":\"light\",\"notifications\":true}');" +
+                    "(1, 'johndoe', 'johndoe@port.ac.uk', '$2y$10$wr1OF4PvzJX0nrfsJ6mumuriuI5MzNPdF.9nxzzElz2mldImt2n.O', 'https://api.dicebear.com/9.x/shapes/svg?seed=profile_johndoe.jpg', false, '{\"theme\":\"light\",\"notifications\":true}')," +
+                    "(1, 'billytest', 'billytest@port.ac.uk', '$2y$10$D.6MBWU7ORf5Yt4ruW5/9OPs4RSFLyOYliqsepZ7vHhLbgIKkVH3.', 'https://api.dicebear.com/9.x/shapes/svg?seed=profile_billytest.jpg', false, '{\"theme\":\"light\",\"notifications\":true}');" +
 
-                    "insert into sessionToken (token, userid, expiry) values" +
-                    "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
-                    "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00')," +
-                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-03-02 15:00:00');" +
+//                    "insert into sessionToken (token, userid, expiry) values" +
+//                    "('d4f7d8c6-6a8f-4c12-b914-7b6f20d1e8fb', 1, '2025-02-28 12:00:00')," +
+//                    "('3b6f9bc8-8a65-4622-92f8-71b1d8faed3c', 2, '2025-02-25 09:00:00')," +
+//                    "('ea2a6b1d-6a78-4a69-8a1b-e5c97b81d004', 3, '2025-03-02 15:00:00');" +
 
                     "insert into societyMember (userId, societyId, isManager) values" +
                     "(1, 1, true)," +
-                    "(2, 2, false)," +
-                    "(3, 3, true)," +
-                    "(4, 1, false);" +
+                    "(1, 2, false)," +
+                    "(2, 2, false);"
 
-                    "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
-                    "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
-                    "(2, 2, 'Join us for an exciting drama performance next week!', '2025-02-18 14:30:00', false)," +
-                    "(3, 3, 'We have an exciting new research opportunity available!', '2025-02-19 11:45:00', true);" +
+//                    "insert into message (userId, societyId, messageContent, timestamp, isPinned) values" +
+//                    "(1, 1, 'Welcome to the Computer Science Society!', '2025-02-15 10:00:00', true)," +
+//                    "(2, 2, 'Join us for an exciting drama performance next week!', '2025-02-18 14:30:00', false)," +
+//                    "(3, 3, 'We have an exciting new research opportunity available!', '2025-02-19 11:45:00', true);" +
 
-                    "insert into events (userId, startTimestamp, endTimestamp, createdTimestamp, location, name, description) values" +
-                    "(1, '2025-03-01 09:00:00', '2025-03-01 12:00:00', '2025-02-10 15:00:00', 'Room 101', 'Tech Talk on AI', 'Join us for a deep dive into Artificial Intelligence.')," +
-                    "(2, '2025-02-28 18:00:00', '2025-02-28 21:00:00', '2025-02-15 10:00:00', 'Auditorium', 'Drama Performance: Romeo and Juliet', 'Watch our talented actors perform the classic play, Romeo and Juliet.')," +
-                    "(3, '2025-03-05 13:00:00', '2025-03-05 16:00:00', '2025-02-20 09:00:00', 'Lab 202', 'Innovation Challenge', 'Participate in our innovation challenge and showcase your ideas.');" +
+//                    "insert into events (userId, startTimestamp, endTimestamp, createdTimestamp, location, name, description) values" +
+//                    "(1, '2025-03-01 09:00:00', '2025-03-01 12:00:00', '2025-02-10 15:00:00', 'Room 101', 'Tech Talk on AI', 'Join us for a deep dive into Artificial Intelligence.')," +
+//                    "(2, '2025-02-28 18:00:00', '2025-02-28 21:00:00', '2025-02-15 10:00:00', 'Auditorium', 'Drama Performance: Romeo and Juliet', 'Watch our talented actors perform the classic play, Romeo and Juliet.')," +
+//                    "(3, '2025-03-05 13:00:00', '2025-03-05 16:00:00', '2025-02-20 09:00:00', 'Lab 202', 'Innovation Challenge', 'Participate in our innovation challenge and showcase your ideas.');" +
 
-                    "insert into societyEvent (societyId, eventId) values" +
-                    "(1, 1)," +
-                    "(2, 2)," +
-                    "(3, 3);"
+//                    "insert into societyEvent (societyId, eventId) values" +
+//                    "(1, 1)," +
+//                    "(2, 2)," +
+//                    "(3, 3);"
                 );
                 statement.close();
             });

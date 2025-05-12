@@ -13,5 +13,5 @@ import java.util.UUID;
  * @param isAdministrator Whether the user is an administrator
  * @param settings JSON string of the user's settings
  */
-public record LoginResponse(UUID token, Instant expiry, String username, String email, String profilePicture, boolean isAdministrator, String settings, String universityName, String universityTheming) {
+public record LoginResponse(UUID token, Instant expiry, String username, String email, String profilePicture, boolean isAdministrator, String settings, String universityName, String universityLogo, String universityTheming) {
 }

@@ -1,5 +1,6 @@
 package uk.ac.port.setap.team6c.routes.societies;
 
+import io.javalin.http.ConflictResponse;
 import io.javalin.http.Context;
 import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +11,8 @@ import uk.ac.port.setap.team6c.database.University;
 import uk.ac.port.setap.team6c.database.User;
 import uk.ac.port.setap.team6c.routes.IdRequest;
 import uk.ac.port.setap.team6c.routes.UserTokenRequest;
+import uk.ac.port.setap.team6c.routes.authentication.LeaveSocietyRequest;
+import uk.ac.port.setap.team6c.routes.authentication.LeaveSocietyResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +54,7 @@ public class Societies {
         User user;
         try {
             user = new User(UUID.fromString(request.token()), request.expiry());
-        } catch (User.UnknownLoginTokenException e) {
+        } catch (Exception e) {
             throw new UnauthorizedResponse();
         }
 
@@ -94,6 +97,30 @@ public class Societies {
                     society.getSocietyPicture(), society.getMaxSize(), society.isPaid()));
         }
         return societies;
+    }
+
+    public static void joinSociety(@NotNull Context ctx) {
+        //TBD
+    }
+
+    public static void leaveSociety(@NotNull Context ctx) {
+        LeaveSocietyRequest request = Main.GSON.fromJson(ctx.body(), LeaveSocietyRequest.class);
+        User user;
+        try{
+            user = new User(request.userid());
+        } catch (Exception ignored) {
+            throw new ConflictResponse();
+        }
+        Society society;
+        try{
+            society = new Society(request.societyid());
+        } catch (Exception ignored) {
+            throw new ConflictResponse();
+        }
+        if (!user.getJoinedSocieties().contains(society)){
+            throw new UnauthorizedResponse();
+        }
+        ctx.result(Main.GSON.toJson(new LeaveSocietyResponse(request.userid(), request.societyid())));
     }
 
 }
