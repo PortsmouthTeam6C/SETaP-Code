@@ -1,7 +1,7 @@
 import './NewHomepage.css';
 import {CiLocationOn, CiShoppingTag} from "react-icons/ci";
 import {useColor} from 'color-thief-react'
-import {ReactNode, useContext, useEffect, useState} from "react";
+import {Dispatch, ReactNode, SetStateAction, useContext, useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {UserContext} from "../context/UserContext";
 import {getJoinedSocieties, SocietyResponse} from "../api/auth/societies";
@@ -69,7 +69,7 @@ export default function Homepage() {
 
   return <div className={'page'}>
     <div className={'main-content'}>
-      <SocietiesSidebar />
+      <SocietiesSidebar selectedSociety={selectedSociety!} setSelectedSociety={setSelectedSociety} />
       <ChatPane />
       <EventsSidebar />
     </div>
@@ -191,7 +191,7 @@ function SidebarEventCard({ image, title, location, datetime, description, price
   </article>
 }
 
-function SocietiesSidebar() {
+function SocietiesSidebar({ selectedSociety, setSelectedSociety }: {selectedSociety: SocietyResponse, setSelectedSociety: Dispatch<SetStateAction<SocietyResponse | undefined>> } ) {
   const navigate = useNavigate();
   const context = useContext(UserContext);
   const [societies, setSocieties] = useState<SocietyResponse[]|undefined>();
@@ -200,7 +200,10 @@ function SocietiesSidebar() {
     if (context.username === undefined) return;
 
     getJoinedSocieties(context.token!, context.expiry!)
-      .then(soc => setSocieties(soc));
+      .then(soc => {
+        setSelectedSociety(soc![0]);
+        setSocieties(soc);
+      });
   }, [context]);
 
   return <aside className={'societies-aside'}>
@@ -208,6 +211,8 @@ function SocietiesSidebar() {
       {societies?.map((society, key) =>
         <SidebarSocietyButton
           key={key}
+          onClick={() => setSelectedSociety(society)}
+          selectedSocietyName={selectedSociety.name}
           name={society.name}
           image={society.picture} />
       )}
@@ -218,8 +223,8 @@ function SocietiesSidebar() {
   </aside>
 }
 
-function SidebarSocietyButton({ name, image }: { name: string, image: string }) {
-  return <button className={'society-button'}>
+function SidebarSocietyButton({ name, image, selectedSocietyName, onClick }: { name: string, image: string, selectedSocietyName: string, onClick: () => void }) {
+  return <button className={`society-button ${name == selectedSocietyName && 'leftborder'}`} onClick={onClick}>
     <img src={image} alt={`${name}'s society image`} />
     <div>
       <h3>{truncate(30, name)}</h3>

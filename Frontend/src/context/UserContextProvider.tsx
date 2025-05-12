@@ -72,6 +72,9 @@ export default function UserContextProvider({ children }: { children: ReactNode 
             if (!response)
                 return false;
 
+            setToken(authToken);
+            setExpiry(authExpiry);
+
             // Set user-related data
             setUsername(response.username);
             setEmail(response.email);

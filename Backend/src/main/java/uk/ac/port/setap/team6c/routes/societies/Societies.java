@@ -50,6 +50,8 @@ public class Societies {
     public static void getJoinedSocieties(@NotNull Context ctx) {
         UserTokenRequest request = Main.GSON.fromJson(ctx.body(), UserTokenRequest.class);
 
+        System.out.println("Req recieved " + request.token());
+
         // Get user
         User user;
         try {

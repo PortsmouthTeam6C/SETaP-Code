@@ -44,9 +44,9 @@ public class User {
         try {
             DatabaseManager.createConnection(connection -> {
                 // Get the userid
-                PreparedStatement preparedStatement = connection.prepareStatement("select userid from sessiontoken where token = ? and expiry > ?");
+                PreparedStatement preparedStatement = connection.prepareStatement("select userid from sessiontoken where token = ?");
                 preparedStatement.setString(1, token.toString());
-                preparedStatement.setTimestamp(2, Timestamp.from(timestamp.truncatedTo(ChronoUnit.MICROS)));
+//                preparedStatement.setTimestamp(2, Timestamp.from(timestamp.truncatedTo(ChronoUnit.MICROS)));
                 ResultSet resultSet = preparedStatement.executeQuery();
                 if (!resultSet.next())
                     System.out.println("Next has nothing");

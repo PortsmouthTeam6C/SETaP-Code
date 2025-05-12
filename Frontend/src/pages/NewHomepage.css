@@ -87,6 +87,10 @@
     color: var(--dark-grey);
 }
 
+.leftborder {
+    border-left: black 3px solid;
+}
+
 .events-aside {
     background: var(--white);
     box-sizing: border-box;
