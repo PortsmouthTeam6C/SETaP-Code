@@ -23,17 +23,17 @@ function Login () {
     alert('Invalid login.')
   }
 
-  function handleSignUp() {
-    //Redirecting to the sign up page.
-    navigate('/SignUp');
-  }
+  // function handleSignUp() {
+  //   //Redirecting to the sign up page.
+  //   navigate('/SignUp');
+  // }
+  //
+  // function handleForgotPassword() {
+  //   //Redirects to forgotten password page
+  //   navigate('/ForgotPasswordPage');
+  // }
 
-  function handleForgotPassword() {
-    //Redirects to forgotten password page
-    navigate('/ForgotPasswordPage');
-  }
-
-  return (
+  return <div className={'login-page'}>
       <div className="login-box">
         <div className="form-container">
           <div className="logo">
@@ -52,13 +52,13 @@ function Login () {
             onChange={(e) => setPassword(e.target.value)}
           />
           <button onClick={handleLogin}>Log In</button>
-          <div className="additional-options">
-            <button onClick={handleSignUp}>Sign Up</button>
-            <button onClick={handleForgotPassword}>Forgot Password?</button>
-          </div>
+          {/*<div className="additional-options">*/}
+          {/*  <button onClick={handleSignUp}>Sign Up</button>*/}
+          {/*  <button onClick={handleForgotPassword}>Forgot Password?</button>*/}
+          {/*</div>*/}
         </div>
       </div>
-  );
+  </div>
 }
 
 export default Login;

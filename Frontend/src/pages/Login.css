@@ -81,3 +81,11 @@ body {
 .additional-options button:hover {
   text-decoration: underline;
 }
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - 70px);
+  width: 100vw;
+}
