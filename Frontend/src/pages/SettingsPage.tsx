@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 
 
 export default function SettingsPage() {
-  const { handleHomepage } = useTestNavigation();
   const navigate = useNavigate();
   const { theme, setTheme } = useTheme();
 
@@ -14,8 +13,8 @@ export default function SettingsPage() {
     console.log("After toggle - New theme:", newTheme); /* Debug*/
   };
 
-  const handleTestPage = () => {
-    navigate("/");
+  function handleHomepage() {
+    navigate('/Homepage'); 
   };
 
   return (

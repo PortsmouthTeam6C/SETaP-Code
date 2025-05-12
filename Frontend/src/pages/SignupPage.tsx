@@ -17,7 +17,7 @@ function SignUpPage() {
       return;
     }
     console.log("User signed up:", { firstName, lastName, username });
-    navigate('/Login');
+    navigate('/');
   }
 
   return (
