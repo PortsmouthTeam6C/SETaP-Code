@@ -1,4 +1,4 @@
-import type {SocietyResponse} from "../pages/home.tsx";
+import type {SocietyResponse} from "../../pages/home.tsx";
 
 interface MessageResponse {
     messageId: number,

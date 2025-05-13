@@ -1,5 +1,5 @@
 import {CiLocationOn, CiShoppingTag} from "react-icons/ci";
-import type {SocietyResponse} from "../pages/home.tsx";
+import type {SocietyResponse} from "../../pages/home.tsx";
 
 export interface EventResponse {
     eventId: number,
