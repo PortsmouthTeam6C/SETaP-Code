@@ -1,6 +1,7 @@
 package uk.ac.port.setap.team6c.routes;
 
 import io.javalin.http.Context;
+import io.javalin.http.OkResponse;
 import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
@@ -42,6 +43,7 @@ public class MessageManager {
             throw new UnauthorizedResponse();
 
         Message.create(user.getUserId(), request.societyId, request.content, Instant.now());
+        throw new OkResponse();
     }
 
     /**

@@ -1,6 +1,7 @@
 package uk.ac.port.setap.team6c.routes;
 
 import io.javalin.http.Context;
+import io.javalin.http.OkResponse;
 import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
@@ -45,7 +46,7 @@ public class EventsManager {
 
         Event.create(request.societyId, request.date, request.location, request.name, request.description,
                 request.price, request.image);
-        ctx.result("");
+        throw new OkResponse();
     }
 
     /**

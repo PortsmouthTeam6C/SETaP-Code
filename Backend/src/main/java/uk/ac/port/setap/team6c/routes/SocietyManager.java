@@ -1,6 +1,7 @@
 package uk.ac.port.setap.team6c.routes;
 
 import io.javalin.http.Context;
+import io.javalin.http.OkResponse;
 import io.javalin.http.UnauthorizedResponse;
 import org.jetbrains.annotations.NotNull;
 import uk.ac.port.setap.team6c.Main;
@@ -54,7 +55,10 @@ public class SocietyManager {
         if (user == null)
             throw new UnauthorizedResponse();
 
-        Society.join(user.getUserId(), request.id());
+        if (!user.hasJoinedSociety(request.id()))
+            Society.join(user.getUserId(), request.id());
+
+        throw new OkResponse();
     }
 
     /**
