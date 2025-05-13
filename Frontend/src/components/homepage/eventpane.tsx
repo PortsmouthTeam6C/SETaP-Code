@@ -80,7 +80,7 @@ function EventCard({ event }: { event: EventResponse }) {
 
 export function EventsPane({ society }: { society: SocietyResponse } ) {
     // Todo: get events based on society
-    return <aside className={'bg-neutral-100 min-w-96 w-96 max-w-96 h-full space-y-4 overflow-scroll p-3'}>
+    return <aside className={'bg-neutral-100 min-w-96 w-96 max-w-96 max-h-[1180px] space-y-4 overflow-scroll p-3'}>
         {events.map((event, i) => <EventCard key={i} event={event} />)}
     </aside>
 }
