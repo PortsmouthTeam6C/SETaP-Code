@@ -30,7 +30,7 @@ public class EventCollection implements Iterable<Event> {
         List<Event> events = new ArrayList<>();
         for (int eventId : eventIds) {
             try {
-                events.add(new Event(eventId));
+                events.add(Event.get(eventId));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,7 +66,7 @@ public class EventCollection implements Iterable<Event> {
         @Override
         public Event next() {
             try {
-                return new Event(eventIdIterator.next());
+                return Event.get(eventIdIterator.next());
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;

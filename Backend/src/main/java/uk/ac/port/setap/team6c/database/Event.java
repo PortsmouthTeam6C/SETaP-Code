@@ -1,86 +1,91 @@
 package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Event {
 
-    private int eventId;
-    private int userid;
-    private Instant StartTimestamp;
-    private Instant EndTimestamp;
-    private Instant CreationTimestamp;
-    private String Location;
-    private String Name;
-    private String Description;
+    private final int eventId;
+    private final Instant date;
+    private final String location;
+    private final String name;
+    private final String description;
+    private final int price;
+    private final String image;
 
     /**
-     * Get an event from an event id
-     * @param eventId The event id
-     * @throws UnknownEventException if the provided event id does not correspond to an event
+     * Get a list of all events belonging to the specified society
+     * @param societyId The id of the society
+     * @return An {@link EventCollection} containing all the events
      */
-    public Event(int eventId) throws UnknownEventException {
-        try{
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from events where eventid = ?");
-                preparedStatement.setInt(1, eventId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                this.eventId = resultSet.getInt("eventid");
-                this.userid = resultSet.getInt("userid");
-                this.StartTimestamp = resultSet.getTimestamp("StartTimestamp").toInstant();
-                this.EndTimestamp = resultSet.getTimestamp("EndTimestamp").toInstant();
-                this.CreationTimestamp = resultSet.getTimestamp("CreationTimestamp").toInstant();
-                this.Location = resultSet.getString("Location");
-                this.Name = resultSet.getString("Name");
-                this.Description = resultSet.getString("Description");
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UnknownEventException();
+    public static @Nullable EventCollection getAllEvents(int societyId) {
+        List<Integer> events = new ArrayList<>();
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
+                    connection,
+                    "select eventid from events where societyid = ?",
+                    societyId);
+
+            if (optionalResultSet.isEmpty())
+                return null;
+
+            ResultSet resultSet = optionalResultSet.get();
+            do {
+                events.add(resultSet.getInt("eventid"));
+            } while (resultSet.next());
+
+            return new EventCollection(events);
+        } catch (Exception e) {
+            return null;
         }
     }
 
     /**
-     * Get the creator of the event
-     * @return The creator of the event
-     * @throws User.UnknownUseridException if the creator of the event does not exist
+     * Get an event from the event's unique eventId
+     * @param eventId The event's eventId
+     * @return The event, or null if the eventId was not found
      */
-    public User getCreator() throws User.UnknownUseridException {
-        return new User(userid);
+    public static @Nullable Event get(int eventId) {
+        return get("select * from events where eventId = ?", eventId);
     }
-    public @NotNull UserCollection getUsers () throws UnknownEventException {
-        List<Integer> userids = new ArrayList<>();
-        try {
-            DatabaseManager.createConnection(Connection -> {
-                PreparedStatement preparedStatement = Connection.prepareStatement("select userid from eventuser where eventid = ?");
-                preparedStatement.setInt(1, eventId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    userids.add(resultSet.getInt("userid"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+
+    /**
+     * Retrieve an event from the database using a query string and any set of parameters
+     * @param query The query string
+     * @param params The set of parameters
+     * @return The event, or null if no result found or error
+     */
+    private static @Nullable Event get(String query, Object... params) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(connection, query, params);
+            if (optionalResultSet.isEmpty())
+                return null;
+
+            ResultSet resultSet = optionalResultSet.get();
+
+            return new Event(
+                    resultSet.getInt("eventId"),
+                    resultSet.getTimestamp("date").toInstant(),
+                    resultSet.getString("location"),
+                    resultSet.getString("name"),
+                    resultSet.getString("description"),
+                    resultSet.getInt("price"),
+                    resultSet.getString("image")
+            );
+        } catch (Exception e) {
+            return null;
         }
-        return new UserCollection(userids);
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Event && ((Event) obj).eventId == eventId;
-    }
-
-    public static class UnknownEventException extends Exception {}
 
 }
-

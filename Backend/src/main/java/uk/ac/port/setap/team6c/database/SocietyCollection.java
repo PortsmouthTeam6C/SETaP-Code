@@ -30,7 +30,7 @@ public class SocietyCollection implements Iterable<Society> {
         List<Society> societies = new ArrayList<>();
         for (int societyId : societyIds) {
             try {
-                societies.add(new Society(societyId));
+                societies.add(Society.get(societyId));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,7 +66,7 @@ public class SocietyCollection implements Iterable<Society> {
         @Override
         public Society next() {
             try {
-                return new Society(societyIdIterator.next());
+                return Society.get(societyIdIterator.next());
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
