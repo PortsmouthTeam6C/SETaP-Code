@@ -7,7 +7,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+/**
+ * A lazy-loaded collection of {@link Society} objects
+ */
 @AllArgsConstructor
 public class SocietyCollection implements Iterable<Society> {
 
@@ -53,6 +57,21 @@ public class SocietyCollection implements Iterable<Society> {
      */
     public boolean contains(@NotNull Society society) {
         return societyIds.contains(society.getSocietyId());
+    }
+
+    /**
+     * Filter societies by a predicate
+     * @param predicate The predicate to test societies against. The parameter is the societyId, to make this a
+     *                  {@link Society} object use {@link Society#get(int)}
+     * @return A new SocietyCollection
+     */
+    public SocietyCollection filter(Function<Integer, Boolean> predicate) {
+        List<Integer> passedTest = new ArrayList<>();
+        for (int id : societyIds) {
+            if (predicate.apply(id))
+                passedTest.add(id);
+        }
+        return new SocietyCollection(passedTest);
     }
 
     public class SocietyCollectionIterator implements Iterator<Society> {

@@ -4,15 +4,17 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
+import uk.ac.port.setap.team6c.routes.AuthManager;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
-import java.util.function.Function;
 
+/**
+ * This class is used to access the database indirectly when getting, creating, or querying users.
+ */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class User {
@@ -79,6 +81,68 @@ public class User {
             );
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * Assign a session token to the user
+     * @param token The token to assign
+     * @param expiry The expiry of the token
+     * @return True if success, false otherwise
+     */
+    public boolean assignSessionToken(String token, Instant expiry) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            DatabaseManager.populateAndExecute(
+                    connection,
+                    "insert into sessionToken (token, userid, expiry) values (?, ?, ?)",
+                    token, userId, Timestamp.from(expiry)
+            );
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
+     * Create a new user object and save it to the database
+     * @param universityId The id of the university the user belongs to
+     * @param username The user's username
+     * @param email The user's email
+     * @param hashedPassword The user's password, it must be hashed via {@link AuthManager#hashPassword(String)} before
+     *                       use
+     * @param profilePicture The user's profile picture
+     * @return The created user object
+     */
+    public static @Nullable User create(int universityId, String username, String email, String hashedPassword,
+                                        String profilePicture) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            DatabaseManager.populateAndExecute(
+                    connection,
+                    "insert into users (universityId, username, email, password, profilePicture) " +
+                    "values (?, ?, ?)",
+                    universityId, username, email, hashedPassword, profilePicture
+            );
+            return User.get(email);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    /**
+     * Check if the user has joined a given society
+     * @param societyId The society to check
+     * @return True if they have joined the society, false otherwise
+     */
+    public boolean hasJoinedSociety(int societyId) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
+                    connection,
+                    "select * from societymember where userid = ? and societyid = ?",
+                    userId, societyId
+            );
+            return optionalResultSet.isPresent();
+        } catch (Exception e) {
+            return false;
         }
     }
 

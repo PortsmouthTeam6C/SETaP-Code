@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A lazy-loaded collection of {@link Event} objects
+ */
 @AllArgsConstructor
 public class EventCollection implements Iterable<Event> {
 
@@ -39,7 +42,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * Get the number of eventss in this collection
+     * Get the number of events in this collection
      * @return The number of events in this collection
      */
     public int size() {
@@ -47,7 +50,7 @@ public class EventCollection implements Iterable<Event> {
     }
 
     /**
-     * Check if this collection contains a event
+     * Check if this collection contains an event
      * @param event The event to check for
      * @return True if the event is in this collection, false otherwise
      */

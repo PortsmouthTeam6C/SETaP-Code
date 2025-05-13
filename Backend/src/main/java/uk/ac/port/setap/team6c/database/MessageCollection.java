@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.function.Consumer;
 
+/**
+ * A lazy-loaded collection of {@link Message} objects
+ */
 @AllArgsConstructor
 public class MessageCollection implements Iterable<Message> {
 

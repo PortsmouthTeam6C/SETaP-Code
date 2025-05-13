@@ -3,15 +3,19 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class is used to access the database indirectly when getting, creating, or querying events.
+ */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Event {
@@ -29,7 +33,8 @@ public class Event {
      * @param societyId The id of the society
      * @return An {@link EventCollection} containing all the events
      */
-    public static @Nullable EventCollection getAllEvents(int societyId) {
+    @Contract("_ -> new")
+    public static @NotNull EventCollection getAllEvents(int societyId) {
         List<Integer> events = new ArrayList<>();
         try (Connection connection = DatabaseManager.getSource().getConnection()) {
             Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
@@ -38,7 +43,7 @@ public class Event {
                     societyId);
 
             if (optionalResultSet.isEmpty())
-                return null;
+                return new EventCollection(events);
 
             ResultSet resultSet = optionalResultSet.get();
             do {
@@ -47,7 +52,7 @@ public class Event {
 
             return new EventCollection(events);
         } catch (Exception e) {
-            return null;
+            return new EventCollection(events);
         }
     }
 
@@ -86,6 +91,58 @@ public class Event {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    /**
+     * Create a new event and save it to the database
+     * @param societyId The id of the society to create the event in
+     * @param date The date the event will take place on
+     * @param location The location of the event
+     * @param name The name of the event
+     * @param description A brief description of the event
+     * @param price The entry price of the event
+     * @param image An image associated with the event
+     */
+    public static void create(int societyId, Instant date, String location, String name, String description, int price,
+                             String image) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            String query = "insert into events (date, location, name, description, price, image) " +
+                           "values (?, ?, ?, ?, ?, ?)";
+            try (PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+                preparedStatement.setTimestamp(1, Timestamp.from(date));
+                preparedStatement.setString(2, location);
+                preparedStatement.setString(3, name);
+                preparedStatement.setString(4, description);
+                preparedStatement.setInt(5, price);
+                preparedStatement.setString(6, image);
+
+                preparedStatement.execute();
+
+                try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int eventId = generatedKeys.getInt(1);
+                        addEventToSociety(eventId, societyId);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
+
+    /**
+     * Adds the eventId-societyId combination to the `societyevent` intersection table
+     * @param eventId The eventId
+     * @param societyId The societyId
+     * @throws SQLException If anything goes wrong
+     */
+    private static void addEventToSociety(int eventId, int societyId) throws SQLException {
+        Connection connection = DatabaseManager.getSource().getConnection();
+        String query = "insert into societyevent (societyid, eventid) values (?, ?)";
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setInt(1, societyId);
+        preparedStatement.setInt(2, eventId);
+        preparedStatement.execute();
+        connection.close();
     }
 
 }

@@ -9,6 +9,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.util.Optional;
 
+/**
+ * This class is used to access the database indirectly when getting, creating, or querying universities.
+ */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class University {
@@ -19,11 +22,21 @@ public class University {
     private final String emailDomain;
     private final String theming;
 
-    public static University get(int universityId) {
+    /**
+     * Retrieve a university from the database using its unique universityId
+     * @param universityId The university's universityId
+     * @return The university, or null if the universityId was not found
+     */
+    public static @Nullable University get(int universityId) {
         return get("select * from university where universityid = ?", universityId);
     }
 
-    public static University get(String emailDomain) {
+    /**
+     * Retrieve a university from the database using its domain name
+     * @param emailDomain The university's email domain - this includes the @ symbol, for example @port.ac.uk
+     * @return The university, or null if the domain was not found
+     */
+    public static @Nullable University get(String emailDomain) {
         return get("select * from university where emailDomain = ?", emailDomain);
     }
 

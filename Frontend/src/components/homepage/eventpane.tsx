@@ -3,7 +3,6 @@ import type {SocietyResponse} from "./societypane.tsx";
 
 export interface EventResponse {
     eventId: number,
-    userId: number,
     date: Date,
     location: string,
     name: string,
@@ -15,7 +14,6 @@ export interface EventResponse {
 const events: EventResponse[] = [
     {
         eventId: 1,
-        userId: 1,
         date: new Date('2023-11-01T10:00:00'),
         location: "Auditorium A",
         name: "Chess Tournament",
@@ -25,7 +23,6 @@ const events: EventResponse[] = [
     },
     {
         eventId: 2,
-        userId: 1,
         date: new Date('2023-11-05T14:00:00'),
         location: "Room 202",
         name: "Debate Workshop",
@@ -35,7 +32,6 @@ const events: EventResponse[] = [
     },
     {
         eventId: 3,
-        userId: 1,
         date: new Date('2023-11-10T16:00:00'),
         location: "Photography Studio",
         name: "Photography Basics",

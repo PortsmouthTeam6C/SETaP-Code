@@ -8,11 +8,15 @@ import uk.ac.port.setap.team6c.Main;
 import java.sql.*;
 import java.util.Optional;
 
+/**
+ * This class manages all connections with the database and is responsible for creating the database on startup
+ */
 public class DatabaseManager {
 
     @Getter
     private static final BasicDataSource source;
 
+    // When this class is loaded, set up the connection with the database
     static {
         source = new BasicDataSource();
         source.setDriverClassName("org.postgresql.Driver");
@@ -40,7 +44,8 @@ public class DatabaseManager {
      * @return A result set if there are results, otherwise null
      * @throws SQLException If anything goes wrong
      */
-    static Optional<ResultSet> populateAndExecute(@NotNull Connection connection, String query, @NotNull Object... params) throws SQLException {
+    static Optional<ResultSet> populateAndExecute(@NotNull Connection connection, String query,
+                                                  @NotNull Object @NotNull ... params) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement(query);
 
         for (int i = 0; i < params.length; i++) {

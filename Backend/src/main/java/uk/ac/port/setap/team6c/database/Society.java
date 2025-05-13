@@ -3,14 +3,20 @@ package uk.ac.port.setap.team6c.database;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class is used to access the database indirectly when getting, creating, or querying societies.
+ */
 @Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Society {
@@ -26,7 +32,8 @@ public class Society {
      * @param universityId The id of the university
      * @return A {@link SocietyCollection} containing all the societies
      */
-    public static @Nullable SocietyCollection getAllSocieties(int universityId) {
+    @Contract("_ -> new")
+    public static @NotNull SocietyCollection getAllSocieties(int universityId) {
         List<Integer> societies = new ArrayList<>();
         try (Connection connection = DatabaseManager.getSource().getConnection()) {
             Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
@@ -35,7 +42,7 @@ public class Society {
                     universityId);
 
             if (optionalResultSet.isEmpty())
-                return null;
+                return new SocietyCollection(societies);
 
             ResultSet resultSet = optionalResultSet.get();
             do {
@@ -44,7 +51,7 @@ public class Society {
 
             return new SocietyCollection(societies);
         } catch (Exception e) {
-            return null;
+            return new SocietyCollection(societies);
         }
     }
 
@@ -80,6 +87,25 @@ public class Society {
             );
         } catch (Exception e) {
             return null;
+        }
+    }
+
+    /**
+     * Makes a user join a society
+     * @param userId The user that will join the society
+     * @param societyId The society they will join
+     */
+    public static void join(int userId, int societyId) {
+        try {
+            Connection connection = DatabaseManager.getSource().getConnection();
+            String query = "insert into societymember (societyid, userid) values (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, societyId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.execute();
+            connection.close();
+        } catch (Exception ignored) {
+
         }
     }
 
