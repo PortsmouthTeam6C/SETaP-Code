@@ -1,0 +1,530 @@
+==================================================
+TEST PLAN
+==================================================
+
+Code Unit 1 - HomePage
+
+Application Context:
+The homepage serves as the central hub for university society management, providing:
+- Society selection and navigation
+- Society-specific communication (chat)
+- Event management and display
+- Society joining functionality
+
+Location: Frontend/src/pages/Homepage.tsx
+Description: Main dashboard that coordinates three core society management components:
+1. SocietyPane - Displays and manages society memberships
+2. ChatPane - Society-specific messaging
+3. EventsPane - Society event management
+Plus modal for creating new events/joining societies
+
+1. Layout Structure
+-------------------
+Expected Results:
+- Clean three-panel dashboard layout optimized for society management
+- Left panel (25% width): Society list and navigation
+- Center panel (50% width): Primary communication interface
+- Right panel (25% width): Event management + action buttons
+- University branding visible (logo/colors)
+- Responsive design for admin/mobile use
+
+Results:
+- Layout proportions maintained across viewports
+- All panels remain accessible on mobile via responsive design
+- University branding consistently applied
+- Component boundaries clearly visible
+
+2. Society Selection & State Management
+---------------------------------------
+Expected Results:
+- Default society loads for new users
+- Society selection persists during navigation
+- Selected society highlights in SocietyPane
+- Chat and Events panels update immediately on society change
+- State resets properly on logout
+
+Results:
+- Initial society loads from user preferences
+- Selection state maintained during navigation
+- Visual feedback on selected society works
+- Child components update within 200ms of change
+- State clears completely on logout
+
+3. Modal Functionality (Event Creation/Society Join)
+---------------------------------------------------
+Expected Results:
+- Modal triggers from "Join a Society" button
+- Form includes all required event fields:
+  * Society selection (pre-populated when joining)
+  * Event metadata (name, desc, date, location)
+  * Financial requirements (price field)
+  * Media upload (image for event flyer)
+- Proper validation before submission
+- Accessible close mechanisms (X button, click outside)
+
+Results:
+- Modal opens within 300ms of button click
+- All form fields validate before submission
+- Price field rejects negative values
+- Image upload restricts to image files
+- Close mechanisms work as expected
+- Form state persists during modal session
+
+4. User Flow Integration
+------------------------
+Expected Results:
+- Logical flow between society selection → chat → events
+- "Join Society" action integrates with backend
+- Event creation reflects in EventsPane immediately
+- New messages trigger unread indicators
+
+Results:
+- Society change updates all connected components
+- Join society button initiates proper API call
+- New events appear in EventsPane without refresh
+- Chat indicators update in real-time
+
+5. Error States
+---------------
+Expected Results:
+- Handles empty society lists gracefully
+- Manages API failures during event creation
+- Validates form inputs before submission
+- Displays appropriate loading states
+
+Results:
+- Empty state UI shows when no societies available
+- Network errors display user-friendly messages
+- Form prevents submission with invalid data
+- Loading spinners appear during async operations
+
+6. Accessibility
+----------------
+Expected Results:
+- Screen reader compatible navigation
+- Keyboard navigable modal
+- Sufficient color contrast
+- ARIA labels for interactive elements
+
+Results:
+- Screen readers can navigate all components
+- Modal fully operable via keyboard
+- Contrast ratio meets WCAG AA standards
+- Interactive elements properly labelled
+
+==================================================
+TEST PLAN
+==================================================
+
+Code Unit 2 - Browse
+
+Application Context:
+The Browse page serves as a discovery and information hub for university societies, providing:
+- Complete list of available societies
+- Detailed society information display
+- Society joining functionality
+- Clean information-focused layout
+
+Location: Frontend/src/pages/Browse.tsx
+Description: Two-panel layout featuring:
+1. SocietyPane - Navigation list of all societies (shared component)
+2. Main content - Detailed society information and join action
+
+1. Layout Structure
+-------------------
+Expected Results:
+- Two-column responsive layout
+- Left column (30% width): Society list navigation
+- Right column (70% width): Society details
+- Proper vertical spacing and padding
+- Clear visual hierarchy
+
+Results:
+- Layout proportions maintained at all breakpoints
+- Society list remains scrollable if content overflows
+- Main content area has comfortable reading padding
+- Mobile view stacks columns vertically
+
+2. Society Selection & Display
+------------------------------
+Expected Results:
+- Default society loads on initial render
+- Society selection updates content area immediately
+- Society name highlighted in title
+- Description displays full text with proper formatting
+- Join button reflects current society
+
+Results:
+- First society loads by default
+- Content updates within 100ms of selection change
+- Society name in header updates with color accent
+- Long descriptions display with proper text wrapping
+- Join button text dynamically updates
+
+3. Join Society Functionality
+----------------------------
+Expected Results:
+- Join button displays for each society
+- Click triggers confirmation flow
+- Success feedback provided
+- Button state updates after joining
+
+Results:
+- Join button visible for all societies
+- Click shows confirmation alert with society name
+- Alert message is clear and actionable
+- Button could be disabled after joining (future enhancement)
+
+4. Content Rendering
+--------------------
+Expected Results:
+- Society name displays prominently
+- Description renders with proper typography
+- No overflow or clipping of content
+- Consistent styling across societies
+
+Results:
+- Society name uses heading hierarchy correctly
+- Description text has readable line height/spacing
+- Long descriptions enable scrolling when needed
+- Styling remains consistent for all society content
+
+5. Error States
+---------------
+Expected Results:
+- Handles empty society list gracefully
+- Manages missing society data
+- Provides feedback for join errors
+
+Results:
+- Empty state shows helpful message when no societies
+- Missing description shows placeholder text
+- Join errors display user-friendly messages
+
+6. Accessibility
+----------------
+Expected Results:
+- Screen reader friendly navigation
+- Keyboard navigable society selection
+- Proper heading hierarchy
+- Sufficient color contrast
+
+Results:
+- Screen readers can navigate society list and content
+- Society items focusable via keyboard
+- Heading levels used appropriately (h1 for title)
+- Text meets WCAG contrast requirements
+
+7. Performance
+--------------
+Expected Results:
+- Smooth society switching
+- Instant visual feedback on interactions
+- Efficient rendering
+
+Results:
+- Society changes feel instantaneous (<100ms)
+- Button presses provide immediate feedback
+- No unnecessary re-renders
+
+8. Responsive Behavior
+----------------------
+Expected Results:
+- Mobile-friendly layout
+- Readable text at all sizes
+- Functional interactive elements
+
+Results:
+- Single column layout on mobile devices
+- Text remains legible on small screens
+- Touch targets sized appropriately
+
+==================================================
+TEST PLAN
+==================================================
+
+Code Unit 3 - Login
+
+Application Context:
+The Login page serves as the entry point for university society members, providing:
+- Secure authentication for society management system
+- Clean, accessible login interface
+- Clear navigation to signup flow
+- Consistent university branding
+
+Location: Frontend/src/pages/Login.tsx
+Description: Centered card layout featuring:
+1. University logo branding
+2. Email/password form fields
+3. Login submission button
+4. Signup navigation link
+
+1. Layout Structure
+-------------------
+Expected Results:
+- Full-viewport centered card design
+- Consistent spacing and padding
+- Logo displayed prominently
+- Responsive width constraints (max 30rem)
+- Shadow effect for visual hierarchy
+
+Results:
+- Card remains centered at all viewport sizes
+- Padding maintains internal spacing
+- Logo scales appropriately
+- Width adapts to smaller screens
+- Shadow effect visible but not overpowering
+
+2. Form Elements
+----------------
+Expected Results:
+- Email input field with proper type
+- Password input with masking
+- Both fields have:
+  - Clear placeholder text
+  - Consistent styling
+  - Adequate touch targets
+- Submit button with hover state
+
+Results:
+- Email field validates input format
+- Password field obscures text input
+- Placeholders disappear on focus
+- Fields maintain consistent border-radius
+- Button has visual feedback on hover
+
+3. Form Functionality
+---------------------
+Expected Results:
+- Form prevents empty submissions
+- Email format validation
+- Password length requirements
+- Submit action triggers auth flow
+- Loading state during submission
+
+Results:
+- Empty submission shows validation errors
+- Invalid emails are rejected
+- Password length enforced (future enhancement)
+- Submit button disabled during auth process
+- Loading indicator visible during submission
+
+4. Navigation
+-------------
+Expected Results:
+- Signup link visible below form
+- Link uses proper routing
+- Hover state visible
+- Keyboard navigable
+
+Results:
+- Link text clearly visible
+- Navigates to /signup without page reload
+- Underline appears on hover
+- Focusable via keyboard tab navigation
+
+5. Error States
+---------------
+Expected Results:
+- Invalid credentials feedback
+- Network error handling
+- Form validation messages
+- Account recovery options (future)
+
+Results:
+- Auth errors display user-friendly messages
+- Offline state handled gracefully
+- Validation errors appear near relevant fields
+- Messages disappear after correction
+
+6. Accessibility
+----------------
+Expected Results:
+- Semantic HTML structure
+- Proper form labels (even if hidden)
+- Sufficient color contrast
+- Keyboard navigable
+- Screen reader compatible
+
+Results:
+- Form uses proper fieldset/legend (if needed)
+- ARIA attributes where appropriate
+- Contrast ratio meets WCAG AA standards
+- All elements focusable in logical order
+- Screen readers announce form purpose
+
+7. Responsive Behavior
+----------------------
+Expected Results:
+- Mobile-friendly layout
+- Comfortable touch targets
+- Readable text at all sizes
+- Landscape orientation support
+
+Results:
+- Form scales down to 320px width
+- Inputs maintain 44px minimum touch target
+- Text remains legible when zoomed
+- Layout adapts to landscape orientation
+
+8. Branding Consistency
+-----------------------
+Expected Results:
+- University logo displayed
+- Color scheme matches brand
+- Typography consistent with design system
+- Loading states use brand colors
+
+Results:
+- Logo appears crisp at all resolutions
+- Blue color matches brand guidelines
+- Font family/sizes consistent with other pages
+- Loading spinner uses brand colors
+
+==================================================
+TEST PLAN
+==================================================
+
+Signup
+
+Application Context:
+The Signup page enables new users to create accounts for the university society management system, providing:
+- Account creation form with validation
+- Consistent branding with login page
+- Clear navigation to existing users
+- Accessible form design
+
+Location: Frontend/src/pages/Signup.tsx
+Description: Centered card layout featuring:
+1. University logo branding
+2. Email/username/password form fields
+3. Signup submission button
+4. Login navigation link
+
+1. Layout Structure
+-------------------
+Expected Results:
+- Full-viewport centered card matching login style
+- Consistent 30rem max-width container
+- Proper vertical spacing (logo, form, link)
+- Shadow effect matching login page
+- Responsive padding adjustments
+
+Results:
+- Card maintains identical styling to login
+- Width scales down properly on mobile
+- Vertical rhythm maintained
+- Shadow consistency verified
+- Padding adapts to small screens
+
+2. Form Elements
+----------------
+Expected Results:
+- Three clearly labeled input fields:
+  - Email (with type validation)
+  - Username
+  - Password (with masking)
+- All fields have:
+  - Consistent styling
+  - Adequate padding
+  - Clear placeholders
+- Submit button with hover state
+
+Results:
+- Email field shows validation on blur
+- Username field accepts valid characters
+- Password field obscures input
+- All fields maintain identical styling
+- Button hover state matches login page
+
+3. Form Validation
+------------------
+Expected Results:
+- Email format validation
+- Username requirements (length, chars)
+- Password complexity rules
+- Field-level error messages
+- Prevents empty submissions
+
+Results:
+- Invalid emails show error message
+- Username rejects invalid characters
+- Password requires minimum length
+- Errors appear near relevant fields
+- Submit disabled with invalid form
+
+4. Submission Flow
+------------------
+Expected Results:
+- Loading state during submission
+- Success redirect to verification/login
+- Error handling for:
+  - Duplicate email
+  - Duplicate username
+  - Weak password
+- Network error handling
+
+Results:
+- Loading spinner appears during submit
+- Success redirects properly
+- Duplicate errors show helpful messages
+- Network errors don't crash UI
+- Form preserves input on error
+
+5. Navigation
+-------------
+Expected Results:
+- Login link clearly visible
+- Proper routing to /login
+- Hover state matches login page
+- Keyboard navigable
+
+Results:
+- Link text contrasts with background
+- Navigation occurs without page reload
+- Underline appears on hover
+- Tab navigation works in correct order
+
+6. Accessibility
+----------------
+Expected Results:
+- Semantic form structure
+- Proper labels for all inputs
+- Sufficient color contrast
+- Screen reader announcements
+- Keyboard operation
+
+Results:
+- Field labels associated properly
+- Contrast ratio ≥ 4.5:1 for text
+- Screen readers announce form purpose
+- All controls focusable via keyboard
+- Error messages accessible to AT
+
+7. Responsive Behavior
+----------------------
+Expected Results:
+- Mobile-optimized layout
+- Comfortable touch targets (≥44px)
+- Readable text at 200% zoom
+- Landscape orientation support
+
+Results:
+- Form usable on 320px wide screens
+- Inputs maintain minimum touch target
+- Text remains legible when zoomed
+- Layout adapts to landscape mode
+
+8. Branding Consistency
+-----------------------
+Expected Results:
+- Matching logo treatment
+- Identical color scheme
+- Consistent typography
+- Unified loading states
+
+Results:
+- Logo identical size/position to login
+- Blue color matches #blue-500 exactly
+- Font sizes identical to login page
+- Loading indicators match brand
