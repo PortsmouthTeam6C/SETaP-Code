@@ -1,4 +1,10 @@
+import {useLocation} from "react-router-dom";
+
 export default function Topbar() {
+    const location = useLocation();
+    if (location.pathname === '/login' || location.pathname === '/signup')
+        return <></>
+
     const universityLogo: string = "https://upload.wikimedia.org/wikipedia/commons/d/dc/University_of_Portsmouth_Logo.png";
     const username: string = "johndoe";
     const profilePicture: string = "https://images.pexels.com/photos/10513822/pexels-photo-10513822.jpeg";
