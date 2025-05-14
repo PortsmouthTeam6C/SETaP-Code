@@ -1,6 +1,7 @@
 package uk.ac.port.setap.team6c.gson;
 
 import com.google.gson.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Type;
 import java.time.Instant;
@@ -18,7 +19,7 @@ public class InstantTypeAdapter implements JsonSerializer<Instant>, JsonDeserial
      * @return a serialized JsonElement
      */
     @Override
-    public JsonElement serialize(Instant src, Type typeOfSrc, JsonSerializationContext context) {
+    public JsonElement serialize(@NotNull Instant src, Type typeOfSrc, JsonSerializationContext context) {
         return new JsonPrimitive(src.toString());  // Store as ISO-8601 String
     }
 
@@ -30,7 +31,7 @@ public class InstantTypeAdapter implements JsonSerializer<Instant>, JsonDeserial
      * @return the deserialized Instant object
      */
     @Override
-    public Instant deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+    public Instant deserialize(@NotNull JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
         return Instant.parse(json.getAsString());  // Parse back to Instant
     }
 

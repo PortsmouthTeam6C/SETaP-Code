@@ -1,6 +1,5 @@
 package uk.ac.port.setap.team6c.database;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,19 +9,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * A collection of messages
- * <p>
- * Constructed using {@link MessageCollectionBuilder}. All filters are optional & can be combined in any combination.
- * <pre>{@code
- *    MessageCollection messageCollection = new MessageCollectionBuilder()
- *        .sentBy(user) // Only show messages sent by a specific user
- *        .sentIn(society) // Only show messages sent in a specific society
- *        .containing("Hello, world!") // Only show messages containing the string "Hello, world!"
- *        .betweenTimestamps(Instant.now().minus(Duration.ofDays(7)), Instant.now()) // Only show messages sent in the last week
- *        .build(); // Build the message collection
- * }</pre>
+ * A lazy-loaded collection of {@link Message} objects
  */
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@AllArgsConstructor
 public class MessageCollection implements Iterable<Message> {
 
     private final List<Integer> messageIds;
@@ -44,8 +33,8 @@ public class MessageCollection implements Iterable<Message> {
         List<Message> messages = new ArrayList<>();
         for (int messageId : messageIds) {
             try {
-                messages.add(new Message(messageId));
-            } catch (Message.MessageDoesNotExistException exception) {
+                messages.add(Message.get(messageId));
+            } catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
@@ -71,8 +60,8 @@ public class MessageCollection implements Iterable<Message> {
         @Override
         public Message next() {
             try {
-                return new Message(messageIdIterator.next());
-            } catch (Message.MessageDoesNotExistException exception) {
+                return Message.get(messageIdIterator.next());
+            } catch (Exception exception) {
                 exception.printStackTrace();
                 return null;
             }

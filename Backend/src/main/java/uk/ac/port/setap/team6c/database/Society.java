@@ -1,119 +1,113 @@
 package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
+/**
+ * This class is used to access the database indirectly when getting, creating, or querying societies.
+ */
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Society {
 
-    private int societyId;
-    @Getter(AccessLevel.PACKAGE)
-    private int universityId;
-    private String societyName;
-    private String societyDescription;
-    private String societyPicture;
-    private int maxSize;
-    private boolean isPaid;
+    private final int societyId;
+    private final int universityId;
+    private final String societyName;
+    private final String description;
+    private final String societyPicture;
 
     /**
-     * Get a society from a provided society ID
-     * @param societyId The society ID
-     * @throws UnknownSocietyException if the provided society ID does not correspond to a society
+     * Get a list of all societies belonging to the specified university
+     * @param universityId The id of the university
+     * @return A {@link SocietyCollection} containing all the societies
      */
-    public Society(int societyId) throws UnknownSocietyException {
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from society where societyid = ?");
-                preparedStatement.setInt(1, societyId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                this.societyId = resultSet.getInt("societyid");
-                this.universityId = resultSet.getInt("universityid");
-                this.societyName = resultSet.getString("societyname");
-                this.societyDescription = resultSet.getString("societydescription");
-                this.societyPicture = resultSet.getString("societypicture");
-                this.maxSize = resultSet.getInt("maxsize");
-                this.isPaid = resultSet.getBoolean("ispaid");
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UnknownSocietyException();
-        }
-    }
+    @Contract("_ -> new")
+    public static @NotNull SocietyCollection getAllSocieties(int universityId) {
+        List<Integer> societies = new ArrayList<>();
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
+                    connection,
+                    "select societyid from society where universityid = ?",
+                    universityId);
 
-    /**
-     * Get all the users in this society
-     * @return A collection of users in this society
-     * @throws UnknownSocietyException if the society does not exist
-     */
-    public UserCollection getUsers() throws UnknownSocietyException {
-        List<Integer> userIds = new ArrayList<>();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select userid from societymember where societyid = ?");
-                preparedStatement.setInt(1, societyId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    userIds.add(resultSet.getInt("userid"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UnknownSocietyException();
+            if (optionalResultSet.isEmpty())
+                return new SocietyCollection(societies);
+
+            ResultSet resultSet = optionalResultSet.get();
+            do {
+                societies.add(resultSet.getInt("societyid"));
+            } while (resultSet.next());
+
+            return new SocietyCollection(societies);
+        } catch (Exception e) {
+            return new SocietyCollection(societies);
         }
-        return new UserCollection(userIds);
-    }
-    public UserCollection getManagers() throws UnknownSocietyException {
-        List<Integer> userIds = new ArrayList<>();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select userid from societymember where societyid = ? and isManager = true");
-                preparedStatement.setInt(1, societyId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    userIds.add(resultSet.getInt("userid"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UnknownSocietyException();
-        }
-        return new UserCollection(userIds);
     }
 
     /**
-     * Get all the events in this society
-     * @return A collection of events in this society
-     * @throws UnknownSocietyException if the society does not exist
+     * Get a society from the society's unique societyId
+     * @param societyId The society's societyId
+     * @return The society, or null if the societyId was not found
      */
-    public EventCollection getEvents()  {
-        List<Integer> eventIds = new ArrayList<>();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select eventid from societyevent where societyid = ?");
-                preparedStatement.setInt(1, societyId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next()) {
-                    eventIds.add(resultSet.getInt("eventId"));
-                }
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
+    public static @Nullable Society get(int societyId) {
+        return get("select * from society where societyid = ?", societyId);
+    }
+
+    /**
+     * Retrieve a society from the database using a query string and any set of parameters
+     * @param query The query string
+     * @param params The set of parameters
+     * @return The society, or null if no result found or error
+     */
+    private static @Nullable Society get(String query, Object... params) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(connection, query, params);
+            if (optionalResultSet.isEmpty())
+                return null;
+
+            ResultSet resultSet = optionalResultSet.get();
+
+            return new Society(
+                    resultSet.getInt("societyId"),
+                    resultSet.getInt("universityId"),
+                    resultSet.getString("societyName"),
+                    resultSet.getString("societyDescription"),
+                    resultSet.getString("societyPicture")
+            );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
-        return new EventCollection(eventIds);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof Society && ((Society) obj).societyId == societyId;
-    }
+    /**
+     * Makes a user join a society
+     * @param userId The user that will join the society
+     * @param societyId The society they will join
+     */
+    public static void join(int userId, int societyId) {
+        try {
+            Connection connection = DatabaseManager.getSource().getConnection();
+            String query = "insert into societymember (societyid, userid) values (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, societyId);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.execute();
+            connection.close();
+        } catch (Exception ignored) {
 
-    public static class UnknownSocietyException extends Exception {}
+        }
+    }
 
 }

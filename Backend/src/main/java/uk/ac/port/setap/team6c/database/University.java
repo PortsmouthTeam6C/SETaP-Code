@@ -1,129 +1,69 @@
 package uk.ac.port.setap.team6c.database;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
-import java.sql.PreparedStatement;
+import java.sql.Connection;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 /**
- * Represents a university saved in the database
+ * This class is used to access the database indirectly when getting, creating, or querying universities.
  */
 @Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class University {
-
-    @Getter(AccessLevel.PACKAGE)
-    private int universityId;
-    private String universityName;
-    private String emailDomain;
-    private String theming;
+    
+    private final int universityId;
+    private final String universityName;
+    private final String universityPicture;
+    private final String emailDomain;
+    private final String theming;
 
     /**
-     * Create a new university and save it to the database
-     * @param universityName The name of the university
-     * @param emailDomain The domain of the university's email addresses. This must be unique.
-     * @param theming JSON string representing the theming of the university
-     * @throws UniversityAlreadyExistsException if a university with the same email domain already exists
+     * Retrieve a university from the database using its unique universityId
+     * @param universityId The university's universityId
+     * @return The university, or null if the universityId was not found
      */
-    public University(String universityName, String emailDomain, String theming) throws UniversityAlreadyExistsException {
-        this.universityName = universityName;
-        this.emailDomain = emailDomain;
-        this.theming = theming;
+    public static @Nullable University get(int universityId) {
+        return get("select * from university where universityid = ?", universityId);
+    }
 
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("insert into university (universityName, emailDomain, theming) values (?, ?, ?) returning universityId");
-                preparedStatement.setString(1, universityName);
-                preparedStatement.setString(2, emailDomain);
-                preparedStatement.setString(3, theming);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                this.universityId = resultSet.getInt("universityId");
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UniversityAlreadyExistsException();
+    /**
+     * Retrieve a university from the database using its domain name
+     * @param emailDomain The university's email domain - this includes the @ symbol, for example @port.ac.uk
+     * @return The university, or null if the domain was not found
+     */
+    public static @Nullable University get(String emailDomain) {
+        return get("select * from university where emailDomain = ?", emailDomain);
+    }
+
+    /**
+     * Retrieve a university from the database using a query string and any set of parameters
+     * @param query The query string
+     * @param params The set of parameters
+     * @return The university, or null if no result found or error
+     */
+    private static @Nullable University get(String query, Object... params) {
+        try (Connection connection = DatabaseManager.getSource().getConnection()) {
+            Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(connection, query, params);
+            if (optionalResultSet.isEmpty())
+                return null;
+
+            ResultSet resultSet = optionalResultSet.get();
+
+            return new University(
+                resultSet.getInt("universityId"),
+                resultSet.getString("universityName"),
+                resultSet.getString("universityPicture"),
+                resultSet.getString("emailDomain"),
+                resultSet.getString("theming")
+            );
+        } catch (Exception e) {
+            return null;
         }
     }
-
-    /**
-     * Get a university from its email domain
-     * @param emailDomain The domain of the university's email addresses
-     * @throws UniversityNotFoundException if no university with the provided email domain exists
-     */
-    public University(String emailDomain) throws UniversityNotFoundException {
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from university where emailDomain = ?");
-                preparedStatement.setString(1, emailDomain);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                this.universityId = resultSet.getInt("universityId");
-                this.universityName = resultSet.getString("universityName");
-                this.emailDomain = resultSet.getString("emailDomain");
-                this.theming = resultSet.getString("theming");
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UniversityNotFoundException();
-        }
-    }
-
-    public University(int universityId) throws UniversityNotFoundException {
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select * from university where universityid = ?");
-                preparedStatement.setInt(1, universityId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                resultSet.next();
-                this.universityId = resultSet.getInt("universityId");
-                this.universityName = resultSet.getString("universityName");
-                this.emailDomain = resultSet.getString("emailDomain");
-                this.theming = resultSet.getString("theming");
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-            throw new UniversityNotFoundException();
-        }
-    }
-
-    /**
-     * Get all societies associated with this university
-     * @return A collection of societies
-     */
-    public @NotNull SocietyCollection getSocieties() {
-        List<Integer> societies = new ArrayList<>();
-        try {
-            DatabaseManager.createConnection(connection -> {
-                PreparedStatement preparedStatement = connection.prepareStatement("select societyid from society where universityid = ?");
-                preparedStatement.setInt(1, universityId);
-                ResultSet resultSet = preparedStatement.executeQuery();
-                while (resultSet.next())
-                    societies.add(resultSet.getInt("societyid"));
-            });
-        } catch (SQLException exception) {
-            exception.printStackTrace();
-        }
-        return new SocietyCollection(societies);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj instanceof University && ((University) obj).universityId == universityId;
-    }
-
-    /**
-     * Exception thrown when a university is created with an existing email address
-     */
-    public static class UniversityAlreadyExistsException extends Exception {}
-
-    /**
-     * Exception thrown when an attempt is made to retrieve a university which does not exist
-     */
-    public static class UniversityNotFoundException extends Exception {}
 
 }
