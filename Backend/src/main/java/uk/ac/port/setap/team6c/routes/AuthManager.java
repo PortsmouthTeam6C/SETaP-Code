@@ -20,7 +20,7 @@ public class AuthManager {
      * @param hashed The hashed password to check against
      * @return Whether the password matches the hash
      */
-    private static boolean verifyHash(@NotNull String password, String hashed) {
+    public static boolean verifyHash(@NotNull String password, String hashed) {
         return BCrypt.verifyer().verify(password.toCharArray(), hashed).verified;
     }
 
@@ -98,6 +98,9 @@ public class AuthManager {
 
         String hashedPassword = hashPassword(request.password);
         String profilePicture = "https://api.dicebear.com/9.x/shapes/svg?seed=" + request.username;
+
+        if (!request.email.contains("@"))
+            throw new UnprocessableContentResponse();
 
         University university = University.get('@' + request.email.split("@")[1]);
         if (university == null)

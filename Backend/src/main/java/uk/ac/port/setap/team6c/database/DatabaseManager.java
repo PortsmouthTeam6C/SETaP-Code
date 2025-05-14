@@ -147,7 +147,7 @@ public class DatabaseManager {
     /**
      * Populates the database with some temp data
      */
-    private static void populateDatabase() {
+    public static void populateDatabase() {
         try {
             createConnection(connection -> {
                 Statement statement = connection.createStatement();
@@ -201,7 +201,6 @@ public class DatabaseManager {
         }
 
         initializeDatabase();
-        populateDatabase();
     }
 
 }

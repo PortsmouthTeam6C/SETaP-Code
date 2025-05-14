@@ -26,6 +26,7 @@ public class Main {
 
     public static void main(String[] args) {
         DatabaseManager.resetDatabase();
+        DatabaseManager.populateDatabase();
         Javalin app = Javalin.create(config ->
             config.bundledPlugins.enableCors(cors ->
                 cors.addRule(CorsPluginConfig.CorsRule::anyHost)
