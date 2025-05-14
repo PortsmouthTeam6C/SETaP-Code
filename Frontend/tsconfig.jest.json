@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "verbatimModuleSyntax": false
+  },
+  "include": ["src", "**/*.test.ts", "**/*.test.tsx"]
+}
+
+// we need to do this specifically just for jest

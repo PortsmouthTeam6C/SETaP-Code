@@ -55,12 +55,13 @@ function fileToBase64(file: File): Promise<string> {
 
 function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, onClose: () => void }) {
     const context = useContext(UserContext);
-    const [eventName, setEventName] = useState<string>();
-    const [description, setDescription] = useState<string>();
-    const [date, setDate] = useState<string>();
-    const [location, setLocation] = useState<string>();
-    const [price, setPrice] = useState<number>();
-    const [image, setImage] = useState<File>();
+    const [eventName, setEventName] = useState<string>('');     // default to empty
+    const [description, setDescription] = useState<string>(''); // default to empty
+    const [date, setDate] = useState<string>('');               // default to empty
+    const [location, setLocation] = useState<string>('');       // default to empty
+    const [price, setPrice] = useState<number>(0);              // default to 0
+    const [image, setImage] = useState<File | null>(null);      // allow null safely
+
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
@@ -94,8 +95,9 @@ function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, o
                 <h2 className="text-xl font-bold mb-4">Create Event</h2>
                 <form className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Event Name</label>
+                        <label htmlFor="eventName" className="block text-sm font-medium text-gray-700">Event Name</label>
                         <input
+                            id="eventName"
                             type="text"
                             placeholder="Enter event name"
                             className="w-full p-2 border border-gray-300 rounded-lg"
@@ -105,8 +107,9 @@ function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, o
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Description</label>
+                        <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
                         <textarea
+                            id="description"
                             placeholder="Enter event description"
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             required
@@ -115,8 +118,9 @@ function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, o
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Date</label>
+                        <label htmlFor="eventDate" className="block text-sm font-medium text-gray-700">Date</label>
                         <input
+                            id="eventDate"
                             type="date"
                             className="w-full p-2 border border-gray-300 rounded-lg hover:cursor-pointer"
                             required
@@ -125,8 +129,9 @@ function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, o
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Location</label>
+                        <label htmlFor="location" className="block text-sm font-medium text-gray-700">Location</label>
                         <input
+                            id="location"
                             type="text"
                             placeholder="Enter location"
                             className="w-full p-2 border border-gray-300 rounded-lg"
@@ -136,25 +141,26 @@ function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, o
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Price</label>
+                        <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
                         <input
+                            id="price"
                             type="number"
                             placeholder="Enter price (default: 0)"
                             className="w-full p-2 border border-gray-300 rounded-lg"
-                            defaultValue={0}
                             min={0}
                             value={price}
                             onChange={e => setPrice(parseFloat(e.target.value))}
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700">Image</label>
+                        <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700">Image</label>
                         <input
+                            id="imageUpload"
                             type="file"
                             accept="image/*"
                             className="w-full p-2 border border-gray-300 rounded-lg hover:cursor-pointer"
                             required
-                            onChange={e => setImage(e.target.files?.[0])}
+                            onChange={(e) => setImage(e.target.files?.[0] ?? null)}
                         />
                     </div>
                     <button
