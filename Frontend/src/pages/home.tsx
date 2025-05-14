@@ -1,14 +1,34 @@
-import {useState} from "react";
-import {societies, SocietyPane, type SocietyResponse} from "../components/homepage/societypane.tsx";
+import {type FormEvent, useContext, useEffect, useState} from "react";
+import {SocietyPane} from "../components/homepage/societypane.tsx";
 import {EventsPane} from "../components/homepage/eventpane.tsx";
 import ChatPane from "../components/homepage/chatpane.tsx";
+import {UserContext} from "../context/UserContext.ts";
+import {getJoinedSocieties, type SocietyResponse} from "../api/societies.ts";
+import {createEvent} from "../api/events.ts";
 
 export default function Home() {
-    // Todo: get societies based on user's joined societies
+    const context = useContext(UserContext);
+    const [societies, setSocieties] = useState<SocietyResponse[]>([]);
     const [currentSociety, setCurrentSociety] = useState<SocietyResponse>(societies[0]);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    return <div className={'h-full w-full flex flex-row bg-neutral-50'}>
+    useEffect(() => {
+        if (context.isLoggedIn()) {
+            getJoinedSocieties(context.token!, context.expiry!)
+                .then(response => {
+                    if (response === undefined) {
+                        setSocieties([]);
+                        setCurrentSociety([][0])
+                    }
+                    else {
+                        setSocieties(response);
+                        setCurrentSociety(response[0])
+                    }
+                })
+        }
+    }, [context]);
+
+    return currentSociety && <div className={'h-full w-full flex flex-row bg-neutral-50'}>
         <SocietyPane societies={societies} currentSociety={currentSociety} setCurrentSociety={setCurrentSociety} />
         <ChatPane society={currentSociety} />
         <div className={'h-full flex flex-col items-center justify-between'}>
@@ -17,14 +37,45 @@ export default function Home() {
                 className={'px-4 mb-4 py-2 rounded-lg text-white bg-blue-500 hover:bg-blue-600 hover:cursor-pointer'}
                 onClick={() => setIsModalOpen(true)}
             >
-                Join a Society
+                Create an Event
             </button>
-            {isModalOpen && <Modal onClose={() => setIsModalOpen(false)} />}
+            {isModalOpen && <Modal currentSociety={currentSociety} onClose={() => setIsModalOpen(false)} />}
         </div>
     </div>
 }
 
-function Modal({ onClose }: { onClose: () => void }) {
+function fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+function Modal({ currentSociety, onClose }: { currentSociety: SocietyResponse, onClose: () => void }) {
+    const context = useContext(UserContext);
+    const [eventName, setEventName] = useState<string>();
+    const [description, setDescription] = useState<string>();
+    const [date, setDate] = useState<string>();
+    const [location, setLocation] = useState<string>();
+    const [price, setPrice] = useState<number>();
+    const [image, setImage] = useState<File>();
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault();
+        if (!context.isLoggedIn())
+            return;
+
+        fileToBase64(image!)
+            .then(async base64Image => {
+                await createEvent(currentSociety.societyId, context.token!, context.expiry!,
+                    new Date(date!), location!, eventName!, description!, price!, base64Image);
+                window.location.reload();
+            })
+            .catch(error => console.log("Error converting file to base64: ", error));
+    }
+    
     return (
         <div
             className="fixed inset-0 bg-black/20 bg-opacity-50 flex items-center justify-center"
@@ -49,6 +100,8 @@ function Modal({ onClose }: { onClose: () => void }) {
                             placeholder="Enter event name"
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             required
+                            value={eventName}
+                            onChange={e => setEventName(e.target.value)}
                         />
                     </div>
                     <div>
@@ -57,6 +110,8 @@ function Modal({ onClose }: { onClose: () => void }) {
                             placeholder="Enter event description"
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             required
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
                         />
                     </div>
                     <div>
@@ -65,6 +120,8 @@ function Modal({ onClose }: { onClose: () => void }) {
                             type="date"
                             className="w-full p-2 border border-gray-300 rounded-lg hover:cursor-pointer"
                             required
+                            value={date}
+                            onChange={e => setDate(e.target.value)}
                         />
                     </div>
                     <div>
@@ -74,6 +131,8 @@ function Modal({ onClose }: { onClose: () => void }) {
                             placeholder="Enter location"
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             required
+                            value={location}
+                            onChange={e => setLocation(e.target.value)}
                         />
                     </div>
                     <div>
@@ -84,6 +143,8 @@ function Modal({ onClose }: { onClose: () => void }) {
                             className="w-full p-2 border border-gray-300 rounded-lg"
                             defaultValue={0}
                             min={0}
+                            value={price}
+                            onChange={e => setPrice(parseFloat(e.target.value))}
                         />
                     </div>
                     <div>
@@ -93,11 +154,13 @@ function Modal({ onClose }: { onClose: () => void }) {
                             accept="image/*"
                             className="w-full p-2 border border-gray-300 rounded-lg hover:cursor-pointer"
                             required
+                            onChange={e => setImage(e.target.files?.[0])}
                         />
                     </div>
                     <button
                         type="submit"
-                        className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600"
+                        className="w-full p-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 hover:cursor-pointer"
+                        onClick={handleSubmit}
                     >
                         Submit
                     </button>

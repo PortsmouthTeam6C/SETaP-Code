@@ -39,7 +39,7 @@ public class Event {
         try (Connection connection = DatabaseManager.getSource().getConnection()) {
             Optional<ResultSet> optionalResultSet = DatabaseManager.populateAndExecute(
                     connection,
-                    "select eventid from events where societyid = ?",
+                    "select eventid from societyevent where societyid = ?",
                     societyId);
 
             if (optionalResultSet.isEmpty())

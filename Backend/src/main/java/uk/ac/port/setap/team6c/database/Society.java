@@ -61,7 +61,7 @@ public class Society {
      * @return The society, or null if the societyId was not found
      */
     public static @Nullable Society get(int societyId) {
-        return get("select * from society where societyId = ?", societyId);
+        return get("select * from society where societyid = ?", societyId);
     }
 
     /**
@@ -82,10 +82,11 @@ public class Society {
                     resultSet.getInt("societyId"),
                     resultSet.getInt("universityId"),
                     resultSet.getString("societyName"),
-                    resultSet.getString("description"),
+                    resultSet.getString("societyDescription"),
                     resultSet.getString("societyPicture")
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

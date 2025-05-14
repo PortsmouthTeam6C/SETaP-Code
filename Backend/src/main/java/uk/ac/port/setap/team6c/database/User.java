@@ -6,9 +6,7 @@ import lombok.Getter;
 import org.jetbrains.annotations.Nullable;
 import uk.ac.port.setap.team6c.routes.AuthManager;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -32,7 +30,7 @@ public class User {
      * @return The user, or null if the userid was not found
      */
     public static @Nullable User get(int userId) {
-        return get("select userid from sessiontoken where userid = ?", userId);
+        return get("select * from users where userid = ?", userId);
     }
 
     /**
@@ -45,7 +43,7 @@ public class User {
         return get("select u.userid, u.universityid, u.username, u.email, u.password, u.profilepicture " +
                    "from users u " +
                    "join sessiontoken st on u.userid = st.userid " +
-                   "where st.token = ? and st.expiry > ?", token, expiry);
+                   "where st.token = ? and st.expiry = ?", token, Timestamp.from(expiry));
     }
 
     /**
@@ -80,6 +78,7 @@ public class User {
                     resultSet.getString("profilePicture")
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -91,16 +90,19 @@ public class User {
      * @return True if success, false otherwise
      */
     public boolean assignSessionToken(String token, Instant expiry) {
-        try (Connection connection = DatabaseManager.getSource().getConnection()) {
-            DatabaseManager.populateAndExecute(
-                    connection,
-                    "insert into sessionToken (token, userid, expiry) values (?, ?, ?)",
-                    token, userId, Timestamp.from(expiry)
-            );
-            return true;
-        } catch (Exception e) {
+        try {
+            Connection connection = DatabaseManager.getSource().getConnection();
+            String query = "insert into sessionToken (token, userid, expiry) values (?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setString(1, token);
+            preparedStatement.setInt(2, userId);
+            preparedStatement.setTimestamp(3, Timestamp.from(expiry));
+            preparedStatement.execute();
+            connection.close();
+        } catch (Exception ignored) {
             return false;
         }
+        return true;
     }
 
     /**
@@ -115,15 +117,21 @@ public class User {
      */
     public static @Nullable User create(int universityId, String username, String email, String hashedPassword,
                                         String profilePicture) {
-        try (Connection connection = DatabaseManager.getSource().getConnection()) {
-            DatabaseManager.populateAndExecute(
-                    connection,
-                    "insert into users (universityId, username, email, password, profilePicture) " +
-                    "values (?, ?, ?)",
-                    universityId, username, email, hashedPassword, profilePicture
-            );
-            return User.get(email);
-        } catch (Exception e) {
+        try {
+            Connection connection = DatabaseManager.getSource().getConnection();
+            String query = "insert into users (universityId, username, email, password, profilePicture) " +
+                    "values (?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setInt(1, universityId);
+            preparedStatement.setString(2, username);
+            preparedStatement.setString(3, email);
+            preparedStatement.setString(4, hashedPassword);
+            preparedStatement.setString(5, profilePicture);
+            preparedStatement.execute();
+            connection.close();
+
+            return get(email);
+        } catch (Exception ignored) {
             return null;
         }
     }

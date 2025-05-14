@@ -99,7 +99,7 @@ public class AuthManager {
         String hashedPassword = hashPassword(request.password);
         String profilePicture = "https://api.dicebear.com/9.x/shapes/svg?seed=" + request.username;
 
-        University university = University.get(request.email.split("@")[1]);
+        University university = University.get('@' + request.email.split("@")[1]);
         if (university == null)
             throw new UnprocessableContentResponse();
 

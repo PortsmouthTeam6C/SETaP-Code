@@ -33,13 +33,13 @@ public class SocietyManager {
      * @param ctx The request context
      */
     public static void getAllJoinedSocieties(@NotNull Context ctx) {
-        AuthenticatedIdRequest request = Main.GSON.fromJson(ctx.body(), AuthenticatedIdRequest.class);
+        AuthManager.TokenExpiryRequest request = Main.GSON.fromJson(ctx.body(), AuthManager.TokenExpiryRequest.class);
 
         User user = User.get(request.token(), request.expiry());
         if (user == null)
             throw new UnauthorizedResponse();
 
-        SocietyCollection societyCollection = Society.getAllSocieties(request.id()).filter(user::hasJoinedSociety);
+        SocietyCollection societyCollection = Society.getAllSocieties(user.getUniversityId()).filter(user::hasJoinedSociety);
         List<SocietyResponse> societies = societyCollectionToResponseList(societyCollection);
         ctx.result(Main.GSON.toJson(societies));
     }
@@ -69,6 +69,7 @@ public class SocietyManager {
     private static @NotNull List<SocietyResponse> societyCollectionToResponseList(@NotNull SocietyCollection societyCollection) {
         List<SocietyResponse> societies = new ArrayList<>();
         for (Society society : societyCollection) {
+            if (society == null) continue;
             societies.add(new SocietyResponse(society.getSocietyId(), society.getUniversityId(),
                     society.getSocietyName(), society.getDescription(), society.getSocietyPicture()));
         }

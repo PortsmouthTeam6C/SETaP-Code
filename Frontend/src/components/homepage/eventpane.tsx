@@ -1,49 +1,13 @@
 import {CiLocationOn, CiShoppingTag} from "react-icons/ci";
-import type {SocietyResponse} from "./societypane.tsx";
-
-export interface EventResponse {
-    eventId: number,
-    date: Date,
-    location: string,
-    name: string,
-    description: string,
-    price: number,
-    image: string
-}
-
-const events: EventResponse[] = [
-    {
-        eventId: 1,
-        date: new Date('2023-11-01T10:00:00'),
-        location: "Auditorium A",
-        name: "Chess Tournament",
-        description: "Compete in our annual chess tournament.",
-        price: 10,
-        image: "https://images.pexels.com/photos/260024/pexels-photo-260024.jpeg"
-    },
-    {
-        eventId: 2,
-        date: new Date('2023-11-05T14:00:00'),
-        location: "Room 202",
-        name: "Debate Workshop",
-        description: "Learn the art of debating with experts.",
-        price: 5.32,
-        image: "https://images.pexels.com/photos/8344905/pexels-photo-8344905.jpeg"
-    },
-    {
-        eventId: 3,
-        date: new Date('2023-11-10T16:00:00'),
-        location: "Photography Studio",
-        name: "Photography Basics",
-        description: "A beginner's guide to photography techniques.",
-        price: 0,
-        image: "https://images.pexels.com/photos/733853/pexels-photo-733853.jpeg"
-    }
-]
+import {type SocietyResponse} from "../../api/societies.ts";
+import {useContext, useEffect, useState} from "react";
+import {type EventResponse, getEvents} from "../../api/events.ts";
+import {UserContext} from "../../context/UserContext.ts";
 
 function EventCard({ event }: { event: EventResponse }) {
     const { image, date, name, description, location, price } = event;
-    const month = date.toLocaleString('default', { month: 'short' }).toUpperCase();
+    const dateAsDate = new Date(date);
+    const month = dateAsDate.toLocaleString('default', { month: 'short' }).toUpperCase();
 
     return <article className={'bg-neutral-50 w-full h-96 shadow-lg rounded-2xl'}>
         <img className={'h-1/2 w-full object-cover shadow-lg rounded-2xl'}
@@ -51,7 +15,7 @@ function EventCard({ event }: { event: EventResponse }) {
              alt={name} />
         <div className={' h-1/2 w-full flex items-center py-3'}>
             <div className={'w-1/3 h-full flex flex-col items-center border-r-2'}>
-                <p className={'text-6xl font-bold'}>{date.getDate()}</p>
+                <p className={'text-6xl font-bold'}>{dateAsDate.getDate().toString().padStart(2, '0')}</p>
                 <p className={'text-3xl'}>{month}</p>
             </div>
             <div className={'w-2/3 h-full px-3 flex flex-col justify-between'}>
@@ -74,8 +38,21 @@ function EventCard({ event }: { event: EventResponse }) {
     </article>
 }
 
-export function EventsPane({ society }: { society: SocietyResponse } ) {
-    // Todo: get events based on society
+export function EventsPane({ society }: { society: SocietyResponse|undefined } ) {
+    const context = useContext(UserContext);
+    const [events, setEvents] = useState<EventResponse[]>([]);
+    useEffect(() => {
+        if (context.isLoggedIn() && society !== undefined) {
+            getEvents(society.societyId)
+                .then(response => {
+                    if (response === undefined)
+                        setEvents([]);
+                    else
+                        setEvents(response);
+                })
+        }
+    }, [context, society]);
+    
     return <aside className={'bg-neutral-100 min-w-96 w-96 max-w-96 max-h-[1180px] space-y-4 overflow-scroll p-3'}>
         {events.map((event, i) => <EventCard key={i} event={event} />)}
     </aside>

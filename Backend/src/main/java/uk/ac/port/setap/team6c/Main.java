@@ -33,15 +33,15 @@ public class Main {
         );
 
         app.post("/account/create", AuthManager::signup);
-        app.post("/account/login/email", AuthManager::login);
-        app.post("/account/login/token", AuthManager::loginWithToken);
-        app.post("/society/get/all", SocietyManager::getAllSocieties);
-        app.post("/society/get/joined", SocietyManager::getAllJoinedSocieties);
-        app.post("/society/join", SocietyManager::joinSociety);
-        app.post("/chat/get", MessageManager::getAllMessages);
-        app.post("/chat/send", MessageManager::sendMessage);
-        app.post("/event/get", EventsManager::getAllEvents);
-        app.post("event/create", EventsManager::createEvent);
+        app.post("/account/login/email", AuthManager::login); // Tested
+        app.post("/account/login/token", AuthManager::loginWithToken); // Tested
+        app.post("/society/get/all", SocietyManager::getAllSocieties); // Tested
+        app.post("/society/get/joined", SocietyManager::getAllJoinedSocieties); // Tested
+        app.post("/society/join", SocietyManager::joinSociety); // Tested
+        app.post("/chat/get", MessageManager::getAllMessages); // Tested
+        app.post("/chat/send", MessageManager::sendMessage); // Tested
+        app.post("/event/get", EventsManager::getAllEvents); // Tested
+        app.post("/event/create", EventsManager::createEvent); // Tested
 
         app.start(7071);
     }
