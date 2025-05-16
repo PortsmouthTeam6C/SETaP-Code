@@ -12,6 +12,8 @@ export default function Login() {
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
 
+        if (!email || !password) return; // prevent empty submission
+
         login(email, password)
             .then(result => {
                 if (result === undefined)

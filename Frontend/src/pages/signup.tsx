@@ -12,6 +12,10 @@ export default function Signup() {
 
     const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
+        
+        if (!email.trim() || !username.trim() || !password.trim()) {
+            return; // prevents empty submission
+        }
 
         signup(email, username, password)
             .then(result => {
