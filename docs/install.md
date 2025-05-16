@@ -1,5 +1,11 @@
 ## Installation and Setup Guide
 
+### Dependencies
+- Install NodeJS and npm from the [official website](https://nodejs.org/en/download) or from your package manager
+- Install Java from [OpenJDK](https://jdk.java.net/24/), from [Oracle](https://www.oracle.com/uk/java/technologies/downloads/), or from your package manager
+- Install Maven from the [official website](https://maven.apache.org/install.html) or from your package manager
+- Install git from the [official website](https://git-scm.com/downloads) or from your package manager
+
 **Clone the Repository**
 
 ```bash
