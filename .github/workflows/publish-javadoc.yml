@@ -24,7 +24,7 @@ jobs:
           javadoc \
             -d javadoc \
             -sourcepath Backend/src/main/java \
-            -subpackages . \
+            -subpackages uk.ac.port.setap.team6c \
             -private \
             -doctitle "Synergy Documentation"
 
