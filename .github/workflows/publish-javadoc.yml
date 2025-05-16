@@ -26,6 +26,6 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           personal_token: ${{ secrets.GH_PAT }}
-          publish_dir: ./Backend/target/site/apidocs
+          publish_dir: ./Backend/target/reports/apidocs
           publish_branch: gh-pages
-          
+
