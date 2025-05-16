@@ -34,7 +34,6 @@ public class EventsManager {
      */
     public static void createEvent(@NotNull Context ctx) {
         CreateEventRequest request = Main.GSON.fromJson(ctx.body(), CreateEventRequest.class);
-        System.out.println(ctx.body());
 
         // If the user doesn't exist, they're not authorized to create an event
         User user = User.get(request.token, request.expiry);

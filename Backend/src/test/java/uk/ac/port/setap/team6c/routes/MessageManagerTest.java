@@ -12,14 +12,17 @@ import uk.ac.port.setap.team6c.Main;
 import uk.ac.port.setap.team6c.database.DatabaseManager;
 
 import java.lang.reflect.Field;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.Instant;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class EventsManagerTest {
+class MessageManagerTest {
 
     private static String token = null;
     private static Instant expiry = null;
@@ -53,11 +56,9 @@ class EventsManagerTest {
     
     insert into societymember (userid, societyid) values (1, 1), (1, 2);
     
-    insert into events (date, location, name, description, price, image) values
-    ('2025-06-13T12:24:01.849390400Z', 'Some Location', 'Event Name', 'Description', 10.2, 'https://www.example.com/image.jpg'),
-    ('2025-06-15T12:24:01.849390400Z', 'Some Other Location', 'Name', 'Description', 5, 'https://www.example.com/image.jpg');
-    
-    insert into societyevent (societyid, eventid) values (1, 1), (1, 2);
+    insert into message (userid, societyid, content, timestamp) values
+    (1, 1, 'Some message here', '2025-05-16 05:59:22'::timestamp at time zone 'UTC'),
+    (1, 1, 'Another message here', '2025-05-16 06:00:03'::timestamp at time zone 'UTC');
     """
         );
         statement.close();
@@ -89,7 +90,7 @@ class EventsManagerTest {
     }
 
     @Test
-    void testGetAllEvents() {
+    void testGetAllMessages() {
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn("""
         {
@@ -97,23 +98,23 @@ class EventsManagerTest {
         }
         """);
 
-        EventsManager.getAllEvents(ctx);
+        MessageManager.getAllMessages(ctx);
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(ctx).result(captor.capture());
         String jsonResponse = captor.getValue();
 
-        JsonObject[] events = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
+        JsonObject[] messages = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
 
-        assertEquals(2, events.length, "There should be 2 events for the society");
-        assertEquals("Event Name", events[0].get("name").getAsString(), "First event name should match");
-        assertEquals("Some Location", events[0].get("location").getAsString(), "First event location should match");
-        assertEquals("Name", events[1].get("name").getAsString(), "Second event name should match");
-        assertEquals("Some Other Location", events[1].get("location").getAsString(), "Second event location should match");
+        assertEquals(2, messages.length, "There should be 2 messages for the society");
+        assertEquals("Some message here", messages[0].get("content").getAsString(), "First message content should match");
+        assertEquals("2025-05-16T05:59:22Z", messages[0].get("timestamp").getAsString(), "First message timestamp should");
+        assertEquals("Another message here", messages[1].get("content").getAsString(), "Second message content should match");
+        assertEquals("2025-05-16T06:00:03Z", messages[1].get("timestamp").getAsString(), "Second message timestamp should");
     }
 
     @Test
-    void testGetAllEventsForEmptySociety() {
+    void testGetAllMessagesForEmptySociety() {
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn("""
         {
@@ -121,19 +122,19 @@ class EventsManagerTest {
         }
         """);
 
-        EventsManager.getAllEvents(ctx);
+        MessageManager.getAllMessages(ctx);
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(ctx).result(captor.capture());
         String jsonResponse = captor.getValue();
 
-        JsonObject[] events = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
+        JsonObject[] messages = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
 
-        assertEquals(0, events.length, "There should be 0 events for a society that has no events");
+        assertEquals(0, messages.length, "There should be 0 messages for a society with no messages");
     }
 
     @Test
-    void testGetAllEventsForNonexistentSociety() {
+    void testGetAllMessagesForNonexistentSociety() {
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn("""
         {
@@ -141,115 +142,90 @@ class EventsManagerTest {
         }
         """);
 
-        EventsManager.getAllEvents(ctx);
+        MessageManager.getAllMessages(ctx);
 
         ArgumentCaptor<String> captor = ArgumentCaptor.forClass(String.class);
         verify(ctx).result(captor.capture());
         String jsonResponse = captor.getValue();
 
-        JsonObject[] events = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
+        JsonObject[] messages = Main.GSON.fromJson(jsonResponse, JsonObject[].class);
 
-        assertEquals(0, events.length, "There should be 0 events for a society that doesn't exist");
+        assertEquals(0, messages.length, "There should be 0 messages for a society that doesn't exist");
     }
 
     @Test
-    void testCreateEvent() {
+    void testSendMessage() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("societyId", 2);
         jsonObject.addProperty("token", token);
         jsonObject.addProperty("expiry", expiry.toString());
-        jsonObject.addProperty("date", Instant.now().toString());
-        jsonObject.addProperty("location", "Some location");
-        jsonObject.addProperty("name", "Event name");
-        jsonObject.addProperty("description", "A description");
-        jsonObject.addProperty("price", 5);
-        jsonObject.addProperty("image", "https://www.example.com/image.jpg");
+        jsonObject.addProperty("societyId", 2);
+        jsonObject.addProperty("content", "Some message content");
 
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn(jsonObject.toString());
 
-        assertThrows(OkResponse.class, () -> EventsManager.createEvent(ctx), "Successfully creating an event" +
+        assertThrows(OkResponse.class, () -> MessageManager.sendMessage(ctx), "Successfully sending a message" +
                 "should throw OkResponse");
     }
 
     @Test
-    void testCreateEventForSocietyTheUserHasNotJoined() {
+    void testSendMessageToSocietyTheUserHasNotJoined() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("societyId", 3);
         jsonObject.addProperty("token", token);
         jsonObject.addProperty("expiry", expiry.toString());
-        jsonObject.addProperty("date", Instant.now().toString());
-        jsonObject.addProperty("location", "Some location");
-        jsonObject.addProperty("name", "Event name");
-        jsonObject.addProperty("description", "A description");
-        jsonObject.addProperty("price", 5);
-        jsonObject.addProperty("image", "https://www.example.com/image.jpg");
+        jsonObject.addProperty("societyId", 3);
+        jsonObject.addProperty("content", "Some message content");
 
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn(jsonObject.toString());
 
-        assertThrows(UnauthorizedResponse.class, () -> EventsManager.createEvent(ctx), "Trying to create an" +
-                "event in a society the user has not joined should throw UnauthorizedResponse.");
+        assertThrows(UnauthorizedResponse.class, () -> MessageManager.sendMessage(ctx), "Attempting to send" +
+                "a message to a society the user has not joined should throw UnauthorizedResponse");
     }
 
     @Test
-    void testCreateEventWithInvalidToken() {
+    void testSendMessageToNonexistentSociety() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("societyId", 2);
-        jsonObject.addProperty("token", "e4b33986-5aa0-47e4-9036-fe939e5f5b8a");
+        jsonObject.addProperty("token", token);
         jsonObject.addProperty("expiry", expiry.toString());
-        jsonObject.addProperty("date", Instant.now().toString());
-        jsonObject.addProperty("location", "Some location");
-        jsonObject.addProperty("name", "Event name");
-        jsonObject.addProperty("description", "A description");
-        jsonObject.addProperty("price", 5);
-        jsonObject.addProperty("image", "https://www.example.com/image.jpg");
+        jsonObject.addProperty("societyId", 4);
+        jsonObject.addProperty("content", "Some message content");
 
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn(jsonObject.toString());
 
-        assertThrows(UnauthorizedResponse.class, () -> EventsManager.createEvent(ctx), "Trying to create an" +
-                "event without a valid token/expiry combination should throw UnauthorizedResponse.");
+        assertThrows(UnauthorizedResponse.class, () -> MessageManager.sendMessage(ctx), "Attempting to send" +
+                "a message to a society the user has not joined should throw UnauthorizedResponse");
     }
 
     @Test
-    void testCreateEventWithIncorrectTokenExpiry() {
+    void testSendMessageWithInvalidToken() {
         JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("token", "920a3c74-5228-4811-ac8a-43fb6b2070d6");
+        jsonObject.addProperty("expiry", expiry.toString());
         jsonObject.addProperty("societyId", 2);
+        jsonObject.addProperty("content", "Some message content");
+
+        Context ctx = Mockito.mock(Context.class);
+        when(ctx.body()).thenReturn(jsonObject.toString());
+
+        assertThrows(UnauthorizedResponse.class, () -> MessageManager.sendMessage(ctx), "Attempting to send" +
+                "a message without a valid token/expiry combination should throw UnauthorizedResponse.");
+    }
+
+    @Test
+    void testSendMessageWithIncorrectTokenExpiry() {
+        JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("token", token);
         jsonObject.addProperty("expiry", Instant.now().toString());
-        jsonObject.addProperty("date", Instant.now().toString());
-        jsonObject.addProperty("location", "Some location");
-        jsonObject.addProperty("name", "Event name");
-        jsonObject.addProperty("description", "A description");
-        jsonObject.addProperty("price", 5);
-        jsonObject.addProperty("image", "https://www.example.com/image.jpg");
+        jsonObject.addProperty("societyId", 2);
+        jsonObject.addProperty("content", "Some message content");
 
         Context ctx = Mockito.mock(Context.class);
         when(ctx.body()).thenReturn(jsonObject.toString());
 
-        assertThrows(UnauthorizedResponse.class, () -> EventsManager.createEvent(ctx), "Trying to create an" +
-                "event without a valid token/expiry combination should throw UnauthorizedResponse.");
-    }
-
-    @Test
-    void testCreateEventInSocietyWhichDoesNotExist() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("societyId", 4);
-        jsonObject.addProperty("token", token);
-        jsonObject.addProperty("expiry", expiry.toString());
-        jsonObject.addProperty("date", Instant.now().toString());
-        jsonObject.addProperty("location", "Some location");
-        jsonObject.addProperty("name", "Event name");
-        jsonObject.addProperty("description", "A description");
-        jsonObject.addProperty("price", 5);
-        jsonObject.addProperty("image", "https://www.example.com/image.jpg");
-
-        Context ctx = Mockito.mock(Context.class);
-        when(ctx.body()).thenReturn(jsonObject.toString());
-
-        assertThrows(UnauthorizedResponse.class, () -> EventsManager.createEvent(ctx), "Trying to create an" +
-                "event in a society which does not exist should throw UnauthorizedResponse.");
+        assertThrows(UnauthorizedResponse.class, () -> MessageManager.sendMessage(ctx), "Attempting to send" +
+                "a message without a valid token/expiry combination should throw UnauthorizedResponse.");
     }
 
 }
