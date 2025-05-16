@@ -28,3 +28,4 @@ jobs:
           personal_token: ${{ secrets.GH_PAT }}
           publish_dir: ./Backend/target/site/apidocs
           publish_branch: gh-pages
+          
