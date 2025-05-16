@@ -18,19 +18,13 @@ jobs:
           distribution: 'temurin'
           java-version: '23'
 
-      - name: Generate Javadoc
-        run: |
-          mkdir javadoc
-          javadoc \
-            -d javadoc \
-            -sourcepath Backend/src/main/java \
-            -subpackages uk.ac.port.setap.team6c \
-            -private \
-            -doctitle "Synergy Documentation"
+      - name: Generate Javadoc with Maven
+        run: mvn javadoc:javadoc
+        working-directory: Backend
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./javadoc
+          publish_dir: ./Backend/target/site/apidocs
           publish_branch: gh-pages
