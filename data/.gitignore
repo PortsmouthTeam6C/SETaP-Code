@@ -1,0 +1,7 @@
+# Ignore the actual dataset files (they should be downloaded locally)
+Essay-quetions-auto-grading/
+*.arrow
+*.parquet
+*.json
+!README.md
+!download_dataset.py
